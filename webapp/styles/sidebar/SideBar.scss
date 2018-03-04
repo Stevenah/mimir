@@ -1,0 +1,100 @@
+@import '../colors';
+@import "~compass-mixins/lib/compass";
+$navWidth: 18%;
+
+header {
+    color: $titleColor;
+}
+
+nav {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 100% - $navWidth;
+    left: 0;
+  
+    padding: 22px;
+    border-right: 2px solid darken($bgColor, 5%);
+    
+    > header {
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-transform: uppercase;    
+    }
+    
+    section {
+      font-weight: 600; 
+  
+      header {
+         padding-top: 30px;
+      }
+      
+      ul {
+        list-style: none;
+        padding: 0px;
+        
+        li {
+          position: relative;
+          padding: 10px 0px;
+          
+          &.active {
+            color: $selectedColor;
+          }
+          
+          &:after {
+            content: attr(data-value);
+            position: absolute;
+            right: 0px;
+            width: 19px;
+            background-color: $textColor;
+            font-size: 0.9rem;
+            @include border-radius(19px);
+            color: $bgColor;
+            text-align: center;
+            
+          }
+          
+          &.red:after {
+            content: '';
+            position: absolute;
+            top: 14px;
+            right: 0px;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(236,72,127,1);
+            @include border-radius(19px);
+          }
+          
+          &.yellow:after {
+            content: '';
+            position: absolute;
+            top: 14px;
+            right: 0px;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(234,142,57,1);
+            @include border-radius(19px);
+          }
+                  
+          &.green:after {
+            content: '';
+            position: absolute;
+            top: 14px;
+            right: 0px;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(56,175,91,1);
+          }
+          
+          &.new {
+            font-size: 0.9rem;
+            color: $greyColor;
+          }
+          
+        } // li
+        
+      } // ul
+      
+    } // section
+    
+  } // nav

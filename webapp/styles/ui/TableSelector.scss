@@ -1,0 +1,46 @@
+@import '../colors';
+
+.selected {
+    background-color: darken( $bgColor, 5% )
+}
+
+.selection-table {
+    color: $textColor!important;
+    overflow-y: scroll;
+}
+
+.test {
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.table-selection-row {
+    display: flex;
+    color: $textColor!important;
+    align-content: space-between;
+    justify-content: space-between;
+    
+    &:hover {
+        background-color: lighten( $bgColor, 5% )
+    }
+}
+
+.table-selection-header {
+    display: flex;
+    align-content: space-between;
+}
+
+.selection-table-body {
+    min-height: 100%;
+    overflow-y: scroll;
+}
+
+.table-selection-header-cell {
+    color: $textColor!important;
+}
+
+.analysis-table {
+    align-self: flex-start;
+    color: $textColor!important;
+}

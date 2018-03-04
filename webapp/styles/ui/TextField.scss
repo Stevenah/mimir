@@ -1,0 +1,22 @@
+
+
+.text-field-container {
+    width: 100%;
+    padding: 1px 0;
+
+    label {
+        display: inline-block;
+        padding-right: 10px;
+    }
+
+    input[type="text"] {
+        border: none;
+        border-bottom: solid 2px white;
+
+        &:focus {
+            outline: none;
+            border: none;
+            border-bottom: solid 2px #c9c9c9;
+        }
+    }
+}

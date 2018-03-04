@@ -1,0 +1,81 @@
+$scale: .78;
+
+h4 {
+    padding: 0;
+    margin-top: 0;
+}
+
+.report-page-section {
+    padding-bottom:  10px;
+}
+
+.page-header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.header-section-left {
+    flex-grow: 3;
+    max-width: 50%;
+}
+
+.header-section-right {
+    text-align: right;
+    flex-grow: 1;
+    max-width: 50%;
+}
+
+.page {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 25px;
+    margin-bottom: 0.5cm;
+    box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+    width: 21cm * $scale;
+    height: 29.7cm * $scale;
+    box-sizing: border-box;
+
+    header {
+        align-self: flex-start;
+    }
+
+    textarea {
+        resize: none;
+    }
+}
+
+
+.input-box-group {    
+    label {
+        display: inline-block;
+        width: 230px!important;
+        text-align: right;
+        padding-right: 10px;
+    }
+}
+
+.input-group {
+    width: 100%;
+    padding: 1px 0;
+
+    label {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    input[type="text"] {
+        border: none;
+        border-bottom: solid 2px white;
+
+        &:focus {
+            outline: none;
+            border: none;
+            border-bottom: solid 2px #c9c9c9;
+        }
+    }
+}

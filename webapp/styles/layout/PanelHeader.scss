@@ -1,0 +1,13 @@
+@import '../colors';
+
+.panel-header {
+    display: flex!important;
+    flex-direction: row!important;
+    justify-content: flex-end!important;
+    align-items: center!important;
+    flex-wrap: nowrap;
+    border-left: 2px solid lighten($bgColor, 5%);
+    border-right: 2px solid darken($bgColor, 5%);
+    border-top: 2px solid lighten($bgColor, 5%);
+    border-bottom: 2px solid darken($bgColor, 5%);
+}

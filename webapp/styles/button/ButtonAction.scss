@@ -1,0 +1,16 @@
+@import "../colors";
+@import "../mixins";
+@import "~compass-mixins/lib/compass";
+
+.analysis-header-button {
+    margin-right: 20px;
+}
+
+.link-button {
+    @include no-select;
+    font-weight: 600;
+    cursor: pointer;
+    &:hover {
+        color: $selectedColor;
+    }
+}

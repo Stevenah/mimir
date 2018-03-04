@@ -1,0 +1,12 @@
+@import '../colors';
+@import "~compass-mixins/lib/compass";
+$navWidth: 18%;
+
+article {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: $navWidth;
+    overflow: auto;
+}

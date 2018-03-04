@@ -1,0 +1,38 @@
+@import '../colors';
+
+.grid-layout {
+    overflow: hidden!important;        
+    min-width: 100%!important;
+    width: 100%!important;
+    height: calc(100% - 60px)!important;
+    position: absolute; 
+    bottom: 0;
+}
+
+.grid-column {
+    height: 100%!important;
+    width: 100%!important;
+    display: flex!important;
+}
+
+.grid-row {
+    height: 100%!important;
+    width: 100%!important;
+    display: flex!important;
+}
+
+.grid-content {
+    width: 100%;
+    height: calc(100% - 60px);
+    position: absolute; 
+    bottom: 0;
+}
+
+.grid-header {
+    width: 100%!important;
+    height: 60px;
+}
+
+.grid-header-column {
+    height: 100%!important;
+}

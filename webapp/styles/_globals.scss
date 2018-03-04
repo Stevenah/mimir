@@ -1,0 +1,51 @@
+@import "colors";
+@import "mixins";
+
+.clickable {
+    cursor: pointer;
+}
+
+.full {
+    width: 100%;
+    height: 100%;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.border-left-dark {
+    border-left: 2px solid darken($bgColor, 5%);
+}
+
+.border-right-dark {
+    border-right: 2px solid darken($bgColor, 5%);
+}
+
+.border-right-light {
+    border-right: 2px solid lighten($bgColor, 5%);
+}
+
+.border-left-light {
+    border-left: 2px solid lighten($bgColor, 5%);
+}
+
+.border-top-dark {
+    border-top: 2px solid darken($bgColor, 5%);
+}
+
+.border-bottom-dark {
+    border-bottom: 2px solid darken($bgColor, 5%);
+}
+
+.border-top-light {
+    border-top: 2px solid lighten($bgColor, 5%);
+}
+
+.border-bottom-light {
+    border-bottom: 2px solid lighten($bgColor, 5%);
+}

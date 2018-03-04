@@ -1,0 +1,73 @@
+@import 'functions';
+
+@mixin no-select {
+    -webkit-touch-callout: none;
+      -webkit-user-select: none; 
+       -khtml-user-select: none; 
+         -moz-user-select: none; 
+          -ms-user-select: none; 
+              user-select: none;
+}
+
+@mixin font-size($size) {
+    font-size: $size;
+    font-size: calculateRem($size);
+}
+
+@mixin bp-large {
+    @media only screen and (max-width: 60em) {
+        @content;
+    }
+}
+
+@mixin bp-medium {
+    @media only screen and (max-width: 40em) {
+        @content;
+    }
+}
+
+@mixin bp-small {
+    @media only screen and (max-width: 30em) {
+        @content;
+    }
+}
+
+@mixin keyframes($animation-name) {
+    @-webkit-keyframes #{$animation-name} {
+        @content;
+    }
+    @-moz-keyframes #{$animation-name} {
+        @content;
+    }  
+    @-ms-keyframes #{$animation-name} {
+        @content;
+    }
+    @-o-keyframes #{$animation-name} {
+        @content;
+    }  
+    @keyframes #{$animation-name} {
+        @content;
+    }
+}
+
+@mixin animation($str) {
+    -webkit-animation: #{$str};
+       -moz-animation: #{$str};
+        -ms-animation: #{$str};
+         -o-animation: #{$str};
+            animation: #{$str};      
+}
+
+@mixin transition($args...) {
+    -webkit-transition: $args;
+       -moz-transition: $args;
+        -ms-transition: $args;
+         -o-transition: $args;
+            transition: $args;
+}
+
+@mixin opacity($opacity) {
+    opacity: $opacity;
+    $opacity-ie: $opacity * 100;
+    filter: alpha(opacity=$opacity-ie); //IE8
+}

@@ -1,0 +1,22 @@
+@import 'colors';
+@import 'mixins';
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+    @include no-select;
+}
+
+.inputfile + label {
+    cursor: pointer;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    overflow: hidden;
+    @include no-select;
+}
+

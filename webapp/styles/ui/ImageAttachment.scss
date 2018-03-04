@@ -1,0 +1,24 @@
+
+
+.ui-image-attachment {
+    max-width: 120px;
+    max-height: 120px;
+}
+
+.ui-image-attachment-container {
+    max-width: 120px;
+    max-height: 120px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    background-color: black;
+}
+
+.ui-image-attachment-label {
+    width: 100%;
+    text-align: left;
+    padding: 1px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    display:block;
+    text-overflow: ellipsis;
+}

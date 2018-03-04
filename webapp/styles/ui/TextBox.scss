@@ -1,0 +1,20 @@
+
+.text-box-container {
+
+    label {
+        display: block;
+        text-align: left;
+        width: 100%;
+    }
+
+    .text-box {
+        border: none;
+        border: solid 2px white;
+        color: black;
+
+        &:focus {
+            outline: none;
+            border: solid 2px #c9c9c9;   
+        }
+    }
+}
