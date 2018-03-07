@@ -3,38 +3,37 @@ import { createEpicMiddleware, combineEpics } from 'redux-observable';
 
 import logger from 'redux-logger';
 
-import fileReducer from 'reducers/file';
+import appReducer from 'reducers/app';
 import loadingReducer from 'reducers/loading';
 import reportReducer from 'reducers/report';
-import modalReducer from 'reducers/modal';
 import cnnReducer from 'reducers/cnn';
 import apiSettingsReducer from 'reducers/api';
 
-import analysisEpics from 'epics';
+import appEpics from 'epics';
 
 const epics = combineEpics(
-    ...analysisEpics
+    ...appEpics
 );
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+let composeEnhancers = compose;
 
 const middlewares = [
     createEpicMiddleware(epics),
 ];
 
 if (process.env.NODE_ENV === `development`) {
-    middlewares.push(logger);
     console.log('You are running the develpment version of the app...')
+    composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+    middlewares.push(logger);
 }
 
 const reducers = combineReducers({
     settings: combineReducers({
         api: apiSettingsReducer,
     }),
-    file: fileReducer,
+    app: appReducer,
     loading: loadingReducer,
     report: reportReducer,
-    modal: modalReducer,
     cnn: cnnReducer,
 });
 

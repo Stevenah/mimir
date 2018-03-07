@@ -5,67 +5,139 @@ import uuid
 import cv2
 from scipy.misc import imsave, imread, imresize
 import os
+import base64
+
+def save_file(f, path, from_type='string', file_type='image'):
+
+    if file_type == 'image':
+        save_image(f, path, 'string')
+        return
+
+    if file_type == 'video':
+        save_video(f, path, 'string')
+        return
+
+    raise NotImplementedError(f'Support for {file_tpye} is currenlty not supported!')
 
 
-def save_image(image, file_path, as_np=False, mode='RGB'):
+def save_standard_file(f, image_id, file_name=None, from_type='string', file_type='image'):
 
-    dir_path = os.path.dirname(file_path)
+    if file_type == 'image':
+        save_standard_image(f, image_id, file_name)
+        return
+
+    raise NotImplementedError(f'Support for {file_tpye} is currenlty not supported!')
+
+def save_image(image, path, from_type='string'):
+
+    dir_path = os.path.dirname(path)
 
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
-    if as_np:
-        cv2.imwrite(file_path, image)
-    else:
-        with open(file_path, 'wb+') as f:
+    if from_type == 'np_array':
+        cv2.imwrite(path, image)
+        return
+
+    if from_type == 'string':
+        with open(path, 'wb+') as f:
             f.write(image.read())
+        return
 
-def load_image(file_path, as_np=False, mode='RGB'):
+    raise NotImplementedError(f'Support for {from_type} is currenlty not supported!')
 
-    if as_np:
-        return cv2.imread(path)
+def save_standard_image(image, image_id, file_name=None, from_type='string'):
+    base_dir = app.config['STANDARD_IMAGE_DIRECTORY']
 
-    with open(file_path, 'rb') as f:
-        return f.read()
+    if file_name is not None:
+        file_name= f'{image_id}.jpg'
+
+    path = os.path.join(base_dir, image_id, file_name)
+    save_image(image, path, from_type)
+
+def save_gradcam_image(image, image_id, layer_id, class_id, from_type='np_array'):
+    base_dir = app.config['GRADCAM_IMAGE_DIRECTORY']
+    image_id = f'{image_id}-{layer_id}-{class_id}'
+    file_name = f'{image_id}.jpg'
+    path = os.path.join(base_dir, image_id, file_name)
+    save_image(image, path, from_type)
+
+def save_saliency_image(image, image_id, layer_id, class_id, from_type='np_array'):
+    base_dir = app.config['SALIENCY_IMAGE_DIRECTORY']
+    image_id = f'{image_id}-{layer_id}-{class_id}'
+    file_name = f'{image_id}.jpg'
+    path = os.path.join(base_dir, image_id, file_name)
+    save_image(image, path, from_type)
+
+def save_guided_gradcam_image(image, image_id, layer_id, class_id, from_type='np_array'):
+    base_dir = app.config['GUIDED_GRADCAM_IMAGE_DIRECTORY']
+    image_id = f'{image_id}-{layer_id}-{class_id}'
+    file_name = f'{image_id}.jpg'
+    path = os.path.join(base_dir, image_id, file_name)
+    save_image(image, path, from_type)
 
 
-def save_file(f, path):
-    if not os.path.exists(os.path.dirname(path)):
-        os.makedirs(os.path.dirname(path))
 
-    with open(path, 'wb+') as destination:
-        destination.write(f.read())
- 
-def read_image(image_id, filter_type='original'):
+def load_image(path, as_type='string'):
 
-    base_dir = app.config[f'{filter_type.upper()}_DIRECTORY']
+    if as_type == 'np_array':
+        image = cv2.imread(path) 
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        return image
 
-    file_dir = os.path.join(base_dir, image_id)
-    file_name = os.listdir(file_dir)[0]
-    file_path = os.path.join(file_dir, file_name)
+    if as_type == 'base_64':
+        with open(path, 'rb') as f:
+            return base64.b64encode(f.read()).decode('UTF-8')
+    
+    if as_type == 'string':
+        with open(path, 'rb') as f:
+            return f.read()
 
-    with open(file_path, 'rb') as f:
-        return f.read(), file_name
+    raise NotImplementedError(f'Support for {as_type} is currenlty not supported!')
 
-def np_read_image(image_id, filter_type='original'):
+def load_images():
+    
+    dir_path = app.config['STANDARD_IMAGE_DIRECTORY']
+    images = []
 
-    base_dir = app.config[f'{filter_type.upper()}_DIRECTORY']
+    for image_id in os.listdir(dir_path):
+        images.append({
+            'id': image_id,
+            'source': load_image(get_image_path(dir_path, image_id), as_type='base_64')
+        })
 
-    file_dir = os.path.join(base_dir, image_id)
-    file_name = os.listdir(file_dir)[0]
-    file_path = os.path.join(file_dir, file_name)
+    return images
 
-    return imread(file_path, mode='RGB')
+def load_standard_image(image_id, as_type='string'):
+    base_dir = app.config['STANDARD_IMAGE_DIRECTORY']
+    return load_image(get_image_path(base_dir, image_id), as_type)
 
-def read_all_image(filter_type):
-    for image_id in os.listdir(app.config[f'{filter_type.upper()}_DIRECTORY']):
-        yield read_image(image_id, filter_type), image_id
+def load_gradcam_image(image_id, layer_id, class_id, as_type='string'):
+    base_dir = app.config['GRADCAM_IMAGE_DIRECTORY']
+    image_id = f'{image_id}-{layer_id}-{class_id}'
+    return load_image(get_image_path(base_dir, image_id), as_type)
 
-def handle_delete(uuid):
-    filepath = os.path.join(app.config['UPLOAD_DIRECTORY'], uuid)
-    shutil.rmtree(filepath)
+def load_guided_gradcam_image(image_id, layer_id, class_id, as_type='string'):
+    base_dir = app.config['GUIDED_GRADCAM_IMAGE_DIRECTORY']
+    image_id = f'{image_id}-{layer_id}-{class_id}'
+    return load_image(get_image_path(base_dir, image_id), as_type)
 
-def handle_upload(form_file, form_attributes):
+def get_image_path(base_dir, image_id):
+    dir_path = os.path.join(base_dir, image_id)
+    file_name = os.listdir(dir_path)[0]
+    return os.path.join(dir_path, file_name)
+
+
+def save_video():
+    pass
+
+def load_video():
+    pass
+
+def load_videos():
+    pass
+
+def upload(f, form_attributes, file_type='image'):
 
     chunked = False
     chunksize = None
@@ -78,36 +150,36 @@ def handle_upload(form_file, form_attributes):
         chunkindex = int(form_attributes['qqpartindex'])
         chunkdir = app.config['CHUNKS_DIRECTORY']
 
-    filepath = ''
+    file_path = ''
 
-    filename = form_attributes['qqfilename']
-    fileuuid = form_attributes['qquuid']
-    filedir = app.config['ORIGINAL_DIRECTORY']
+    file_name = form_attributes['qqfilename']
+    file_uuid = form_attributes['qquuid']
+    file_dir = app.config['ORIGINAL_DIRECTORY']
 
-    dest = os.path.join(filedir, fileuuid, filename)
+    path = os.path.join(file_dir, file_uuid, file_name)
 
     if chunked and chunksize > 1:
-        dest = os.path.join(chunkdir, fileuuid, filename, str(chunkindex))
+        path = os.path.join(chunkdir, file_uuid, file_name, str(chunkindex))
 
-    save_file(form_file, dest)
+    save_standard_file(f, file_uuid, file_name, file_type)
 
     if chunked and (chunksize - 1 == chunkindex):
 
-        filepath = os.path.join(filedir, fileuuid, filename)
+        file_path = os.path.join(file_dir, file_uuid, file_name)
 
         combine_chunks(
             chunksize=chunksize,
-            source_dir=os.path.dirname(dest),
-            dest=filepath)
+            source_dir=os.path.dirname(path),
+            path=file_path)
 
-        shutil.rmtree(os.path.dirname(os.path.dirname(dest)))
+        shutil.rmtree(os.path.dirname(os.path.dirname(path)))
     
-    return filepath
+    return file_path
 
-def combine_chunks(chunksize, source_dir, dest):
+def combine_chunks(chunksize, source_dir, path):
 
-    if not os.path.exists(os.path.dirname(dest)):
-        os.makedirs(os.path.dirname(dest))
+    if not os.path.exists(os.path.dirname(path)):
+        os.makedirs(os.path.dirname(path))
 
     with open(dest, 'wb+') as destination:
         for chunk_index in range(chunksize):

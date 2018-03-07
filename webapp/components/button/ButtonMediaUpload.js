@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { requestFileUpload, requestFileRefresh } from 'actions';
+import { requestFileUpload, requestImages } from 'actions';
 
 import FineUploaderTraditional from 'fine-uploader-wrappers';
 import FileInput from 'react-fine-uploader/file-input';
@@ -16,7 +16,7 @@ class ButtonUpload extends Component {
         this.uploader = new FineUploaderTraditional({
             options: {
                request: {
-                  endpoint: 'api/file/upload'
+                  endpoint: 'api/files/upload'
                },
             }
          });
@@ -28,7 +28,7 @@ class ButtonUpload extends Component {
         });
 
         this.uploader.on('onAllComplete', (succeeded, failed) => {
-            this.props.requestFileRefresh();
+            this.props.requestImages();
         });
     }
 
@@ -49,8 +49,8 @@ export default connect(
         requestFileUpload(){
             dispatch(requestFileUpload())
         },
-        requestFileRefresh(){
-            dispatch(requestFileRefresh())
+        requestImages(){
+            dispatch(requestImages())
         }
     })
 )(ButtonUpload);

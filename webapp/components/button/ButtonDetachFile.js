@@ -9,12 +9,10 @@ import ButtonAction from 'components/button/ButtonAction'
 
 const enhance = compose(
     connect(
-        state => ({
-            file: state.file.selectedFile,
-        }),
+        null,
         dispatch => ({
-            detachImage(file) {
-                dispatch(detachFile(file))
+            detachImage(imageId) {
+                dispatch(detachFile(imageId))
             },
         }),
     ),
@@ -23,8 +21,8 @@ const enhance = compose(
     })),
     withHandlers({
         onClick: props => event => {
-            if (!isEmpty(props.file)) {
-                props.detachImage(props.file);
+            if (props.imageId) {
+                props.detachImage(props.imageId);
             }
         }
     })

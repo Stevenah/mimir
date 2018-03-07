@@ -15,9 +15,9 @@ const initialState = {
 const cnn = (state = initialState, action) => {
     switch (action.type) {
 
-        case actions.RECEIVE_FILE_REFRESH:
+        case actions.RECEIVE_IMAGES:
             return update(state, {
-                originalImages: {$merge: action.payload.files}
+                originalImages: {$merge: action.payload.images}
             })
 
         case actions.SELECT_FILE:
@@ -74,7 +74,7 @@ const cnn = (state = initialState, action) => {
                 selectedGuidedGradCam: { $set: 'data:image/jpeg;base64,' + state.guidedGradCamImages[imageId].source }
             });
             
-        case actions.RECEIVE_SELECTED_VISUALIZATIONS:
+        case actions.RECEIVE_IMAGE_VISUALIZATION:
             return update(state, {
                 gradCamImages: {
                     $merge: {

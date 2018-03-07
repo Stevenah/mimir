@@ -169,8 +169,8 @@ const ColonoscopyReport = props =>
                 </div>
             </div>
             <div className='section-right report-attached-images'>
-                {Object.keys(props.attachedImages).map(fileId => (
-                    <ImageAttachment label={props.attachedImages[fileId].file.name} src={props.attachedImages[fileId].source} />
+                {props.attachedImages.map(imageSource => (
+                    <ImageAttachment src={imageSource} />
                 ))}
             </div>
         </div>

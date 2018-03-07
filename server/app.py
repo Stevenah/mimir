@@ -2,9 +2,8 @@ from flask import Flask
 from flask_cors import CORS
 
 from blueprints.pages import mod as pages_mod
-from blueprints.model import mod as model_mod
-from blueprints.visualize import mod as visualize_mod
-from blueprints.file import mod as file_mod
+from blueprints.cnn import mod as cnn_mod
+from blueprints.files import mod as files_mod
 
 from utils.modelhelper import ModelHelper
 from utils.kvasir import KVASIR_CLASSIFICATION_LABELS
@@ -26,10 +25,8 @@ app.config['MODEL'] = ModelHelper(
 )
 
 app.register_blueprint(pages_mod)
-app.register_blueprint(visualize_mod)
-app.register_blueprint(model_mod)
-app.register_blueprint(file_mod)
-
+app.register_blueprint(files_mod)
+app.register_blueprint(cnn_mod)
 
 if __name__ == '__main__':
 

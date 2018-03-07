@@ -36,12 +36,12 @@ class FileSelector extends Component {
                         width={100}
                         height={100}
                         key={file.id} 
-                        selected={file.selected}
+                        selected={file.id === this.props.selectedFile}
                         loading={file.loading}
                         attached={file.attached}
                         label={file.type}
                         clickable={true}
-                        src={file.thumbnail} 
+                        src={file.source} 
                         onClick={() => this.props.selectFile(file.id)}
                     />
                 ))}

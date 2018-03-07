@@ -12,7 +12,7 @@ from keras.layers.convolutional import _Conv
 from keras.layers.pooling import _Pooling1D, _Pooling2D, _Pooling3D
 from keras.layers import GlobalAveragePooling2D, Activation
 
-from blueprints.utils import save_image
+from blueprints.utils import save_image, save_gradcam_image, save_guided_gradcam_image, save_saliency_image
 
 import keras.backend as K
 import tensorflow as tf
@@ -51,8 +51,8 @@ class ModelHelper():
         self.image_height = self.model.input_shape[2]
         self.image_channels = self.model.input_shape[3]
 
-        self.image_rescale = True
-        self.image_bgr = True
+        self.image_rescale = False
+        self.image_bgr = False
 
     def initialize_model(self):
         if self.model_file is not None:
@@ -73,10 +73,6 @@ class ModelHelper():
 
     def get_classes(self):
         return [self.labels[class_id] for class_id in self.labels]
-
-    def prepare_base64_image(self, image):
-        return prepare_base64_image(image, self.image_width, 
-            self.image_height, self.image_channels)
             
     def prepare_image(self, image):
         return prepare_image(image, self.image_width, 
@@ -95,33 +91,6 @@ class ModelHelper():
         return {label: predictions[i].tolist() 
             for i, label in self.labels.items() if predictions[i] > threshold}
 
-    def predict_max(self, image):
-        return np.argmax(self.predict(image))
-
-    def save_image(self, image, image_id, filter_type, layer_id, class_id):
-
-        image_id = self.get_image_id(image_id, filter_type, layer_id, class_id)
-        file_name = f'{image_id}.jpg'
-
-        base_dir = app.config[f'{filter_type.upper()}_DIRECTORY']
-        file_dir = os.path.join(base_dir, image_id)
-
-        if not os.path.exists(file_dir):
-            os.makedirs(file_dir)
-
-        file_path = os.path.join(file_dir, file_name)
-
-        save_image(image, file_path, as_np=True)
-
-    def get_image_id(self, image_id, image_filter, layer_id, class_id):
-        return f'{image_id}_{image_filter}_{layer_id}_{class_id}'
-
-    def load_layer_visualization(self, layer, category):
-        return {
-            'gradcam': self.load_guided_gradcam(layer, category),
-            'heatmap': self.load_gradcam(layer, category)
-        }
-
     def create_saliency_map(self, image, layer_id):
         layer_output = self.guided_model.get_layer(layer_id).output
 
@@ -130,11 +99,11 @@ class ModelHelper():
 
         return K.function([self.guided_model.input], [saliency])([image])
 
-    def create_gradient_cam(self, image, class_id, layer_id):
+    def create_gradcam(self, image, class_id, layer_id):
         input_layer  = self.model.layers[0].input
         output_layer = self.model.layers[-1].output
         target_layer = self.model.get_layer(layer_id).output
-    
+
         loss = K.sum(output_layer * K.one_hot([class_id], self.number_of_classes))
 
         gradients = K.gradients(loss, target_layer)[0]
@@ -152,78 +121,18 @@ class ModelHelper():
 
         return gradcam / np.max(gradcam)
 
-    def create_guided_gradient_cam(self, saliancy_map, grad_cam):
+    def create_guided_gradcam(self, saliancy_map, grad_cam):
         saliancy_map = np.squeeze(saliancy_map)
         grad_cam = grad_cam[..., np.newaxis]
         return saliancy_map * grad_cam
 
-    def visualize_image(self, image, image_id, layer_id, class_id):
-
-        image = self.prepare_image(image)
-        gradcam, saliency, guided_gradcam = self.guided_gradcam(image, layer_id, class_id)
-
-        self.save_image(gradcam, image_id, 'gradcam', layer_id, class_id)      
-        self.save_image(saliency, image_id, 'saliency', layer_id, class_id)  
-        self.save_image(guided_gradcam, image_id, 'guided_gradcam', layer_id, class_id)
-
-    def archive(self, image, image_id, sub_dir, layer_id=None, class_id=None, save_prediction=False):
-
-        archive_dir = app.config['ARCHIVE_DIRECTORY']
-        model_dir = app.config['MODEL_NAME']
-        image_dir = os.path.join(archive_dir, model_dir, image_id) 
-        path = os.path.join(image_dir, sub_dir)
-
-        if layer_id and class_id:
-            filename = f'{image_id}_{layer_id}_{class_id}.jpg'
-        else:
-            filename = f'{image_id}.jpg'
-
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-        if save_prediction:
-            predictions = self.predict(self.prepare_image(image))
-            with open(os.path.join(image_dir, 'predictions.txt'), 'w') as f:
-                json.dump(
-                    self.labeled_predictions(image), f,
-                    sort_keys=True,
-                    indent=4,
-                    separators=(',', ': '))
-
-        save_image(image, os.path.join(path, filename), as_np=True)
-        
-    def visualize_model(self, image, image_id):
-
-        self.archive(image, image_id, 'original')
-
-        image = self.prepare_image(image)
-        predictions = self.predict(image)
-
-        for class_id in range(0, self.number_of_classes):
-            
-            if predictions[class_id] < .2:
-                continue
-
-            for layer_index, layer in enumerate(self.model.layers):
-                if isinstance(layer, _Conv):
-
-                    gradcam, saliency, guided_gradcam = self.guided_gradcam(
-                        image, layer.name, class_id)
-                    
-                    self.archive(gradcam, image_id, 'gradcam', layer.name, class_id)      
-                    self.archive(saliency, image_id, 'saliency', layer.name, class_id)  
-                    self.archive(guided_gradcam, image_id, 'guided_gradcam', layer.name, class_id)
-
-            self.reset()
-
-    
-    def guided_gradcam(self, image, layer_id, class_id):
+    def visualize(self, image, layer_id, class_id):
 
         original, processed = self.process_image(image)
         
         saliency = self.create_saliency_map(processed, layer_id)
-        gradcam = self.create_gradient_cam(processed, class_id, layer_id)
-        guided_gradcam = self.create_guided_gradient_cam(saliency, gradcam)
+        gradcam = self.create_gradcam(processed, class_id, layer_id)
+        guided_gradcam = self.create_guided_gradcam(saliency, gradcam)
 
         gradcam = deprocess_gradcam(original, gradcam)
         saliency = deprocess_saliency(saliency)
@@ -233,29 +142,13 @@ class ModelHelper():
 
         return gradcam, saliency, guided_gradcam
 
-    # def save_prediction_results(self, image):
-    #     with open(os.path.join(self.image_dir, 'predictions.txt'), 'w') as file:
-    #         file.write(json.dumps(self.labeled_predictions(image)))
+    def visualize_image(self, image, image_id, layer_id, class_id):
 
-    # def load_image(self, image_id, filter_type, layer_id, class_id):
-    #     with open(f'{image_id}_{filter_type}_{layer_id}_{class_id}.jpg', 'rb') as f:
-    #         return base64.b64encode(f.read()).decode('UTF-8')
-    
-    # def load_all_layer_visualizations(self, category):
-    #     return {layer: self.load_layer_visualization(layer, category) 
-    #         for layer in self.visualized_layers}
+        class_id = int(class_id)
 
-    # def load_all_category_visualizations(self):
-    #     return {label: self.load_all_layer_visualizations(category) 
-    #         for category, label in self.labels.items()}
+        image = self.prepare_image(image)
+        gradcam, saliency, guided_gradcam = self.visualize(image, layer_id, class_id)
 
-    # def set_image_dir(self, path):
-    #     os.makedirs(path)
-    #     self.image_dir = path
-
-    # def get_visualized_layers(self):
-    #     return self.visualized_layers
-    
-    # def add_visualized_layer(self, layer_id, layer_index):
-    #     if layer_id not in self.visualized_layers:
-    #         self.visualized_layers[layer_id] = layer_index
+        save_gradcam_image(gradcam, image_id, layer_id, class_id)      
+        save_saliency_image(saliency, image_id, layer_id, class_id)  
+        save_guided_gradcam_image(guided_gradcam, image_id, layer_id, class_id)

@@ -9,12 +9,10 @@ import ButtonAction from 'components/button/ButtonAction'
 
 const enhance = compose(
     connect(
-        state => ({
-            file: state.file.selectedFile,
-        }),
+        null,
         dispatch => ({
-            attachImage(file) {
-                dispatch(attachFile(file))
+            attachImage(imageId) {
+                dispatch(attachFile(imageId))
             },
         }),
     ),
@@ -23,8 +21,8 @@ const enhance = compose(
     })),
     withHandlers({
         onClick: props => event => {
-            if (!isEmpty(props.file)) {
-                props.attachImage(props.file);
+            if (props.imageId) {
+                props.attachImage(props.imageId);
             }
         }
     })

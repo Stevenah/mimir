@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, nest } from 'recompose';
-import { updateField } from 'actions';
+import { setTextField } from 'actions';
 
 import Panel from 'layout/Panel'
 import ColonoscopyReport from 'components/ui/ColonoscopyReport';
@@ -9,7 +9,7 @@ import ColonoscopyReport from 'components/ui/ColonoscopyReport';
 const enhance = compose(
     connect(
         state => ({
-            attachedImages: state.report.attachedImages,
+            attachedImages: state.report.attachedImages.map(imageId => state.app.images[imageId].source),
             patientName: state.report.patientName,
             dateOfBirth: state.report.dateOfBirth,
             generalPracticioner: state.report.generalPracticioner,
@@ -32,7 +32,7 @@ const enhance = compose(
         }),
         dispatch => ({
             updateValue(field, value) {
-                dispatch(updateField(field, value));
+                dispatch(setTextField(field, value));
             }
         })
     )

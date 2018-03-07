@@ -2,21 +2,61 @@ import * as actions from 'constants';
 import update from 'immutability-helper';
 
 const initialState = {
-    analysis: false,
-    file: false,
+    gradCam: {},
+    guidedGradCam: {},
+    layers: false,
+    classes: false,
 };
 
 const analysis = (state = initialState, action) => {
     switch (action.type) {
-        case actions.REQUEST_SELECTED_VISUALIZATIONS:
+        
+        case actions.REQUEST_IMAGE_VISUALIZATION: {
+            const imageId = `${action.payload.imageId}-${action.payload.layerId}-${action.payload.classId}`;
             return update(state, {
-                analysis: {$set: true}
+                gradCam: { [imageId]: { $set: true } },
+                guidedGradCam: { [imageId]: { $set: true } },
+            });
+        }
+
+        case actions.RECEIVE_IMAGE_VISUALIZATION: {
+            return update(state, {
+                gradCam: { [action.payload.imageId]: { $set: false } },
+                guidedGradCam: { [action.payload.imageId]: { $set: false } },
+            });
+        }
+            
+
+        case actions.REQUEST_CNN_LAYERS:
+            return update(state, {
+                layers: { $set: true },
             });
 
-        case actions.RECEIVE_SELECTED_VISUALIZATIONS:
+        case actions.RECEIVE_CNN_LAYERS:
             return update(state, {
-                analysis: {$set: false}
+                layers: { $set: false },
             });
+
+        case actions.REQUEST_CNN_CLASSES:
+            return update(state, {
+                classes: { $set: true },
+            });
+
+        case actions.RECEIVE_CNN_CLASSES:
+            return update(state, {
+                classes: { $set: false },
+            });
+
+        case actions.REQUEST_CNN_CLASSIFICATION:
+            return update(state, {
+                classification: { $set: true },
+            });
+
+        case actions.RECEIVE_CNN_CLASSIFICATION:
+            return update(state, {
+                classification: { $set: false },
+            });
+
 
         case actions.REQUEST_FILE_UPLOAD:
         case actions.REQUEST_FILES:

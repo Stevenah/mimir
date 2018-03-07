@@ -5,25 +5,10 @@ h4 {
     margin-top: 0;
 }
 
-.report-page-section {
-    padding-bottom:  10px;
-}
-
 .page-header {
     display: flex;
     flex-direction: row;
     width: 100%;
-}
-
-.header-section-left {
-    flex-grow: 3;
-    max-width: 50%;
-}
-
-.header-section-right {
-    text-align: right;
-    flex-grow: 1;
-    max-width: 50%;
 }
 
 .page {
@@ -46,7 +31,6 @@ h4 {
         resize: none;
     }
 }
-
 
 .input-box-group {    
     label {

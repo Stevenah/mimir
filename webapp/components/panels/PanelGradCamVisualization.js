@@ -9,13 +9,14 @@ import ShowcaseImage from 'components/ui/ShowcaseImage';
 const enhance = compose(
     connect(
         state => ({
-            source: state.cnn.selectedGradCam,
-            loading: state.loading.analysis,
+            gradCam: state.cnn.gradCamImages[`${state.cnn.selectedImageId}-${state.cnn.selectedLayer}-${state.cnn.selectedClass}`],
+            loading: state.loading.gradCam[`${state.cnn.selectedImageId}-${state.cnn.selectedLayer}-${state.cnn.selectedClass}`],
         })
     ),
     withProps(props => ({
         emptyMessage: 'A heatmap representation of the image will appear here.',
-        isEmpty: !props.source
+        source: props.gradCam ? 'data:image/jpeg;base64,' + props.gradCam : '',
+        isEmpty: !props.gradCam,
     })),
 );
 

@@ -4,10 +4,9 @@ from flask.json import jsonify
 from blueprints.utils import *
 
 import flask
-import cv2
 import os
 
-mod = Blueprint('model', __name__, url_prefix='/api/model')
+mod = Blueprint('cnn', __name__, url_prefix='/api/cnn')
 
 @mod.route('/layers', methods=['GET'])
 def layers():
@@ -49,10 +48,36 @@ def classify(image_id):
     
     if flask.request.method == 'GET':
         model = app.config['MODEL']
-
-        image = np_read_image(image_id)
+        image = load_standard_image(image_id, as_type='np_array')
         image = model.prepare_image(image)
-        response['classes'] = model.labeled_predictions(image)
+        response['classification'] = model.labeled_predictions(image)
+        response['status'] = 200
+
+    return jsonify(response)
+
+@mod.route('/visualize/<image_id>', methods=['GET', 'DELETE'])
+def visualize(image_id):
+    
+    response = {
+        'status': 400,
+        'success': False
+    }
+
+    if flask.request.method == 'GET':
+
+        model = app.config['MODEL']
+
+        layer_id = flask.request.args.get('layerId', '0')
+        class_id = flask.request.args.get('classId', '0')
+
+        image = load_standard_image(image_id, as_type='np_array')
+
+        model.visualize_image(image, image_id, layer_id, class_id)
+
+        response['gradCam'] = load_gradcam_image(image_id, layer_id, class_id, as_type='base_64')
+        response['guidedGradCam'] = load_guided_gradcam_image(image_id, layer_id, class_id, as_type='base_64')
+
+        response['success'] = True
         response['status'] = 200
 
     return jsonify(response)

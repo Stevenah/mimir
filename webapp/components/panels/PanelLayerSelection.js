@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withProps, nest, withHandlers, lifecycle } from 'recompose';
-import { requestCnnLayers, selectCnnLayer, requestSelectedVisualization } from 'actions';
+import { requestCnnLayers, selectCnnLayer, requestImageVisualization } from 'actions';
 
 import Panel from 'layout/Panel'
 import TableSelector from 'components/ui/TableSelector';
@@ -11,21 +11,31 @@ const enhance = compose(
         state => ({
             layers: state.cnn.layers,
             imageId: state.cnn.selectedImageId,
+            layerId: state.cnn.selectedLayer,
+            classId: state.cnn.selectedClass,
             selectedRow: state.cnn.layers.indexOf(state.cnn.selectedLayer),
+            loading: state.loading.layers,
         }),
         dispatch => ({
             requestCnnLayers() {
                 dispatch(requestCnnLayers());
             },
-            selectVisualizationLayer(layerId){
-                dispatch(selectCnnLayer(layerId));
-                dispatch(requestSelectedVisualization());
+            selectCnnLayer(layerIndex) {
+                dispatch(selectCnnLayer(layerIndex));
+            },
+            selectVisualizationLayer(imageId, layerId, classId){
+                dispatch(requestImageVisualization(imageId, layerId, classId));
             },
         })
     ),
     withHandlers({
         onClick: props => rowIndex => {
-            props.selectVisualizationLayer(Object.keys(props.layers)[rowIndex])
+            props.selectCnnLayer(rowIndex);
+            props.selectVisualizationLayer(
+                props.imageId,
+                props.layers[rowIndex],
+                props.classId
+            );
         },
     }),
     withProps(props => ({

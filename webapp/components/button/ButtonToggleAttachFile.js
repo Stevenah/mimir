@@ -6,17 +6,15 @@ import ButtonAction from 'components/button/ButtonAction';
 import ButtonAttachFile from 'components/button/ButtonAttachFile';
 import ButtonDetachFile from 'components/button/ButtonDetachFile';
 
-import { getSelectedFileFromState } from 'utils';
-
 const enhance = compose(
     connect(
         state => ({
-            file: getSelectedFileFromState(state),
-            attached: getSelectedFileFromState(state).attached,
+            imageId: state.app.selectedImageId,
+            image: state.app.images[state.app.selectedImageId],
         })
     ),
     branch(
-        props => !props.attached,
+        props => props.image && !props.image.attached,
         renderComponent(ButtonAttachFile),
         renderComponent(ButtonDetachFile)
     )

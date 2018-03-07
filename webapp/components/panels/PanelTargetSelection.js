@@ -1,26 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withProps, nest, withHandlers, lifecycle, defaultProps } from 'recompose';
-import { requestCnnClasses, selectCnnClass, requestSelectedVisualization } from 'actions';
+import { requestCnnClasses, selectCnnClass, requestImageVisualization } from 'actions';
 
 import Panel from 'layout/Panel'
 import TableSelector from 'components/ui/TableSelector';
+import {  } from 'actions';
 
 const enhance = compose(
     connect(
         state => ({
             classes: state.cnn.classes,
             imageId: state.cnn.selectedImageId,
+            layerId: state.cnn.selectedLayer,
+            classId: state.cnn.selectedClass,
             selectedRow: Number(state.cnn.selectedClass),
             classification: state.cnn.classifications[state.cnn.selectedImageId],
+            loading: state.loading.classes
         }),
         dispatch => ({
             requestCnnClasses() {
                 dispatch(requestCnnClasses());
             },
-            selectVisualizationTarget(classId){
+            selectVisualizationTarget(imageId, layerId, classId){
                 dispatch(selectCnnClass(classId));
-                dispatch(requestSelectedVisualization());
+                dispatch(requestImageVisualization(imageId, layerId, classId));
             },
         })
     ),
@@ -30,6 +34,8 @@ const enhance = compose(
     withHandlers({
         onClick: props => rowIndex => {
             props.selectVisualizationTarget(
+                props.imageId,
+                props.layerId,
                 Object.keys(props.classes)[rowIndex]
             );
         },

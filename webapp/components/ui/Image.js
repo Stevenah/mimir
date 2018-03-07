@@ -51,11 +51,14 @@ class Image extends Component {
                 <img src={this.props.src}
                      width={this.props.width}
                      height={this.props.height}/>
-                <span className='ui-image-label-overlay'>
-                    <span className='ui-image-label'>
-                        {this.props.label}
+                {this.props.label ?
+                    <span className='ui-image-label-overlay'>
+                        <span className='ui-image-label'>
+                            {this.props.label}
+                        </span>
                     </span>
-                </span>
+                : ''}
+                
             </div>
         );
     }

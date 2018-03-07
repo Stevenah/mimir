@@ -23,6 +23,9 @@ module.exports = merge(base, {
             },
         }),
         new webpack.HashedModuleIdsPlugin(),
-        new webpack.optimize.ModuleConcatenationPlugin()
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production')
+        })
     ],  
 });

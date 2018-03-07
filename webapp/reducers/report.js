@@ -2,7 +2,7 @@ import * as actions from 'constants';
 import update from 'immutability-helper';
 
 const initialState = {
-    attachedImages: {},
+    attachedImages: [],
     patientName: 'Windom Earle',
     dateOfBirth: '07.12.1993',
     generalPracticioner: 'Billy Gregg',
@@ -29,16 +29,15 @@ const report = (state = initialState, action) => {
        
         case actions.ATTACH_FILE:
             return update(state, {
-                attachedImages: {$merge: {[action.payload.file.id]: action.payload.file}}
+                attachedImages: { $push: [ action.payload.imageId ] },
             })
         
         case actions.DETACH_FILE:
             return update(state, {
-                attachedImages: {$unset: [action.payload.file.id]}
+                attachedImages: { $unshift: [ action.payload.imageId ] }
             })
 
-        case actions.EDIT_FIELD: {
-            console.log(action.payload.field, action.payload.value);
+        case actions.SET_TEXT_FIELD: {
             return update(state, {
                 [action.payload.field]: {$set: action.payload.value},
             });
