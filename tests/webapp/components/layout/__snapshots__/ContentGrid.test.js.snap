@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContentGrid does render 1`] = `
+<Grid
+  className="grid-layout grid-content"
+  columns={0}
+  verticalAlign="middle"
+/>
+`;

@@ -9,7 +9,6 @@ import HeaderColumn from 'layout/HeaderColumn';
 import ContentRow from 'layout/ContentRow';
 
 import PanelReport from 'components/panels/PanelReport';
-import ButtonPrint from 'components/button/ButtonPrint';
 
 
 const ReportPage = () =>

@@ -7,7 +7,6 @@ import appReducer from 'reducers/app';
 import loadingReducer from 'reducers/loading';
 import reportReducer from 'reducers/report';
 import cnnReducer from 'reducers/cnn';
-import apiSettingsReducer from 'reducers/api';
 
 import appEpics from 'epics';
 
@@ -27,18 +26,13 @@ if (process.env.NODE_ENV === `development`) {
     middlewares.push(logger);
 }
 
-const reducers = combineReducers({
-    settings: combineReducers({
-        api: apiSettingsReducer,
-    }),
-    app: appReducer,
-    loading: loadingReducer,
-    report: reportReducer,
-    cnn: cnnReducer,
-});
-
 export default createStore(
-    reducers,
+    combineReducers({
+        app: appReducer,
+        loading: loadingReducer,
+        report: reportReducer,
+        cnn: cnnReducer,
+    }),
     composeEnhancers(
         applyMiddleware(...middlewares)
     )

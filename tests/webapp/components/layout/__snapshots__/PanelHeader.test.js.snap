@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PanelHeader does render 1`] = `
+<branch(branch(PanelHeader))
+  emptyMessage=""
+  loading={false}
+/>
+`;

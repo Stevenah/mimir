@@ -1,4 +1,4 @@
-import * as actions from 'constants';
+import * as actions from 'actionConstants';
 import update from 'immutability-helper';
 
 const initialState = {

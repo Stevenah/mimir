@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ImageAttachment does render 1`] = `
+<div
+  className="ui-image-attachment-container "
+>
+  <span
+    className="ui-image-attachment-label"
+  />
+  <img
+    className="ui-image-attachment"
+  />
+</div>
+`;

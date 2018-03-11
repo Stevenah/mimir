@@ -6,7 +6,7 @@ import HeaderGrid from 'layout/HeaderGrid';
 import HeaderColumn from 'layout/HeaderColumn';
 import ContentRow from 'layout/ContentRow';
 
-import ButtonMediaUpload from 'components/button/ButtonMediaUpload';
+import ButtonUpload from 'components/button/ButtonUpload';
 import ButtonToggleAttachFile from 'components/button/ButtonToggleAttachFile';
 
 import Panel from 'layout/Panel'
@@ -30,7 +30,7 @@ const ImageAnalysisPage = () =>
             </HeaderColumn>
             <HeaderColumn>
                 <PanelHeader>
-                    <ButtonMediaUpload />
+                    <ButtonUpload />
                 </PanelHeader>
             </HeaderColumn>
         </HeaderGrid>

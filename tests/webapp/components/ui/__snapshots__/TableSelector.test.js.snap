@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TableSelector does render 1`] = `
+<div
+  className="test"
+>
+  <Table
+    as="table"
+    basic={true}
+    className="selection-table analysis-table "
+  >
+    <TableHeader
+      as="thead"
+    >
+      <TableRow
+        as="tr"
+        cellAs="td"
+        className="table-selection-row"
+      />
+    </TableHeader>
+    <TableBody
+      as="tbody"
+      className="selection-table-body"
+    />
+  </Table>
+</div>
+`;

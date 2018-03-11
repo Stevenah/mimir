@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ImageAnalysisPage does render 1`] = `
+<div
+  className="full"
+>
+  <HeaderGrid>
+    <HeaderColumn>
+      <defaultProps(branch(branch(PanelHeader)))
+        emptyMessage=""
+        loading={false}
+      >
+        <Connect(branch(ButtonAction)) />
+      </defaultProps(branch(branch(PanelHeader)))>
+    </HeaderColumn>
+    <HeaderColumn>
+      <defaultProps(branch(branch(PanelHeader)))
+        emptyMessage=""
+        loading={false}
+      >
+        <Connect(ButtonUpload) />
+      </defaultProps(branch(branch(PanelHeader)))>
+    </HeaderColumn>
+  </HeaderGrid>
+  <ContentGrid>
+    <ContentColumn>
+      <ContentRow>
+        <ContentColumn>
+          <Connect(withProps(nest(defaultProps(branch(branch(Panel))), ShowcaseImage))) />
+        </ContentColumn>
+        <ContentColumn>
+          <Connect(withProps(nest(defaultProps(branch(branch(Panel))), ImageDescription))) />
+        </ContentColumn>
+      </ContentRow>
+      <ContentRow>
+        <ContentColumn>
+          <Connect(withProps(nest(defaultProps(branch(branch(Panel))), ShowcaseImage))) />
+        </ContentColumn>
+        <ContentColumn>
+          <Connect(withProps(nest(defaultProps(branch(branch(Panel))), ShowcaseImage))) />
+        </ContentColumn>
+      </ContentRow>
+      <ContentRow>
+        <ContentColumn>
+          <Connect(withHandlers(withProps(lifecycle(nest(defaultProps(branch(branch(Panel))), TableSelector))))) />
+        </ContentColumn>
+        <ContentColumn>
+          <Connect(defaultProps(withHandlers(withProps(lifecycle(nest(defaultProps(branch(branch(Panel))), TableSelector)))))) />
+        </ContentColumn>
+      </ContentRow>
+    </ContentColumn>
+    <ContentColumn>
+      <Connect(lifecycle(withProps(nest(defaultProps(branch(branch(Panel))), FileSelector)))) />
+    </ContentColumn>
+  </ContentGrid>
+</div>
+`;

@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ButtonAction does render 1`] = `
+<span
+  className="link-button analysis-header-button "
+>
+  Hello Jest!
+</span>
+`;

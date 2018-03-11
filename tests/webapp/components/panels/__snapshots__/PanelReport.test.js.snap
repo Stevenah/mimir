@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PanelReport does render 1`] = `
+<nest(defaultProps(branch(branch(Panel))), ColonoscopyReport)
+  attachedImages={Array []}
+  coMorbidity="None"
+  dateOfBirth="07.12.1993"
+  dateOfProcedure="27.09.2012"
+  endoscopicDiagnosis="Varices. Esophageal. Furthger 4 bands applied"
+  endoscopist="Dan Brownman"
+  extentOfExam="Second part of duodenum"
+  findings="Polyps"
+  followUp="High fiber diet"
+  generalPracticioner="Billy Gregg"
+  hospitalNumber="562346"
+  indicationsForExamination="Survailence-Varices"
+  instrument="G15 - H260"
+  medications="Xylocaine Sprey"
+  nurses="Jane Doe, Carol Smith"
+  opsc4Code="G45 Gastroscopy (OGD)"
+  patientName="Windom Earle"
+  procedurePerformed="Gastoscopy (OGD)"
+  recommendations="High fiber diet."
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+  storeSubscription={
+    Subscription {
+      "listeners": Object {
+        "clear": [Function],
+        "get": [Function],
+        "notify": [Function],
+        "subscribe": [Function],
+      },
+      "onStateChange": [Function],
+      "parentSub": undefined,
+      "store": Object {
+        "clearActions": [Function],
+        "dispatch": [Function],
+        "getActions": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+      },
+      "unsubscribe": [Function],
+    }
+  }
+  updateValue={[Function]}
+  visualization="Good"
+>
+  This is a test!
+</nest(defaultProps(branch(branch(Panel))), ColonoscopyReport)>
+`;

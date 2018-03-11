@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PanelLayerSelection does render 1`] = `
+<withHandlers(withProps(lifecycle(nest(defaultProps(branch(branch(Panel))), TableSelector))))
+  classId={6}
+  layerId="block5_conv4"
+  layers={Array []}
+  loading={false}
+  requestCnnLayers={[Function]}
+  selectCnnLayer={[Function]}
+  selectVisualizationLayer={[Function]}
+  selectedRow={-1}
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+  storeSubscription={
+    Subscription {
+      "listeners": Object {
+        "clear": [Function],
+        "get": [Function],
+        "notify": [Function],
+        "subscribe": [Function],
+      },
+      "onStateChange": [Function],
+      "parentSub": undefined,
+      "store": Object {
+        "clearActions": [Function],
+        "dispatch": [Function],
+        "getActions": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+      },
+      "unsubscribe": [Function],
+    }
+  }
+>
+  This is a test!
+</withHandlers(withProps(lifecycle(nest(defaultProps(branch(branch(Panel))), TableSelector))))>
+`;

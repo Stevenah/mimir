@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextBox does render 1`] = `
+<div
+  className="text-boxcontainer input-group"
+>
+  <label
+    style={
+      Object {
+        "display": "block",
+        "textAlign": "left",
+      }
+    }
+  />
+  <div
+    className="text-box"
+    contentEditable={true}
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  />
+</div>
+`;

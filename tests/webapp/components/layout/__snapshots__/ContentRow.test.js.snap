@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContentRow does render 1`] = `
+<GridRow
+  className="grid-row"
+/>
+`;

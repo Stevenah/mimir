@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { requestFileUpload, requestImages } from 'actions';
+import { requestFileUpload, requestImages, requestFiles } from 'actions';
 
 import FineUploaderTraditional from 'fine-uploader-wrappers';
 import Dropzone from 'react-fine-uploader/dropzone';
 
 import { compose, withProps } from 'recompose';
-import { requestFiles } from 'actions';
 
 import { Icon } from 'semantic-ui-react';
 

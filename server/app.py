@@ -5,8 +5,8 @@ from blueprints.pages import mod as pages_mod
 from blueprints.cnn import mod as cnn_mod
 from blueprints.files import mod as files_mod
 
-from utils.modelhelper import ModelHelper
-from utils.kvasir import KVASIR_CLASSIFICATION_LABELS
+from model import ModelHelper
+from utils.kvasir_utils import kvasir_index_label
 from utils.util import server_arg_parser
 
 import os
@@ -17,7 +17,7 @@ app = Flask(__name__)
 CORS(app)
 
 app.config.from_pyfile('../config/app.conf')
-app.config['MODEL_CLASS_LABELS'] = KVASIR_CLASSIFICATION_LABELS
+app.config['MODEL_CLASS_LABELS'] = kvasir_index_label
 app.config['MODEL'] = ModelHelper(
     classes=app.config['MODEL_CLASS_LABELS'],
     model_json=app.config['MODEL_JSON_PATH'],

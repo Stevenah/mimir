@@ -10,6 +10,10 @@ const defaultClasses = [
     'image-container',
 ];
 
+const sortFiles = (a, b) => {
+    return (a.id < b.id) ? -1 : (a.id > b.id) ? 1 : 0;
+}
+
 class FileSelector extends Component {
 
     static defaultProps = {
@@ -19,7 +23,7 @@ class FileSelector extends Component {
     
     getFileArray = () => {
         return Object.keys(this.props.files).
-            map(fileId => this.props.files[fileId]);
+            map(fileId => this.props.files[fileId]).sort(sortFiles);
     }
     
     render() {

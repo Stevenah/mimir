@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Image does render 1`] = `
+<div
+  className="ui-image "
+  onClick={[Function]}
+>
+  <img
+    height={100}
+    width={100}
+  />
+</div>
+`;

@@ -1,41 +1,59 @@
-import React, { Component } from 'react'
-import classnames from 'classnames';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import 'style/button/ButtonUpload.scss';
+import { requestFileUpload, requestImages } from 'actions';
+
+import FineUploaderTraditional from 'fine-uploader-wrappers';
+import FileInput from 'react-fine-uploader/file-input';
+
+import ButtonAction from 'components/button/ButtonAction';
 
 class ButtonUpload extends Component {
 
-    static defaultProps = {
-        label: 'Upload file',
-        classNames: [],
+    static state = []
+
+    componentWillMount() {
+        this.uploader = new FineUploaderTraditional({
+            options: {
+               request: {
+                  endpoint: 'api/files/upload',
+               },
+               chunking: {
+                   enabled: true,
+               },
+            }
+         });
+    }
+
+    componentDidMount() {
+        this.uploader.on('onSubmit', (id, name) => {
+            this.props.requestFileUpload();
+        });
+
+        this.uploader.on('onAllComplete', (succeeded, failed) => {
+            this.props.requestImages();
+        });
     }
 
     render() {
-        let classNames = classnames(
-            this.props.classNames
-        );
-
-        let label = this.props.children ? 
-            this.props.children : this.props.label;
-
         return (
-            <div className={classNames} style={{marginTop: "5px"}}>
-                <input onChange={this.props.onChange}
-                    type="file"
-                    name="file-1[]"
-                    id="file-1"
-                    className="inputfile"
-                    data-multiple-caption="{count} files selected"
-                    multiple
-                />
-                <label htmlFor="file-1">
-                    <span className="link-button">
-                        {label}
-                    </span>
-                </label>
-            </div>
+            <ButtonAction className={['analysis-header-button']}>
+                <FileInput className='analysis-header-button' multiple uploader={ this.uploader }>
+                    Upload Files
+                </FileInput>
+            </ButtonAction>
         );
     }
 }
 
-export default ButtonUpload;
+export default connect(
+    null,
+    dispatch => ({
+        requestFileUpload(){
+            dispatch(requestFileUpload())
+        },
+        requestImages(){
+            dispatch(requestImages())
+        }
+    })
+)(ButtonUpload);

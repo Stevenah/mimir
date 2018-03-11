@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReportPage does render 1`] = `
+<div>
+  <HeaderGrid>
+    <HeaderColumn>
+      <defaultProps(branch(branch(PanelHeader)))
+        emptyMessage=""
+        loading={false}
+      />
+    </HeaderColumn>
+  </HeaderGrid>
+  <ContentGrid>
+    <ContentColumn>
+      <Connect(nest(defaultProps(branch(branch(Panel))), ColonoscopyReport)) />
+    </ContentColumn>
+  </ContentGrid>
+</div>
+`;

@@ -1,4 +1,4 @@
-import * as actions from 'constants';
+import * as actions from 'actionConstants';
 import update from 'immutability-helper';
 
 const initialState = {
@@ -6,6 +6,7 @@ const initialState = {
     guidedGradCam: {},
     layers: false,
     classes: false,
+    files: false
 };
 
 const analysis = (state = initialState, action) => {
@@ -59,17 +60,15 @@ const analysis = (state = initialState, action) => {
 
 
         case actions.REQUEST_FILE_UPLOAD:
-        case actions.REQUEST_FILES:
-        case actions.REQUEST_FILE_REFRESH:
+        case actions.REQUEST_IMAGES:
             return update(state, {
-                file: {$set: true}
+                files: {$set: true}
             });
 
-        case actions.REJECT_FILES:
-        case actions.RECEIVE_FILES:
-        case actions.RECEIVE_FILE_REFRESH:
+        case actions.REJECT_IMAGES:
+        case actions.RECEIVE_IMAGES:
             return update(state, {
-                file: {$set: false}
+                files: {$set: false}
             });
             
         default:

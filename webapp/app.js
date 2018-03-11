@@ -17,7 +17,7 @@ const AppContainer = () =>
 
 const render = () => {
     ReactDOM.render(<AppContainer />,
-        document.getElementById('app'));
+        document.getElementById('app') || document.createElement('div'));
 };
 
 render();

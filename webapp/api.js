@@ -1,5 +1,3 @@
-import store from 'store';
-
 const handleStatus = response => {
     if (!response.ok) {
         throw Error(response.statusText);
@@ -19,10 +17,7 @@ const getJsonOptions = () => ({
 });
 
 export const getImageVisualization = (imageId, classId, layerId) => {
-
-    const baseUrl = store.getState().settings.api.url;
-
-    return fetch(`${baseUrl}/api/cnn/visualize/${imageId}?classId=${classId}&layerId=${layerId}`, getJsonOptions())
+    return fetch(`/api/cnn/visualize/${imageId}?classId=${classId}&layerId=${layerId}`, getJsonOptions())
         .then(handleStatus)
         .then(response => response.json())
         .then(response => response)
@@ -30,10 +25,7 @@ export const getImageVisualization = (imageId, classId, layerId) => {
 };
 
 export const getImage = imageId => {
-
-    const baseUrl = store.getState().settings.api.url;
-
-    return fetch(`${baseUrl}/api/files/images/${imageId}`, getJsonOptions())
+    return fetch(`/api/files/images/${imageId}`, getJsonOptions())
         .then(handleStatus)
         .then(response => response.json())
         .then(response => response)
@@ -41,10 +33,7 @@ export const getImage = imageId => {
 };
 
 export const getImages = () => {
-    
-    const baseUrl = store.getState().settings.api.url;
-    
-    return fetch(`${baseUrl}/api/files/images`, getJsonOptions())
+    return fetch(`/api/files/images`, getJsonOptions())
         .then(handleStatus)
         .then(response => response.json())
         .then(response => response)
@@ -52,10 +41,7 @@ export const getImages = () => {
 };
 
 export const getCnnLayers = () => {
-
-    const baseUrl = store.getState().settings.api.url;
-    
-    return fetch(`${baseUrl}/api/cnn/layers`, getJsonOptions())
+    return fetch(`/api/cnn/layers`, getJsonOptions())
         .then(handleStatus)
         .then(response => response.json())
         .then(response => response)
@@ -63,10 +49,7 @@ export const getCnnLayers = () => {
 };
 
 export const getCnnClasses = () => {
-
-    const baseUrl = store.getState().settings.api.url;
-
-    return fetch(`${baseUrl}/api/cnn/classes`, getJsonOptions())
+    return fetch(`/api/cnn/classes`, getJsonOptions())
         .then(handleStatus)
         .then(response => response.json())
         .then(response => response)
@@ -74,10 +57,7 @@ export const getCnnClasses = () => {
 };
 
 export const getCnnClassification = imageId => {
-
-    const baseUrl = store.getState().settings.api.url;
-    
-    return fetch(`${baseUrl}/api/cnn/classify/${imageId}`, getJsonOptions())
+    return fetch(`/api/cnn/classify/${imageId}`, getJsonOptions())
         .then(handleStatus)
         .then(response => response.json())
         .then(response => response)

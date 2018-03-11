@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SidebarSection does render 1`] = `
+<section>
+  <header />
+</section>
+`;

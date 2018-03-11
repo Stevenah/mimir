@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Sidebar does render 1`] = `
+<nav
+  className="sidebar"
+>
+  <header>
+    Gastroenterology
+  </header>
+  <SidebarSection
+    title="Report Generation"
+  >
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <Link
+          replace={false}
+          to="/image"
+        >
+          Image Analysis
+        </Link>
+      </SidebarMenuItem>
+      <SidebarMenuItem>
+        <Link
+          replace={false}
+          to="/report"
+        >
+          Reports
+        </Link>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  </SidebarSection>
+</nav>
+`;

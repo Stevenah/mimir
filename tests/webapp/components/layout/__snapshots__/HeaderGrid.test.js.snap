@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HeaderGrid does render 1`] = `
+<Grid
+  className="grid-header"
+  columns={0}
+  verticalAlign="middle"
+/>
+`;

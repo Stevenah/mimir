@@ -28,7 +28,7 @@ const config = {
     resolve: { 
         alias: {
             components: getPath('../webapp/components'),
-            constants: getPath('../webapp/constants'),
+            actionConstants: getPath('../webapp/actionConstants'),
             reducers: getPath('../webapp/reducers'),
             actions: getPath('../webapp/actions'),
             layout: getPath('../webapp/components/layout'),

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HeaderColumn does render 1`] = `
+<GridColumn
+  className="grid-column"
+/>
+`;

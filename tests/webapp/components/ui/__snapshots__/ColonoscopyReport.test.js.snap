@@ -1,0 +1,202 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColonoscopyReport does render 1`] = `
+<Page
+  classNames={Array []}
+>
+  <header
+    className="page-header"
+  >
+    <div
+      className="header-section-left"
+    >
+      <h3>
+        Endoscopy Report
+      </h3>
+    </div>
+    <div
+      className="header-section-right"
+    >
+      <h3>
+        Gastroscopy (OGD)
+      </h3>
+    </div>
+  </header>
+  <div>
+    <hr />
+  </div>
+  <h4>
+    Guy's & St.Thomas' NHS Foundation Trust
+  </h4>
+  <div
+    className="report-page-content"
+  >
+    <div
+      className="section-left"
+    >
+      <div
+        className="patient-data report-page-section"
+      >
+        <TextField
+          className="input-group"
+          classNames={Array []}
+          label="Patient Name"
+          onChange={[Function]}
+        />
+        <TextField
+          className="input-group"
+          classNames={Array []}
+          label="Date of Birth"
+          onChange={[Function]}
+        />
+        <TextField
+          className="input-group"
+          classNames={Array []}
+          label="General Practicioner"
+          onChange={[Function]}
+        />
+      </div>
+      <div
+        className="hospital-data report-page-section"
+      >
+        <TextField
+          className="input-group"
+          classNames={Array []}
+          label="Hospital Number"
+          onChange={[Function]}
+        />
+        <TextField
+          className="input-group"
+          classNames={Array []}
+          label="Date of Procedure"
+          onChange={[Function]}
+        />
+        <TextField
+          className="input-group"
+          classNames={Array []}
+          label="Endoscopist"
+          onChange={[Function]}
+        />
+        <TextField
+          className="input-group"
+          classNames={Array []}
+          label="Nurses"
+          onChange={[Function]}
+        />
+        <TextField
+          className="input-group"
+          classNames={Array []}
+          label="Medications"
+          onChange={[Function]}
+        />
+        <TextField
+          className="input-group"
+          classNames={Array []}
+          label="Instrument"
+          onChange={[Function]}
+        />
+        <TextField
+          className="input-group"
+          classNames={Array []}
+          label="Extent of Exam"
+          onChange={[Function]}
+        />
+        <TextField
+          className="input-group"
+          classNames={Array []}
+          label="Visualization"
+          onChange={[Function]}
+        />
+        <TextField
+          className="input-group"
+          classNames={Array []}
+          label="Co-morbidity"
+          onChange={[Function]}
+        />
+      </div>
+      <hr />
+      <div
+        className="input-box-group report-page-section"
+      >
+        <TextBox
+          className=""
+          classNames={Array []}
+          label="INDICATIONS FOR EXAMINATION"
+          onChange={[Function]}
+        />
+      </div>
+      <div
+        className="input-box-group report-page-section"
+      >
+        <TextBox
+          className=""
+          classNames={Array []}
+          label="PROCEDURE PERFORMED"
+          onChange={[Function]}
+        />
+      </div>
+      <div
+        className="input-box-group report-page-section"
+      >
+        <TextBox
+          className=""
+          classNames={Array []}
+          label="FINDINGS"
+          onChange={[Function]}
+        />
+      </div>
+      <div
+        className="input-box-group report-page-section"
+      >
+        <TextBox
+          className=""
+          classNames={Array []}
+          label="ENDOSCOPIC DIAGNOSIS"
+          onChange={[Function]}
+        />
+      </div>
+      <div
+        className="input-box-group report-page-section"
+      >
+        <TextBox
+          className=""
+          classNames={Array []}
+          label="RECOMMENDATIONS"
+          onChange={[Function]}
+        />
+      </div>
+      <div
+        className="input-box-group report-page-section"
+      >
+        <TextBox
+          className=""
+          classNames={Array []}
+          label="FOLLOW UP"
+          onChange={[Function]}
+        />
+      </div>
+      <div
+        className="input-box-group report-page-section"
+      >
+        <TextField
+          className=""
+          classNames={Array []}
+          label="OPCS4 Code"
+          onChange={[Function]}
+        />
+      </div>
+      <div
+        className="input-box-group report-page-section"
+      >
+        <span>
+          Signature _____________________
+        </span>
+      </div>
+    </div>
+    <div
+      className="section-right report-attached-images"
+    />
+  </div>
+  <footer />
+</Page>
+`;

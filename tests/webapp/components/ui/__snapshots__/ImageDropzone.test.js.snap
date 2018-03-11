@@ -1,0 +1,329 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ImageDropzone does render 1`] = `
+<DropzoneElement
+  dropActiveClassName="react-fine-uploader-dropzone-active"
+  multiple={true}
+  onProcessingDroppedFilesComplete={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "display": "flex",
+      "height": "100%",
+      "justifyContent": "center",
+      "width": "100%",
+    }
+  }
+  uploader={
+    FineUploaderTraditional {
+      "methods": Object {
+        "_autoRetries": Array [],
+        "_buttonIdsForFileIds": Array [],
+        "_buttons": Array [],
+        "_currentItemLimit": 0,
+        "_customHeadersStore": Object {
+          "addReadOnly": [Function],
+          "get": [Function],
+          "remove": [Function],
+          "reset": [Function],
+          "set": [Function],
+        },
+        "_deleteFileCustomHeadersStore": Object {
+          "addReadOnly": [Function],
+          "get": [Function],
+          "remove": [Function],
+          "reset": [Function],
+          "set": [Function],
+        },
+        "_deleteFileEndpointStore": Object {
+          "addReadOnly": [Function],
+          "get": [Function],
+          "remove": [Function],
+          "reset": [Function],
+          "set": [Function],
+        },
+        "_deleteFileParamsStore": Object {
+          "addReadOnly": [Function],
+          "get": [Function],
+          "remove": [Function],
+          "reset": [Function],
+          "set": [Function],
+        },
+        "_deleteHandler": Object {
+          "canceled": [Function],
+          "initTransport": [Function],
+          "sendDelete": [Function],
+        },
+        "_disposeSupport": Object {
+          "addDisposer": [Function],
+          "attach": [Function],
+          "dispose": [Function],
+        },
+        "_endpointStore": Object {
+          "addReadOnly": [Function],
+          "get": [Function],
+          "remove": [Function],
+          "reset": [Function],
+          "set": [Function],
+        },
+        "_extraButtonSpecs": Object {},
+        "_failedSinceLastAllComplete": Array [],
+        "_formSupport": Object {
+          "attachedToForm": false,
+          "getFormInputsAsObject": [Function],
+          "newAutoUpload": false,
+          "newEndpoint": null,
+        },
+        "_handler": Object {
+          "add": [Function],
+          "cancel": [Function],
+          "cancelAll": [Function],
+          "expunge": [Function],
+          "getFile": [Function],
+          "getInput": [Function],
+          "getResumableFilesData": [Function],
+          "getThirdPartyFileId": [Function],
+          "isProxied": [Function],
+          "isResumable": [Function],
+          "isValid": [Function],
+          "pause": [Function],
+          "reset": [Function],
+          "retry": [Function],
+          "upload": [Function],
+        },
+        "_imageGenerator": Object {
+          "_testing": Object {
+            "determineMimeOfFileName": [Function],
+            "isCanvas": [Function],
+            "isCrossOrigin": [Function],
+            "isImg": [Function],
+          },
+          "generate": [Function],
+        },
+        "_netUploaded": 0,
+        "_netUploadedOrQueued": 0,
+        "_options": Object {
+          "autoUpload": true,
+          "blobs": Object {
+            "defaultName": "misc_data",
+          },
+          "button": null,
+          "callbacks": Object {
+            "onAllComplete": [Function],
+            "onAutoRetry": [Function],
+            "onCancel": [Function],
+            "onComplete": [Function],
+            "onDelete": [Function],
+            "onDeleteComplete": [Function],
+            "onError": [Function],
+            "onManualRetry": [Function],
+            "onPasteReceived": [Function],
+            "onProgress": [Function],
+            "onResume": [Function],
+            "onSessionRequestComplete": [Function],
+            "onStatusChange": [Function],
+            "onSubmit": [Function],
+            "onSubmitDelete": [Function],
+            "onSubmitted": [Function],
+            "onTotalProgress": [Function],
+            "onUpload": [Function],
+            "onUploadChunk": [Function],
+            "onUploadChunkSuccess": [Function],
+            "onValidate": [Function],
+            "onValidateBatch": [Function],
+          },
+          "camera": Object {
+            "button": null,
+            "ios": false,
+          },
+          "chunking": Object {
+            "concurrent": Object {
+              "enabled": false,
+            },
+            "enabled": false,
+            "mandatory": false,
+            "paramNames": Object {
+              "chunkSize": "qqchunksize",
+              "partByteOffset": "qqpartbyteoffset",
+              "partIndex": "qqpartindex",
+              "totalFileSize": "qqtotalfilesize",
+              "totalParts": "qqtotalparts",
+            },
+            "partSize": 2000000,
+            "success": Object {
+              "endpoint": null,
+            },
+          },
+          "classes": Object {
+            "buttonFocus": "qq-upload-button-focus",
+            "buttonHover": "qq-upload-button-hover",
+          },
+          "cors": Object {
+            "allowXdr": false,
+            "expected": false,
+            "sendCredentials": false,
+          },
+          "debug": false,
+          "deleteFile": Object {
+            "customHeaders": Object {},
+            "enabled": false,
+            "endpoint": "/server/upload",
+            "method": "DELETE",
+            "params": Object {},
+          },
+          "disableCancelForFormUploads": false,
+          "extraButtons": Array [],
+          "form": Object {
+            "autoUpload": false,
+            "element": "qq-form",
+            "interceptSubmit": true,
+          },
+          "formatFileName": [Function],
+          "maxConnections": 3,
+          "messages": Object {
+            "emptyError": "{file} is empty, please select files again without it.",
+            "maxHeightImageError": "Image is too tall.",
+            "maxWidthImageError": "Image is too wide.",
+            "minHeightImageError": "Image is not tall enough.",
+            "minSizeError": "{file} is too small, minimum file size is {minSizeLimit}.",
+            "minWidthImageError": "Image is not wide enough.",
+            "noFilesError": "No files to upload.",
+            "onLeave": "The files are being uploaded, if you leave now the upload will be canceled.",
+            "retryFailTooManyItems": "Retry failed - you have reached your file limit.",
+            "sizeError": "{file} is too large, maximum file size is {sizeLimit}.",
+            "tooManyItemsError": "Too many items ({netItems}) would be uploaded.  Item limit is {itemLimit}.",
+            "typeError": "{file} has an invalid extension. Valid extension(s): {extensions}.",
+            "unsupportedBrowserIos8Safari": "Unrecoverable error - this browser does not permit file uploading of any kind due to serious bugs in iOS8 Safari.  Please use iOS8 Chrome until Apple fixes these issues.",
+          },
+          "multiple": true,
+          "paste": Object {
+            "defaultName": "pasted_image",
+            "targetElement": null,
+          },
+          "request": Object {
+            "customHeaders": Object {},
+            "endpoint": "api/files/upload",
+            "filenameParam": "qqfilename",
+            "forceMultipart": true,
+            "inputName": "qqfile",
+            "method": "POST",
+            "params": Object {},
+            "paramsInBody": true,
+            "totalFileSizeName": "qqtotalfilesize",
+            "uuidName": "qquuid",
+          },
+          "resume": Object {
+            "enabled": false,
+            "paramNames": Object {
+              "resuming": "qqresume",
+            },
+            "recordsExpireIn": 7,
+          },
+          "retry": Object {
+            "autoAttemptDelay": 5,
+            "enableAuto": false,
+            "maxAutoAttempts": 3,
+            "preventRetryResponseProperty": "preventRetry",
+          },
+          "scaling": Object {
+            "customResizer": null,
+            "defaultQuality": 80,
+            "defaultType": null,
+            "failureText": "Failed to scale",
+            "includeExif": false,
+            "orient": true,
+            "sendOriginal": true,
+            "sizes": Array [],
+          },
+          "session": Object {
+            "customHeaders": Object {},
+            "endpoint": null,
+            "params": Object {},
+            "refreshOnReset": true,
+          },
+          "text": Object {
+            "defaultResponseError": "Upload failure reason unknown",
+            "fileInputTitle": "file input",
+            "sizeSymbols": Array [
+              "kB",
+              "MB",
+              "GB",
+              "TB",
+              "PB",
+              "EB",
+            ],
+          },
+          "validation": Object {
+            "acceptFiles": null,
+            "allowEmpty": false,
+            "allowedExtensions": Array [],
+            "image": Object {
+              "maxHeight": 0,
+              "maxWidth": 0,
+              "minHeight": 0,
+              "minWidth": 0,
+            },
+            "itemLimit": 0,
+            "minSizeLimit": 0,
+            "sizeLimit": 0,
+            "stopOnFirstInvalidFile": true,
+          },
+          "workarounds": Object {
+            "ios8BrowserCrash": false,
+            "ios8SafariUploads": true,
+            "iosEmptyVideos": true,
+          },
+        },
+        "_paramsStore": Object {
+          "addReadOnly": [Function],
+          "get": [Function],
+          "remove": [Function],
+          "reset": [Function],
+          "set": [Function],
+        },
+        "_preventRetries": Array [],
+        "_retryTimeouts": Array [],
+        "_scaler": Object {
+          "enabled": false,
+          "getFileRecords": [Function],
+          "handleNewFile": [Function],
+        },
+        "_storedIds": Array [],
+        "_succeededSinceLastAllComplete": Array [],
+        "_thumbnailUrls": Array [],
+        "_totalProgress": Object {
+          "onAllComplete": [Function],
+          "onIndividualProgress": [Function],
+          "onNewSize": [Function],
+          "onStatusChange": [Function],
+          "reset": [Function],
+        },
+        "_uploadData": Object {
+          "addFile": [Function],
+          "getIdsInBatch": [Function],
+          "getIdsInProxyGroup": [Function],
+          "reset": [Function],
+          "retrieve": [Function],
+          "setParentId": [Function],
+          "setStatus": [Function],
+          "updateName": [Function],
+          "updateSize": [Function],
+          "uuidChanged": [Function],
+        },
+      },
+      "options": Object {
+        "request": Object {
+          "endpoint": "api/files/upload",
+        },
+      },
+      "qq": [Function],
+    }
+  }
+>
+  <Icon
+    as="i"
+    name="image"
+    size="huge"
+  />
+</DropzoneElement>
+`;

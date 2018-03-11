@@ -4,6 +4,11 @@ import { Grid } from 'semantic-ui-react';
 import 'style/layout/GridLayout.scss';
 
 class ContentGrid extends Component {
+    
+    static defaultProps = {
+        children: []
+    }
+
     render() {
         return (
             <Grid 

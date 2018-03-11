@@ -1,6 +1,6 @@
-import * as action from 'constants';
+import * as action from 'actionConstants';
 
-const actionCreator = type =>
+export const actionCreator = type =>
     (payload={}, meta={}, error={}) => ({
             type,
             payload,
@@ -53,6 +53,8 @@ export const receiveImages = response => {
         }
         return images
     }, {})
+
+    console.log(images)
 
     return actionCreator(action.RECEIVE_IMAGES)({
         images,

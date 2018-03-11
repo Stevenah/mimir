@@ -10,4 +10,9 @@ mod = Blueprint('pages', __name__)
 @mod.route('/', defaults={'path': ''})
 @mod.route('/<path:path>')
 def catch_all(path):
+    """ Catch all paths and return index.html.
+
+        # Returns
+            index.html.
+    """
     return render_template('index.html')

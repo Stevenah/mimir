@@ -1,4 +1,4 @@
-import * as actions from 'constants';
+import * as actions from 'actionConstants';
 import update from 'immutability-helper';
 
 const initialState = {
@@ -26,21 +26,6 @@ const cnn = (state = initialState, action) => {
                 selectedImageSource: {$set: state.originalImages[action.payload.fileId].source}
             })
             
-        case actions.RECEIVE_CNN_GRADCAM:
-            return update(state, {
-                gradcamImages: {$merge: action.payload.gradcam}
-            });
-
-        case actions.RECEIVE_CNN_GUIDED_GRADCAM:
-            return update(state, {
-                guidedGradcamImages: {$merge: action.payload.guidedGradcam}
-            });
-
-        case actions.SELECT_CNN_IMAGE:
-            return update(state, {
-                selectedImage: {$set: action.payload.imageSource}
-            });
-
         case actions.RECEIVE_CNN_LAYERS:
             return update(state, {
                 layers: {$set: action.payload.layers}
@@ -66,14 +51,6 @@ const cnn = (state = initialState, action) => {
                 classifications: {$merge: {[action.payload.imageId]: action.payload.classification}}
             });
 
-        case actions.UPDATE_SELECTED_VISUALIZATIONS:
-            const imageId = `${state.selectedImageId}-${state.selectedClass}-${state.selectedLayer}`;
-
-            return update(state, {
-                selectedGradCam: { $set: 'data:image/jpeg;base64,' + state.gradCamImages[imageId].source },
-                selectedGuidedGradCam: { $set: 'data:image/jpeg;base64,' + state.guidedGradCamImages[imageId].source }
-            });
-            
         case actions.RECEIVE_IMAGE_VISUALIZATION:
             return update(state, {
                 gradCamImages: {

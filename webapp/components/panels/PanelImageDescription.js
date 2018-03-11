@@ -26,7 +26,7 @@ const enhance = compose(
     connect(
         state => ({
             selectedClassification: state.cnn.classifications[state.cnn.selectedImageId],
-            loading: state.cnn.classification
+            loading: state.loading.classification
         })
     ),
     withProps(props => ({

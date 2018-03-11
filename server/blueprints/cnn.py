@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app as app
 from flask.json import jsonify
 
-from blueprints.utils import *
+from utils.file_utils import *
 
 import flask
 import os
@@ -10,7 +10,11 @@ mod = Blueprint('cnn', __name__, url_prefix='/api/cnn')
 
 @mod.route('/layers', methods=['GET'])
 def layers():
-
+    """ Gets layers of underlying cnn
+    
+        # Returns
+            jsonified list of layers.
+    """
     response = {
         'status': 400,
         'payload': {}
@@ -25,7 +29,11 @@ def layers():
 
 @mod.route('/classes', methods=['GET'])
 def classes():
-
+    """ Gets classes of underlying cnn
+    
+        # Returns
+            jsonified list of classes.
+    """
     response = {
         'status': 400,
         'payload': {}
@@ -40,7 +48,14 @@ def classes():
 
 @mod.route('/classify/<image_id>', methods=['GET'])
 def classify(image_id):
+    """ Classifies image based on given image id.
 
+        # Arguments
+            image_id: id of image to be classified.
+    
+        # Returns
+            Labels and prediction of classified image.
+    """
     response = {
         'status': 400,
         'payload': {}
@@ -57,7 +72,14 @@ def classify(image_id):
 
 @mod.route('/visualize/<image_id>', methods=['GET', 'DELETE'])
 def visualize(image_id):
+    """ visualizes image based on given image id.
+
+        # Arguments
+            image_id: id of image to be visualized.
     
+        # Returns
+            grad-CAM and guided grad-CAM representation of given image.
+    """
     response = {
         'status': 400,
         'success': False
