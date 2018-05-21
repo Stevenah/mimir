@@ -14,6 +14,10 @@ const sortFiles = (a, b) => {
     return (a.id < b.id) ? -1 : (a.id > b.id) ? 1 : 0;
 }
 
+const sortProp = (a, b) => {
+    return b.prediction - a.prediction;
+}
+
 class FileSelector extends Component {
 
     static defaultProps = {
@@ -22,6 +26,18 @@ class FileSelector extends Component {
     }
     
     getFileArray = () => {
+
+        console.log(this.props.files)
+
+        if (this.props.classFilter !== 'default') {
+            let files = Object.keys(this.props.files).
+                map(fileId => this.props.files[fileId]).sort(sortFiles);
+
+
+            return files.filter(file => file.classIndex === Number(this.props.classFilter)).sort(sortProp)
+        }
+
+
         return Object.keys(this.props.files).
             map(fileId => this.props.files[fileId]).sort(sortFiles);
     }
@@ -43,7 +59,7 @@ class FileSelector extends Component {
                         selected={file.id === this.props.selectedFile}
                         loading={file.loading}
                         attached={file.attached}
-                        label={file.type}
+                        label={file.label}
                         clickable={true}
                         src={file.source} 
                         onClick={() => this.props.selectFile(file.id)}

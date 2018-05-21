@@ -30,19 +30,19 @@ class TableSelector extends Component {
     }
 
     buildBodyRows = () => {
-        return this.props.content.map((content, i) => {
+        return this.props.rows.sort(this.props.sorter).map(row => {
             
             let classNames = classnames({
                 'table-selection-row': true,
                 'clickable': true,
-                'selected': i === this.props.selectedRow,
+                'selected': row.id === this.props.selectedRow,
             });
 
             return (
-                <Table.Row onClick={() => this.props.onClick(i)} className={classNames}>
-                    {content.map(element => (
+                <Table.Row onClick={() => this.props.onClick(row.id)} className={classNames}>
+                    {row.content.map(element => (
                         <Table.Cell>
-                            {element}
+                            { element }
                         </Table.Cell>
                     ))}
                 </Table.Row>

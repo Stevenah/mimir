@@ -3,6 +3,7 @@ import update from 'immutability-helper';
 
 const initialState = {
     images: {},
+    classFilter: 'default',
 };
 
 const file = (state = initialState, action) => {
@@ -26,6 +27,11 @@ const file = (state = initialState, action) => {
         case actions.SELECT_FILE:
             return update(state, {
                 selectedImageId: {$set: action.payload.fileId}
+            });
+
+        case actions.SELECT_CLASS_FILTER:
+            return update(state, {
+                classFilter: {$set: action.payload.classFilter}
             });
             
         default:

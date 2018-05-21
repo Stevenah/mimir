@@ -7,6 +7,7 @@ import appReducer from 'reducers/app';
 import loadingReducer from 'reducers/loading';
 import reportReducer from 'reducers/report';
 import cnnReducer from 'reducers/cnn';
+import modalReducer from 'reducers/modal';
 
 import appEpics from 'epics';
 
@@ -32,6 +33,7 @@ export default createStore(
         loading: loadingReducer,
         report: reportReducer,
         cnn: cnnReducer,
+        modal: modalReducer,
     }),
     composeEnhancers(
         applyMiddleware(...middlewares)

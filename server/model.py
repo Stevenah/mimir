@@ -1,12 +1,14 @@
 from utils.model_utils import apply_guided_backprop
 from utils.image_utils import deprocess_saliency, deprocess_gradcam, deprocess_image
-from utils.file_utils import save_gradcam_image, save_guided_gradcam_image, save_saliency_image
+from utils.file_utils import save_visualization
 
 from scipy.misc import imresize
 
 from flask import current_app as app
 
 from tf_extensions.activations import register_guided_relu
+
+from models.Architecture import Architecture
 
 from keras.models import Model, load_model, model_from_json
 from keras.layers.convolutional import _Conv
@@ -17,12 +19,13 @@ import keras.backend as K
 import tensorflow as tf
 import numpy as np
 
+import contextlib
+import tempfile
+import h5py
 import os
 import cv2
 import json
-import base64
-import uuid
-import json
+import io
 
 class ModelHelper():
     """ Wrapper class for the keras Model
@@ -49,40 +52,60 @@ class ModelHelper():
         model_weights=None,
         model_json=None):
 
-        if model_file is None and (model_weights is None or model_json is None):
-            raise Exception("Error!")
+        K.set_learning_phase(0)
 
         register_guided_relu()
 
-        self.model_file = model_file
+        self.model_file = '/tmp/model.h5'
         self.model_json = model_json
         self.model_weights = model_weights
 
         self.initialize_model()
 
+        self.model_id = 5 # model_id
+
         self.number_of_classes = len(classes)
         self.labels = classes
 
         self.layers = self.get_layers()
-        self.visualized_layers = {}
-        self.cache = {}
 
         self.image_width = self.model.input_shape[1]
         self.image_height = self.model.input_shape[2]
         self.image_channels = self.model.input_shape[3]
 
-        self.image_rescale = False
+        self.image_rescale = True
         self.image_bgr = False
+
+    def swap_model(self, model_id):
+        model = Architecture.query.with_entities(Architecture.model_file).filter_by(id = model_id).first()
+
+        with open(f'/tmp/model.h5', 'wb') as f:
+            f.write(model.model_file)
+
+        self.model_id = model_id
+        self.model_file = '/tmp/model.h5'
+        self.initialize_model()
+
+    def get_model_id(self):
+        return self.model_id
 
     def initialize_model(self):
         """ Initialize models
         """
+        print(self.model_file)
+        
         if self.model_file is not None:
             self.model = load_model(self.model_file)
         else:
             self.model = model_from_json(open(self.model_json).read())
             self.model.load_weights(self.model_weights)
 
+        self.image_width = self.model.input_shape[1]
+        self.image_height = self.model.input_shape[2]
+        self.image_channels = self.model.input_shape[3]
+
+        self.layers = self.get_layers()
+        
         self.guided_model = apply_guided_backprop(self.model)
         self.graph = tf.get_default_graph()
 
@@ -108,7 +131,7 @@ class ModelHelper():
                 A list containing the classes to be classified into 
                 of the model.
         """
-        return [self.labels[class_id] for class_id in self.labels]
+        return {class_id: self.labels[class_id] for class_id in self.labels}
             
     def labeled_predictions(self, image):
         """ Gets labeled predictions.
@@ -122,7 +145,22 @@ class ModelHelper():
         predictions = self.predict(image)
         return { label: predictions[i].tolist() 
             for i, label in self.labels.items()}
-                
+
+    def predict_from_path(self, path):
+
+        image = cv2.imread(path)
+        # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = self.prepare_image(image)
+
+        prediction = self.predict(image)
+
+        label = self.labels[np.argmax(prediction)]
+        prob = prediction[np.argmax(prediction)]
+
+        print(np.argmax(prediction))
+
+        return prob, label, np.argmax(prediction)
+
     def prepare_image(self, image):
         """ Prepares an image for classification.
 
@@ -138,6 +176,7 @@ class ModelHelper():
         
         image = image.reshape(1, self.image_width, 
             self.image_height, self.image_channels)
+            
         
         return image
 
@@ -156,14 +195,14 @@ class ModelHelper():
         """
         with self.graph.as_default():
 
-            if self.image_rescale:
+            if self.image_bgr:
                 image = image[...,::-1]
 
-            if self.image_bgr:
+            if self.image_rescale:
                 image = np.true_divide(image, 255.)
 
             if max_only:
-                return np.argmax(image, axis=1)
+                return np.argmax(self.model.predict(image)[0], axis=1)
 
             return self.model.predict(image)[0]
 
@@ -189,10 +228,10 @@ class ModelHelper():
         processed = image
 
         if self.image_rescale:
-            processed = processed[...,::-1]
+            processed = np.true_divide(processed, 255.)
 
         if self.image_bgr:
-            processed = np.true_divide(processed, 255.)
+            processed = processed[...,::-1]
 
         saliency = self.create_saliency_map(processed, layer_id)
         gradcam = self.create_gradcam(processed, class_id, layer_id)
@@ -221,13 +260,15 @@ class ModelHelper():
             raise Exception('Selected class not in model!')
 
         if layer_id not in self.layers:
+            print(layer_id)
+            print(self.layers)
             raise Exception('Selected layer not in model!')
 
         gradcam, saliency, guided_gradcam = self.visualize(image, layer_id, class_id)
 
-        save_gradcam_image(gradcam, image_id, layer_id, class_id)      
-        save_saliency_image(saliency, image_id, layer_id, class_id)  
-        save_guided_gradcam_image(guided_gradcam, image_id, layer_id, class_id)
+        save_visualization(gradcam, image_id, layer_id, class_id, 'gradcam', 'np_array')      
+        save_visualization(saliency, image_id, layer_id, class_id, 'saliency', 'np_array')  
+        save_visualization(guided_gradcam, image_id, layer_id, class_id, 'guided_gradcam', 'np_array')
 
     def create_saliency_map(self, image, layer_id):
         """ Creates the saliency map representation of the given image
@@ -261,7 +302,7 @@ class ModelHelper():
         loss = K.sum(output_layer * K.one_hot([class_id], self.number_of_classes))
 
         gradients = K.gradients(loss, target_layer)[0]
-        gradients /= (K.sqrt(K.mean(K.square(gradients))) + K.epsilon())
+        # gradients /= (K.sqrt(K.mean(K.square(gradients))) + K.epsilon())
 
         weights = GlobalAveragePooling2D()(gradients)
         

@@ -6,7 +6,9 @@ import { requestFileUpload, requestImages } from 'actions';
 import FineUploaderTraditional from 'fine-uploader-wrappers';
 import FileInput from 'react-fine-uploader/file-input';
 
-import ButtonAction from 'components/button/ButtonAction';
+import ButtonCover from 'components/button/ButtonCover';
+
+import 'style/button/ButtonUpload.scss';
 
 class ButtonUpload extends Component {
 
@@ -37,11 +39,11 @@ class ButtonUpload extends Component {
 
     render() {
         return (
-            <ButtonAction className={['analysis-header-button']}>
-                <FileInput className='analysis-header-button' multiple uploader={ this.uploader }>
+            <ButtonCover className={['analysis-header-button']}>
+                <FileInput className='ui-button-upload' multiple uploader={ this.uploader }>
                     Upload Files
                 </FileInput>
-            </ButtonAction>
+            </ButtonCover>
         );
     }
 }

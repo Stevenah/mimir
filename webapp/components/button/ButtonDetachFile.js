@@ -5,7 +5,7 @@ import { detachFile } from 'actions';
 
 import { isEmpty } from 'utils';
 
-import ButtonAction from 'components/button/ButtonAction'
+import ButtonCover from 'components/button/ButtonCover'
 
 const enhance = compose(
     connect(
@@ -28,4 +28,4 @@ const enhance = compose(
     })
 );
 
-export default enhance(ButtonAction);
+export default enhance(ButtonCover);

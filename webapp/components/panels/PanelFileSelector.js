@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, withProps, nest, lifecycle } from 'recompose';
-import { selectFile, requestImages, requestImageVisualization, requestCnnClassification } from 'actions';
+import { selectFile, requestImages, requestImageVisualization, requestCnnClassification, requestSelectedImage } from 'actions';
 
 import { isEmpty } from 'utils';
 
@@ -9,13 +9,12 @@ import Panel from 'layout/Panel'
 import ImageDropzone from 'components/ui/ImageDropzone';
 import FileSelector from 'components/ui/FileSelector';
 
-
-
 const enhance = compose(
     connect(
         state => ({
             files: state.app.images,
             loading: state.loading.files,
+            classFilter: state.app.classFilter,
             selectedFile: state.cnn.selectedImageId,
             selectedLayer: state.cnn.selectedLayer,
             selectedClass: state.cnn.selectedClass,
@@ -26,6 +25,7 @@ const enhance = compose(
             },
             selectFile(imageId, layerId, classId) {
                 dispatch(selectFile(imageId))
+                dispatch(requestSelectedImage(imageId))
                 dispatch(requestCnnClassification(imageId))
                 dispatch(requestImageVisualization(imageId, layerId, classId))
             },

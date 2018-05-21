@@ -9,6 +9,12 @@ const enhance = compose(
     connect(
         state => ({
             source: state.cnn.selectedImageSource,
+            loading: state.loading.selectedImage,
+        }),
+        dispatch => ({
+            requestSelectedImage() {
+                dispatch(requestSelectedImage());
+            },
         })
     ),
     withProps(props => ({

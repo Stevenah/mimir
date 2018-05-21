@@ -37,7 +37,7 @@ def route_images():
     }
 
     if request.method == 'GET':
-        response['images'] = load_images()
+        response['images'] = load_images(True)
         response['status'] = 200
         response['success'] = True
 
@@ -60,8 +60,9 @@ def route_image(image_id):
     }
     
     if request.method == 'GET':
-        response['success'] = False
-        response['status'] = 501
+        response['image'] = load_image(image_id, 'base_64')
+        response['success'] = True
+        response['status'] = 200
 
     if request.method == 'DELETE':
         response['success'] = False

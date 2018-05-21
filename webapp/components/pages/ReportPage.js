@@ -8,21 +8,42 @@ import HeaderGrid from 'layout/HeaderGrid';
 import HeaderColumn from 'layout/HeaderColumn';
 import ContentRow from 'layout/ContentRow';
 
+import ButtonToggleAttachFile from 'components/button/ButtonToggleAttachFile';
+import ButtonPrint from 'components/button/ButtonPrint';
+
+import PanelFileSelector from 'components/panels/PanelFileSelector';
+
 import PanelReport from 'components/panels/PanelReport';
 
 
 const ReportPage = () =>
     <div>
         <HeaderGrid>
+
             <HeaderColumn>
                 <PanelHeader>
+                    <ButtonPrint />
                 </PanelHeader>
             </HeaderColumn>
+            
+            <HeaderColumn>
+                <PanelHeader>
+                    <ButtonToggleAttachFile />
+                </PanelHeader>
+            </HeaderColumn>
+
         </HeaderGrid>
+
         <ContentGrid>
+
             <ContentColumn>
                 <PanelReport />
             </ContentColumn>
+
+            <ContentColumn>
+                <PanelFileSelector />
+            </ContentColumn>
+
         </ContentGrid>
     </div>
 

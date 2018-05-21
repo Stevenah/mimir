@@ -12,9 +12,9 @@ class Sidebar extends Component {
         return (
             <nav className='sidebar'>
                 <header>
-                    Gastroenterology
+                    Mímir
                 </header>
-                <SidebarSection title='Report Generation'>
+                <SidebarSection title='Analysis and Reporting'>
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <Link to='/image'>Image Analysis</Link>

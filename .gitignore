@@ -100,7 +100,6 @@ ENV/
 # mypy
 .mypy_cache/
 
-*.h5
 *.avi
 *.mp4
 *.webm
@@ -168,5 +167,6 @@ typings/
 .env
 *.jpg
 
-model
 uploads/*
+
+mimir.db

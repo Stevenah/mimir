@@ -14,7 +14,7 @@ export const requestImageVisualization = (imageId, layerId, classId) => {
     return actionCreator(action.REQUEST_IMAGE_VISUALIZATION)({
         imageId,
         layerId,
-        classId,
+        classId
     });
 };
 
@@ -41,10 +41,12 @@ export const requestImages = () => ({
 });
 
 export const receiveImages = response => {
-
     const images = response.images.reduce((images, image) => {
         images[image.id] = {
             id: image.id,
+            label: image.label,
+            prediction: image.prediction,
+            classIndex: image.classIndex,
             source: 'data:image/jpeg;base64,' + image.source,
             selected: false,
             loading: false,
@@ -53,8 +55,6 @@ export const receiveImages = response => {
         }
         return images
     }, {})
-
-    console.log(images)
 
     return actionCreator(action.RECEIVE_IMAGES)({
         images,
@@ -173,3 +173,112 @@ export const setApiUrl = apiUrl => {
 export const requestFileUpload = () => ({
     type: action.REQUEST_FILE_UPLOAD,
 });
+
+export const requestSelectedImage = imageId => {
+    return actionCreator(action.REQUEST_SELECTED_IMAGE)({
+        imageId,
+    })
+}
+
+export const receiveSelectedImage = response => {
+    return actionCreator(action.RECEIVE_SELECTED_IMAGE)({
+        source: 'data:image/jpeg;base64,' + response.image,
+    })
+}
+
+export const requestAvailableModels = () => ({
+    type: action.REQUEST_AVAILABLE_MODELS,
+});
+
+export const receiveAvailableModels = response => {
+    return actionCreator(action.RECEIVE_AVAILABLE_MODELS)({
+        models: response.models,
+    })
+}
+
+export const requestModelActivation = modelId => {
+    return actionCreator(action.REQUEST_MODEL_ACTIVATION)({
+        modelId, 
+    });
+}
+
+export const receiveModelActivation = response => {
+    console.log(response)
+    return actionCreator(action.RECEIVE_MODEL_ACTIVATION)({
+        model: response.model, 
+    });
+}
+
+export const requestActiveModel = () => ({
+    type: action.REQUEST_ACTIVE_MODEL,
+});
+
+export const receiveActiveModel = response => {
+    return actionCreator(action.RECEIVE_ACTIVE_MODEL)({
+        model: response.model,
+    });
+}
+
+
+// export const requestUploadModel = () => ({
+//     type: action.REQUEST_UPLOAD_MODEL,
+// });
+
+// export const receiveUploadModel = response => {
+//     return actionCreator(action.RECEIVE_UPLOAD_MODEL)({
+//         modelId: response.modelId,
+//     });
+// }
+
+/** 
+ * START - DELETE MODEL ACTIONS
+ */
+
+export const requestDeleteModel = modelId => {
+    return actionCreator(action.REQUEST_DELETE_MODEL)({
+        modelId
+    });
+}
+
+export const receiveDeleteModel = response => {
+    return actionCreator(action.RECEIVE_DELETE_MODEL)({
+        response
+    });
+}
+
+/**
+ * END - DELETE MODEL ACTIONS
+ */
+
+
+/** 
+ * START - UPLOAD MODEL ACTIONS
+ */
+
+export const requestUploadModel = () => ({
+    type: action.REQUEST_UPLOAD_MODEL
+});
+
+export const receiveUploadModel = () => ({
+    type: action.RECEIVE_UPLOAD_MODEL
+});
+
+/**
+ * END - UPLOAD MODEL ACTIONS
+ */
+
+export const openModal = modalId => {
+    return actionCreator(action.OPEN_MODAL)({
+        modalId,
+    });
+}
+
+export const closeModal = () => ({
+    type: action.CLOSE_MODAL,
+})  
+
+export const selectCLassFilter = classFilterId => {
+    return actionCreator(action.SELECT_CLASS_FILTER)({
+        classFilter: classFilterId,
+    });
+}

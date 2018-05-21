@@ -1,37 +1,13 @@
 from flask import current_app as app
+from database import db
+from models.Image import Image
+from models.Visualization import Visualization
 
 import os
 import cv2
 import base64
 import shutil
 import numpy as np
-
-def save_file(f, path, from_type='string', file_type='image'):
-    """ Saves a file to disk.
-
-        # Arguments
-            f: file to be saved.
-            path: path of file to be saved.
-            from_type: format of file to be saved.
-            file_type: type of file. Either image, video 
-                or chunk.
-
-        # Raises
-            NotImplementedError: if file_type is not supported.
-    """
-    if file_type == 'image':
-        save_image(f, path, 'string')
-        return
-
-    if file_type == 'video':
-        save_video(f, path, 'string')
-        return
-
-    if file_type == 'chunk':
-        save_chunk(f, path, 'string')
-        return
-        
-    raise NotImplementedError(f'Support for {file_tpye} is currenlty not supported!')
 
 def save_standard_file(f, file_id, file_name=None, from_type='string', file_type='image'):
     """ Saves a file to the standard directory.
@@ -55,32 +31,97 @@ def save_standard_file(f, file_id, file_name=None, from_type='string', file_type
         
     raise NotImplementedError(f'Support for {file_tpye} is currenlty not supported!')
 
-def save_image(image, path, from_type='string'):
+def save_image(source, file_name, from_type='string'):
     """ Saves an image to disk.
 
         # Arguments
-            image: image to be saved.
-            path: path of image to be saved.
+            source: image to be saved.
             from_type: format of image to be saved.
 
         # Raises
             NotImplementedError: if from_type is not supported.
     """
-    dir_path = os.path.dirname(path)
 
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
+    if not os.path.isdir('uploads/images'):
+        os.makedirs('uploads/images')
+
+    if not os.path.isdir('uploads/thumbnails'):
+        os.makedirs('uploads/thumbnails')
+
+    if not os.path.isdir('uploads/gradcam'):
+        os.makedirs('uploads/gradcam')
+
+    if not os.path.isdir('uploads/guided_gradcam'):
+        os.makedirs('uploads/guided_gradcam')
+
+    if not os.path.isdir('uploads/saliency'):
+        os.makedirs('uploads/saliency')
+
+    image = Image()
+
+    db.session.add(image)
+    db.session.flush()
+
+    image.name = file_name
+    image.path = f'uploads/images/{image.id}_{file_name}'
+    image.thumbnail = f'uploads/thumbnails/{image.id}_{file_name}'
 
     if from_type == 'np_array':
-        cv2.imwrite(path, image)
-        return
+        cv2.imwrite(image.path, source)
 
-    if from_type == 'string':
-        with open(path, 'wb+') as f:
-            f.write(image.read())
-        return
+    elif from_type == 'string':
+        with open(image.path, 'wb+') as f:
+            f.write(source.read())
 
-    raise NotImplementedError(f'Support for {from_type} is currenlty not supported!')
+    else:
+        raise NotImplementedError(f'Support for {from_type} is currenlty not supported!')
+
+    prediction, label, class_index = app.config['MODEL'].predict_from_path(image.path)
+
+    image.label = label
+    image.prediction = prediction
+    image.class_index = int(class_index)
+
+    thumbnail = cv2.imread(image.path) 
+    thumbnail = cv2.resize(thumbnail, (100, 100))
+    cv2.imwrite(image.thumbnail, thumbnail)
+
+    db.session.add(image)
+    db.session.commit()
+
+
+def save_visualization(source, image_id, layer_id, class_id, viz_type, from_type='string'):
+    """ Saves an image to disk.
+
+        # Arguments
+            source: image to be saved.
+            from_type: format of image to be saved.
+
+        # Raises
+            NotImplementedError: if from_type is not supported.
+    """
+
+    image = Visualization()
+
+    image.name = f'{layer_id}_{class_id}_{image_id}_{viz_type}.png'
+    image.target_layer = layer_id
+    image.target_class = class_id
+    image.image_id = image_id
+    image.type = viz_type
+    image.path = f'uploads/{viz_type}/{image.name}_{image.id}_{image.name}'
+
+    if from_type == 'np_array':
+        cv2.imwrite(image.path, source)
+
+    elif from_type == 'string':
+        with open(image.path, 'wb+') as f:
+            f.write(source.read())
+
+    else:
+        raise NotImplementedError(f'Support for {from_type} is currenlty not supported!')
+
+    db.session.add(image)
+    db.session.commit()
 
 def save_standard_image(image, image_id, file_name=None, from_type='string'):
     """ Saves an image to the standard directory.
@@ -98,77 +139,9 @@ def save_standard_image(image, image_id, file_name=None, from_type='string'):
 
     file_path = os.path.join(base_dir, image_id, file_name)
     
-    # save_thumbnail(image, file_id, file_name, from_type)
-    save_image(image, file_path, from_type)
+    save_image(image, file_name, from_type)
 
-def save_thumbnail(image, image_id, file_name, from_type):
-    """ Saves an image to the thumbnail directory.
-
-        # Arguments
-            image: image to be saved.
-            image_id: uuid of the image
-            file_name: name of file.
-            from_type: format of image to be saved.
-    """
-    thumbnail_dir = app.config['STANDARD_THUMBNAIL_DIRECTORY']
-
-    if from_type == 'string':
-        image = np.fromstring(image)
-
-    image = cv2.resize(image, (100, 100))
-
-    file_path = os.path.join(thumbnail_dir, image_id, file_name)
-    save_image(image, file_path, from_type='np_array')
-
-def save_gradcam_image(image, image_id, layer_id, class_id, from_type='np_array'):
-    """ Saves an image to the gradcam directory.
-
-        # Arguments
-            image: image to be saved.
-            image_id: uuid of the image
-            layer_id: id of layer grad-CAM is visualized for.
-            class_id: id of class grad-CAM is visualized for.
-            from_type: format of image to be saved.
-    """
-    base_dir = app.config['GRADCAM_IMAGE_DIRECTORY']
-    image_id = get_cam_file_name(image_id, layer_id, class_id)
-    file_name = add_file_extension(image_id, '.jpg')
-    path = os.path.join(base_dir, image_id, file_name)
-    save_image(image, path, from_type)
-
-def save_saliency_image(image, image_id, layer_id, class_id, from_type='np_array'):
-    """ Saves an image to the saliency directory.
-
-        # Arguments
-            image: image to be saved.
-            image_id: uuid of the image
-            layer_id: id of layer grad-CAM is visualized for.
-            class_id: id of class grad-CAM is visualized for.
-            from_type: format of image to be saved.
-    """
-    base_dir = app.config['SALIENCY_IMAGE_DIRECTORY']
-    image_id = get_cam_file_name(image_id, layer_id, class_id)
-    file_name = add_file_extension(image_id, '.jpg')
-    path = os.path.join(base_dir, image_id, file_name)
-    save_image(image, path, from_type)
-
-def save_guided_gradcam_image(image, image_id, layer_id, class_id, from_type='np_array'):
-    """ Saves an image to the guided gradcam directory.
-
-        # Arguments
-            image: image to be saved.
-            image_id: uuid of the image
-            layer_id: id of layer grad-CAM is visualized for.
-            class_id: id of class grad-CAM is visualized for.
-            from_type: format of image to be saved.
-    """
-    base_dir = app.config['GUIDED_GRADCAM_IMAGE_DIRECTORY']
-    image_id = get_cam_file_name(image_id, layer_id, class_id)
-    file_name = add_file_extension(image_id, '.jpg')
-    path = os.path.join(base_dir, image_id, file_name)
-    save_image(image, path, from_type)
-
-def load_image(path, as_type='string'):
+def load_visualization(image_id, layer_id, class_id, viz_type, as_type='string'):
     """ Load image from path.
     
         # Arguments
@@ -179,99 +152,74 @@ def load_image(path, as_type='string'):
         # Returns
             returns image from path.
     """
+
+    image = Visualization.query.filter_by(image_id=image_id, target_layer=layer_id, target_class=class_id, type=viz_type).first()
+
     if as_type == 'np_array':
-        image = cv2.imread(path) 
+        image = cv2.imread(image.path)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         return image
 
     if as_type == 'base_64':
-        with open(path, 'rb') as f:
+        with open(image.path, 'rb') as f:
             return base64.b64encode(f.read()).decode('UTF-8')
-    
+
     if as_type == 'string':
-        with open(path, 'rb') as f:
+        with open(image.path, 'rb') as f:
             return f.read()
 
     raise NotImplementedError(f'Support for {as_type} is currenlty not supported!')
 
-def load_images():
+
+def load_image(image_id, as_type='string', thumbnail=False):
+    """ Load image from path.
+    
+        # Arguments
+            path: location of image to be loaded
+            as_type: load image as type, such as np array, 
+            string or base 64.
+
+        # Returns
+            returns image from path.
+    """
+
+    image = Image.query.get(image_id)
+
+    if as_type == 'np_array':
+        image = cv2.imread(image.thumbnail if thumbnail else image.path)
+        # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        return image
+
+    if as_type == 'base_64':
+        with open(image.thumbnail if thumbnail else image.path, 'rb') as f:
+            return base64.b64encode(f.read()).decode('UTF-8')
+
+    if as_type == 'string':
+        with open(image.thumbnail if thumbnail else image.path, 'rb') as f:
+            return f.read()
+
+    raise NotImplementedError(f'Support for {as_type} is currenlty not supported!')
+
+def load_images(thumbnails=False):
     """ Load all images from the standard directory.
     
         # Returns
             list of images from the standard directory in base 64 format.
     """
-    dir_path = app.config['STANDARD_IMAGE_DIRECTORY']
+
     images = []
 
-    for image_id in os.listdir(dir_path):
+    for image in Image.query.all():
+
         images.append({
-            'id': image_id,
-            'source': load_image(get_image_path(dir_path, image_id), as_type='base_64')
+            'id': image.id,
+            'label': image.label,
+            'prediction': image.prediction,
+            'classIndex': image.class_index,
+            'source': load_image(image.id, as_type='base_64', thumbnail=thumbnails)
         })
 
     return images
-
-def load_standard_image(image_id, as_type='string'):
-    """ Load image from the standard directory.
-
-        # Arguments
-            image_id: id of image to be loaded.
-            as_type: load image as type, such as np array, 
-            string or base 64.
-
-        # Returns
-            image in format specified in as_type argument.
-    """
-    base_dir = app.config['STANDARD_IMAGE_DIRECTORY']
-    return load_image(get_image_path(base_dir, image_id), as_type)
-
-def load_gradcam_image(image_id, layer_id, class_id, as_type='string'):
-    """ Load image from the standard directory.
-
-        # Arguments
-            image_id: uuid of the image to be loaded.
-            layer_id: id of layer grad-CAM is visualized for.
-            class_id: id of class grad-CAM is visualized for.
-            as_type: load image as type, such as np array, 
-            string or base 64.
-
-        # Returns
-            image in format specified in as_type argument.
-    """
-    base_dir = app.config['GRADCAM_IMAGE_DIRECTORY']
-    image_id = get_cam_file_name(image_id, layer_id, class_id)
-    return load_image(get_image_path(base_dir, image_id), as_type)
-
-def load_guided_gradcam_image(image_id, layer_id, class_id, as_type='string'):
-    """ Load image from the guided gradcam directory.
-
-        # Arguments
-            image_id: uuid of the image to be loaded.
-            layer_id: id of layer grad-CAM is visualized for.
-            class_id: id of class grad-CAM is visualized for.
-            as_type: load image as type, such as np array, 
-            string or base 64.
-
-        # Returns
-            image in format specified in as_type argument.
-    """
-    base_dir = app.config['GUIDED_GRADCAM_IMAGE_DIRECTORY']
-    image_id = get_cam_file_name(image_id, layer_id, class_id)
-    return load_image(get_image_path(base_dir, image_id), as_type)
-
-def get_image_path(base_dir, image_id):
-    """ Get image file path.
-
-        # Arguments
-            base_dir: directory to load image from.
-            image_id: uuid of the image to be loaded.
-
-        # Returns
-            path to image
-    """
-    dir_path = os.path.join(base_dir, image_id)
-    file_name = os.listdir(dir_path)[0]
-    return os.path.join(dir_path, file_name)
 
 def save_video(video, path):
     """ Save video to disk.

@@ -13,7 +13,7 @@ const enhance = compose(
             imageId: state.cnn.selectedImageId,
             layerId: state.cnn.selectedLayer,
             classId: state.cnn.selectedClass,
-            selectedRow: state.cnn.layers.indexOf(state.cnn.selectedLayer),
+            selectedRow: state.cnn.selectedLayer,
             loading: state.loading.layers,
         }),
         dispatch => ({
@@ -29,11 +29,11 @@ const enhance = compose(
         })
     ),
     withHandlers({
-        onClick: props => rowIndex => {
-            props.selectCnnLayer(rowIndex);
+        onClick: props => rowId => {
+            props.selectCnnLayer(rowId);
             props.selectVisualizationLayer(
                 props.imageId,
-                props.layers[rowIndex],
+                rowId,
                 props.classId
             );
         },
@@ -41,7 +41,11 @@ const enhance = compose(
     withProps(props => ({
         isEmpty: !props.imageId,
         header: ['Layer Name'],
-        content: props.layers.map(layerName =>  [layerName]),
+        sorter: (a, b) => Number(b.id) - Number(a.id),
+        rows: Object.keys(props.layers).map(rowId => ({
+            id: rowId,
+            content: [ props.layers[rowId] ]
+        })),
         emptyMessage: 'The result of the file analysis will appear here',
     })),
     lifecycle({

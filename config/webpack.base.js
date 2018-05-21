@@ -33,6 +33,7 @@ const config = {
             actions: getPath('../webapp/actions'),
             layout: getPath('../webapp/components/layout'),
             pages: getPath('../webapp/components/pages'),
+            modal: getPath('../webapp/components/modal'),
             style: getPath('../webapp/styles'),
             utils: getPath('../webapp/utils'),
             store: getPath('../webapp/store'),

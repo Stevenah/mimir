@@ -8,6 +8,12 @@ import ContentRow from 'layout/ContentRow';
 
 import ButtonUpload from 'components/button/ButtonUpload';
 import ButtonToggleAttachFile from 'components/button/ButtonToggleAttachFile';
+import ButtonUploadModel from 'components/button/ButtonUploadModel';
+import ButtonManageModels from 'components/button/ButtonManageModels';
+import ButtonSelectedModel from 'components/button/ButtonSelectedModel';
+
+import ButtonClassFilter from 'components/button/ButtonClassFilter';
+
 
 import Panel from 'layout/Panel'
 import PanelHeader from 'layout/PanelHeader';
@@ -25,14 +31,52 @@ const ImageAnalysisPage = () =>
         <HeaderGrid>
             <HeaderColumn>
                 <PanelHeader>
-                    <ButtonToggleAttachFile />
+                    
+                <HeaderColumn>
+                    <PanelHeader>
+                        <ButtonUploadModel />
+                    </PanelHeader>
+                </HeaderColumn>
+                
+                <HeaderColumn>
+                    <PanelHeader>
+                        <ButtonSelectedModel />
+                    </PanelHeader>
+                </HeaderColumn>
+
+                <HeaderColumn>
+                    <PanelHeader>
+                        <ButtonManageModels />
+                    </PanelHeader>
+                </HeaderColumn>
+
                 </PanelHeader>
             </HeaderColumn>
+
             <HeaderColumn>
                 <PanelHeader>
-                    <ButtonUpload />
+                    
+                <HeaderColumn>
+                    <PanelHeader>
+                        <ButtonToggleAttachFile />
+                    </PanelHeader>
+                </HeaderColumn>
+
+                <HeaderColumn>
+                    <PanelHeader>
+                        <ButtonClassFilter />
+                    </PanelHeader>
+                </HeaderColumn>
+                
+                <HeaderColumn>
+                    <PanelHeader>
+                        <ButtonUpload />
+                    </PanelHeader>
+                </HeaderColumn>
+
                 </PanelHeader>
             </HeaderColumn>
+
         </HeaderGrid>
         <ContentGrid>
             <ContentColumn>
