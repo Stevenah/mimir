@@ -9,6 +9,7 @@ import HeaderColumn from 'layout/HeaderColumn';
 import ContentRow from 'layout/ContentRow';
 
 import ButtonToggleAttachFile from 'components/button/ButtonToggleAttachFile';
+import ButtonClassFilter from 'components/button/ButtonClassFilter';
 import ButtonPrint from 'components/button/ButtonPrint';
 
 import PanelFileSelector from 'components/panels/PanelFileSelector';
@@ -28,7 +29,19 @@ const ReportPage = () =>
             
             <HeaderColumn>
                 <PanelHeader>
-                    <ButtonToggleAttachFile />
+
+                    <HeaderColumn>
+                        <PanelHeader>
+                            <ButtonToggleAttachFile />
+                        </PanelHeader>
+                    </HeaderColumn>
+
+                    <HeaderColumn>
+                        <PanelHeader>
+                            <ButtonClassFilter />
+                        </PanelHeader>
+                    </HeaderColumn>
+
                 </PanelHeader>
             </HeaderColumn>
 

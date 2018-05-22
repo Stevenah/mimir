@@ -30,60 +30,35 @@ import io
 class ModelHelper():
     """ Wrapper class for the keras Model
 
-        # Arguments
-            classes: number of classes to classify into.
-            model_file (optional): model file to load from. When
-                used in in conjunction with model_weights and model_json,
-                this will be prioritized.
-            model_weights (optional): model weights file to load from. Must
-                be passed together with model_json or will throw an exception.
-                if model_file is present, this will be ignored.
-            model_json (optional): model_json file to load from. Must
-                be passed together with model_weights or will throw an exception.
-                if model_file is present, this will be ignored.
-
         # Returns
             A ModelHelper instance.
 
     """
-    def __init__(self,
-        classes,
-        model_file=None,
-        model_weights=None,
-        model_json=None):
+    def __init__(self):
 
         K.set_learning_phase(0)
 
         register_guided_relu()
 
         self.model_file = '/tmp/model.h5'
-        self.model_json = model_json
-        self.model_weights = model_weights
+        self.class_file = '/tmp/class.json'
 
         self.initialize_model()
-
-        self.model_id = 5 # model_id
-
-        self.number_of_classes = len(classes)
-        self.labels = classes
-
-        self.layers = self.get_layers()
-
-        self.image_width = self.model.input_shape[1]
-        self.image_height = self.model.input_shape[2]
-        self.image_channels = self.model.input_shape[3]
 
         self.image_rescale = True
         self.image_bgr = False
 
     def swap_model(self, model_id):
+
         model = Architecture.query.with_entities(Architecture.model_file).filter_by(id = model_id).first()
 
         with open(f'/tmp/model.h5', 'wb') as f:
             f.write(model.model_file)
 
+        with open(f'/tmp/class.json', 'wb') as f:
+            f.write(model.class_file)
+
         self.model_id = model_id
-        self.model_file = '/tmp/model.h5'
         self.initialize_model()
 
     def get_model_id(self):
@@ -92,17 +67,17 @@ class ModelHelper():
     def initialize_model(self):
         """ Initialize models
         """
-        print(self.model_file)
         
-        if self.model_file is not None:
-            self.model = load_model(self.model_file)
-        else:
-            self.model = model_from_json(open(self.model_json).read())
-            self.model.load_weights(self.model_weights)
+        self.model = load_model(self.model_file)
+
+        self.model_id = 5
 
         self.image_width = self.model.input_shape[1]
         self.image_height = self.model.input_shape[2]
         self.image_channels = self.model.input_shape[3]
+
+        self.labels = {int(k): v for k, v in json.load(open(self.class_file)).items()}
+        self.number_of_classes = len(self.labels)
 
         self.layers = self.get_layers()
         
