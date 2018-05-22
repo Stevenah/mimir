@@ -409,4 +409,4 @@ def video_to_images(file_path, video_id):
         frame_id = f'{video_id}-{video.get(cv2.CAP_PROP_POS_MSEC)}'
         file_name = add_file_extension(frame_id, '.jpg')
 
-        save_standard_image(frame, frame_id, file_name, 'np_array')
+        save_image(frame, file_name, 'np_array')
