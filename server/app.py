@@ -10,8 +10,8 @@ from models.Visualization import Visualization
 
 from database import db
 from model import ModelHelper
-from utils.kvasir_utils import kvasir_index_label
 from utils.util import server_arg_parser
+from utils.file_utils import initialize_directories
 
 import os
 import shutil
@@ -42,7 +42,8 @@ def setup_app():
 
 def setup_database(app):
     with app.app_context():
-        db.create_all()   
+        db.create_all()
+        initialize_directories()
 
         for model_pair in default_data:
             model = Architecture()
@@ -68,7 +69,6 @@ if __name__ == '__main__':
         print("database initialization...")
         setup_database(app)
 
-    app.config['MODEL_CLASS_LABELS'] = kvasir_index_label
     app.config['MODEL'] = ModelHelper()
 
     args = server_arg_parser()

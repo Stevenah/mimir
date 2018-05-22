@@ -50,7 +50,7 @@ class ModelHelper():
 
     def swap_model(self, model_id):
 
-        model = Architecture.query.with_entities(Architecture.model_file).filter_by(id = model_id).first()
+        model = Architecture.query.with_entities(Architecture.model_file, Architecture.class_file).filter_by(id = model_id).first()
 
         with open(f'/tmp/model.h5', 'wb') as f:
             f.write(model.model_file)
@@ -124,15 +124,12 @@ class ModelHelper():
     def predict_from_path(self, path):
 
         image = cv2.imread(path)
-        # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         image = self.prepare_image(image)
 
         prediction = self.predict(image)
 
         label = self.labels[np.argmax(prediction)]
         prob = prediction[np.argmax(prediction)]
-
-        print(np.argmax(prediction))
 
         return prob, label, np.argmax(prediction)
 
