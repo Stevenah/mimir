@@ -10,13 +10,13 @@ It is recommended that Mimir is run on a computer using a GPU. Although Mimir wi
 ### Prerequisites
 Before we run Mimir, we must first make sure the following programs are installed.
 
-* Git - [Download & Install Git](https://git-scm.com/downloads).
+* Git - [Download & Install Git](https://git-scm.com/downloads) and git lfs to download the sample Keras models.
 * Python 3.6+ - [Download & Install Python 3.6](https://www.python.org/downloads/) and the package manager pip.
 * OpenCV 3.0+ - [Download & Install OpenCV 3](https://opencv.org/) and make sure it supports FFmpeg, this is required for video processing.
 * SQLite - [Download & Install SQLite](https://www.sqlite.org/download.html).
 
 ### Installation
- Before we start, make sure that you clone this repository to your local computer by running `git clone https://github.com/stevenah/mimir` in the directory of your choice. With all prerequisites installed, running `pip -r install requirements.txt` should install all required python dependencies. This is all that is needed for a basic local instance of Mimir.
+ Before we start, make sure that you clone this repository to your local computer by running `git clone https://github.com/stevenah/mimir` in the directory of your choice. With all prerequisites installed, running `pip -r install requirements.txt` should install all required python dependencies. This is all that is needed for a basic local instance of Mimir. To pull down the sample Keras models included with Mimir, run `git lfs pull` in the root directory.
  
 ### Usage
 To start a local instance of Mimir, it should be enough to run the `app.py` file located in the `server` directory.
