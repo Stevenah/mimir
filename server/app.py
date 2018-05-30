@@ -69,6 +69,11 @@ if __name__ == '__main__':
         print("database initialization...")
         setup_database(app)
 
+    if not os.path.isfile('./tmp/model.h5'):
+        shutil.copy2(default_data[1][2], '/tmp/model.h5')
+        shutil.copy2(default_data[1][3], '/tmp/class.json')
+
+
     app.config['MODEL'] = ModelHelper()
 
     args = server_arg_parser()
