@@ -11,10 +11,11 @@ const enhance = compose(
         state => ({
             imageId: state.app.selectedImageId,
             image: state.app.images[state.app.selectedImageId],
+            attached: state.report.attachedImages,
         })
     ),
     branch(
-        props => props.image && !props.image.attached,
+        props => props.image && !props.attached.includes(props.imageId),
         renderComponent(ButtonAttachFile),
         renderComponent(ButtonDetachFile)
     )

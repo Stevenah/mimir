@@ -15,6 +15,7 @@ const enhance = compose(
             files: state.app.images,
             loading: state.loading.files,
             classFilter: state.app.classFilter,
+            attached: state.report.attachedImages,
             selectedFile: state.cnn.selectedImageId,
             selectedLayer: state.cnn.selectedLayer,
             selectedClass: state.cnn.selectedClass,

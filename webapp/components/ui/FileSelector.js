@@ -56,7 +56,7 @@ class FileSelector extends Component {
                         key={file.id} 
                         selected={file.id === this.props.selectedFile}
                         loading={file.loading}
-                        attached={file.attached}
+                        attached={this.props.attached.includes(file.id)}
                         label={file.label}
                         clickable={true}
                         src={file.source} 
