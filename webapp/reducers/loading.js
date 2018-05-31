@@ -13,7 +13,6 @@ const initialState = {
 
 const loading = (state = initialState, action) => {
 
-    console.log(action)
     switch (action.type) {
         
         case actions.REQUEST_IMAGE_VISUALIZATION: {

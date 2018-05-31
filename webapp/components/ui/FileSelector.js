@@ -27,8 +27,6 @@ class FileSelector extends Component {
     
     getFileArray = () => {
 
-        console.log(this.props.files)
-
         if (this.props.classFilter !== 'default') {
             let files = Object.keys(this.props.files).
                 map(fileId => this.props.files[fileId]).sort(sortFiles);

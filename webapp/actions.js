@@ -203,7 +203,6 @@ export const requestModelActivation = modelId => {
 }
 
 export const receiveModelActivation = response => {
-    console.log(response)
     return actionCreator(action.RECEIVE_MODEL_ACTIVATION)({
         model: response.model, 
     });

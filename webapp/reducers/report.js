@@ -32,10 +32,14 @@ const report = (state = initialState, action) => {
                 attachedImages: { $push: [ action.payload.imageId ] },
             })
         
-        case actions.DETACH_FILE:
+        case actions.DETACH_FILE: {
+
+            let index = state.attachedImages.indexOf(action.payload.imageId)
+
             return update(state, {
-                attachedImages: { $unshift: [ action.payload.imageId ] }
+                attachedImages: { $splice: [ [ index, action.payload.imageId ] ] }
             })
+        }
 
         case actions.SET_TEXT_FIELD: {
             return update(state, {
