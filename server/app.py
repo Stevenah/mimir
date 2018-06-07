@@ -19,12 +19,19 @@ import shutil
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 default_data=[
-    ("Inception-V3-NON", "Non-processed Kvasir (v2)", "../model/inceptionv3.h5", "../model/kvasir.json"),
-    ("VGG-16-NON", "Non-processed Kvasir (v2)", "../model/vgg16.h5", "../model/kvasir.json"),
-    ("VGG-19-NON", "Non-processed Kvasir (v2)", "../model/vgg19.h5", "../model/kvasir.json"),
-    ("ResNet-50-NON", "Non-processed Kvasir (v2)", "../model/resnet50.h5", "../model/kvasir.json"),
-    ("Xeception-NON", "Non-processed Kvasir (v2)", "../model/xception.h5", "../model/kvasir.json"),
+    ("Inception-V3", "Non-processed Kvasir (v2)", "../model/inceptionv3.h5", "../model/kvasir.json"),
+    ("VGG-16", "Non-processed Kvasir (v2)", "../model/vgg16.h5", "../model/kvasir.json"),
+    ("VGG-19", "Non-processed Kvasir (v2)", "../model/vgg19.h5", "../model/kvasir.json"),
+    ("ResNet-50", "Non-processed Kvasir (v2)", "../model/resnet50.h5", "../model/kvasir.json"),
+    ("Xeception", "Non-processed Kvasir (v2)", "../model/xception.h5", "../model/kvasir.json"),
+
+    ("Inception-V3", "PRE-processed Kvasir (v2)", "../model/proc_inception.h5", "../model/kvasir.json"),
+    ("VGG-16", "PRE-processed Kvasir (v2)", "../model/proc_vgg16.h5", "../model/kvasir.json"),
+    ("VGG-19", "PRE-processed Kvasir (v2)", "../model/proc_vgg19.h5", "../model/kvasir.json"),
+    ("ResNet-50", "PRE-processed Kvasir (v2)", "../model/proc_resnet.h5", "../model/kvasir.json"),
+    ("Xeception", "PRE-processed Kvasir (v2)", "../model/proc_xception.h5", "../model/kvasir.json")
 ]
+
 
 
 def setup_app():
@@ -37,6 +44,16 @@ def setup_app():
     app.register_blueprint(pages_mod)
     app.register_blueprint(files_mod)
     app.register_blueprint(cnn_mod)
+
+    if not os.path.isfile('./mimir.db'):
+        print("database initialization...")
+        setup_database(app)
+
+    if not os.path.isfile('./tmp/model.h5'):
+        shutil.copy2(default_data[1][2], '/tmp/model.h5')
+        shutil.copy2(default_data[1][3], '/tmp/class.json')
+
+    app.config['MODEL'] = ModelHelper()
 
     return app
 
@@ -53,7 +70,7 @@ def setup_database(app):
             model.model_file = open(model_pair[2], 'rb').read()
             model.class_file = open(model_pair[3], 'rb').read()
 
-            if model_pair[0] == 'VGG-16-NON':
+            if model_pair[0] == 'VGG-16':
                 shutil.copy2(model_pair[2], '/tmp/model.h5')
                 shutil.copy2(model_pair[3], '/tmp/class.json')
                 model.active = True
@@ -64,17 +81,6 @@ def setup_database(app):
 if __name__ == '__main__':
 
     app = setup_app()
-
-    if not os.path.isfile('./mimir.db'):
-        print("database initialization...")
-        setup_database(app)
-
-    if not os.path.isfile('./tmp/model.h5'):
-        shutil.copy2(default_data[1][2], '/tmp/model.h5')
-        shutil.copy2(default_data[1][3], '/tmp/class.json')
-
-
-    app.config['MODEL'] = ModelHelper()
 
     args = server_arg_parser()
 

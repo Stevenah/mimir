@@ -209,6 +209,41 @@ def classes():
 
     return jsonify(response)
 
+@mod.route('/reclassify', methods=['POST'])
+def reclassify():
+    """ Classifies image based on given image id.
+
+        # Arguments
+            image_id: id of image to be classified.
+    
+        # Returns
+            Labels and prediction of classified image.
+    """
+    response = {
+        'status': 400,
+        'payload': {}
+    }
+    
+    if flask.request.method == 'POST':
+
+        model = app.config['MODEL']
+        images = Image.query.all()
+
+        for image in images:
+
+            prediction, label, class_index = model.predict_from_path(image.path)
+
+            image.label = label
+            image.prediction = prediction
+            image.class_index = int(class_index)
+
+            db.session.add(image)
+            db.session.commit()
+
+        response['status'] = 200
+
+    return jsonify(response)
+
 @mod.route('/classify/<image_id>', methods=['GET'])
 def classify(image_id):
     """ Classifies image based on given image id.
@@ -225,9 +260,12 @@ def classify(image_id):
     }
     
     if flask.request.method == 'GET':
+
         model = app.config['MODEL']
+
         image = load_image(image_id, as_type='np_array')
         image = model.prepare_image(image)
+
         response['classification'] = model.labeled_predictions(image)
         response['status'] = 200
 

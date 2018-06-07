@@ -34,6 +34,14 @@ export const requestCnnClassification = action$ => {
             .catch(error => actions.rejectCnnClassification(error)));
 };
 
+export const requestCnnClassificationRefresh = action$ => {
+    return action$.ofType(types.REQUEST_MODEL_ACTIVATION)
+        .concatMap(() => 
+            api.getRefreshCnnClassification()
+                .then(response => actions.requestImages())
+                .catch(error => actions.rejectRefreshCnnClassification(error)));
+};
+
 export const requestImageVisualization = (action$, store) => {
     return action$.ofType(types.REQUEST_IMAGE_VISUALIZATION)
         .concatMap(({payload: { imageId, layerId, classId }}) =>
@@ -93,4 +101,5 @@ export default [
     requestActiveModel,
     requestModelActivation,
     requestDeleteModel,
+    requestCnnClassificationRefresh,
 ];

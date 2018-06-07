@@ -74,6 +74,16 @@ export const getCnnClassification = imageId => {
         .catch(handleErrors)
 };
 
+export const getRefreshCnnClassification = imageId => {
+    return fetch(`/api/cnn/reclassify`, postJsonOptions())
+        .then(handleStatus)
+        .then(response => response.json())
+        .then(response => response)
+        .catch(handleErrors)
+};
+
+
+
 export const getSelectedImage = imageId => {
     return fetch(`/api/files/images/${imageId}`, getJsonOptions())
         .then(handleStatus)
