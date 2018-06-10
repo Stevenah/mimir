@@ -11,6 +11,9 @@ import numpy as np
 
 
 def initialize_directories():
+    if not os.path.isdir('../model'):
+        os.makedirs('../model')
+
     if not os.path.isdir('uploads/images'):
         os.makedirs('uploads/images')
 
