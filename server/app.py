@@ -20,11 +20,11 @@ import urllib
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 default_data=[
-    ("Inception-V3", "Non-processed Kvasir (v2)", "../model/inceptionv3.h5", "../model/kvasir.json"),
-    ("VGG-16", "Non-processed Kvasir (v2)", "../model/vgg16.h5", "../model/kvasir.json"),
-    ("VGG-19", "Non-processed Kvasir (v2)", "../model/vgg19.h5", "../model/kvasir.json"),
-    ("ResNet-50", "Non-processed Kvasir (v2)", "../model/resnet50.h5", "../model/kvasir.json"),
-    ("Xeception", "Non-processed Kvasir (v2)", "../model/xception.h5", "../model/kvasir.json"),
+    ("Inception-V3", "Non-processed Kvasir (v2)", "../model/inceptionv3.h5", "../model/kvasir.json", "https://www.dropbox.com/s/t0lxg8ei0g3etye/inceptionv3.h5?dl=1"),
+    ("VGG-16", "Non-processed Kvasir (v2)", "../model/vgg16.h5", "../model/kvasir.json", "https://www.dropbox.com/s/vonhjmv4qzorhex/vgg16.h5?dl=1"),
+    ("VGG-19", "Non-processed Kvasir (v2)", "../model/vgg19.h5", "../model/kvasir.json", "https://www.dropbox.com/s/t3v0rktokali77m/vgg19.h5?dl=1"),
+    ("ResNet-50", "Non-processed Kvasir (v2)", "../model/resnet50.h5", "../model/kvasir.json", "https://www.dropbox.com/s/0vzgs2e341k0j9u/resnet50.h5?dl=1"),
+    ("Xeception", "Non-processed Kvasir (v2)", "../model/xception.h5", "../model/kvasir.json", "https://www.dropbox.com/s/h314gq7ly82wgml/xception.h5?dl=1"),
     
     ("Inception-V3", "blacked-out-processed Kvasir (v2)", "../model/proc_inceptionv3.h5", "../model/kvasir.json"),
     ("VGG-16", "blacked-out-processed Kvasir (v2)", "../model/proc_vgg16.h5", "../model/kvasir.json"),
@@ -41,6 +41,12 @@ default_data=[
 
 def setup_default_data():
     for model_pair in default_data:
+
+        if not os.path.exists(model_pair[2]):
+            print(f"Downloading {model_pair[0]}...")
+            download_file(model_pair[4], model_pair[2])
+            download_file('https://www.dropbox.com/s/pki880covt6bki1/kvasir.json?dl=1', model_pair[3])
+
         model = Architecture()
         
         model.model_name = model_pair[0]
