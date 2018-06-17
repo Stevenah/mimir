@@ -168,5 +168,6 @@ typings/
 *.jpg
 
 uploads/*
+model/
 
 mimir.db

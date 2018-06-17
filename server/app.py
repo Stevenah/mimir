@@ -15,6 +15,7 @@ from utils.file_utils import initialize_directories
 
 import os
 import shutil
+import urllib
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -87,6 +88,9 @@ def setup_database(app):
         db.create_all()
         initialize_directories()
         setup_default_data()
+
+def download_file(url, dest):
+    urllib.request.urlretrieve(url, dest)
 
 if __name__ == '__main__':
 
