@@ -24,17 +24,40 @@ default_data=[
     ("VGG-19", "Non-processed Kvasir (v2)", "../model/vgg19.h5", "../model/kvasir.json"),
     ("ResNet-50", "Non-processed Kvasir (v2)", "../model/resnet50.h5", "../model/kvasir.json"),
     ("Xeception", "Non-processed Kvasir (v2)", "../model/xception.h5", "../model/kvasir.json"),
-
-    ("Inception-V3", "PRE-processed Kvasir (v2)", "../model/proc_inception.h5", "../model/kvasir.json"),
-    ("VGG-16", "PRE-processed Kvasir (v2)", "../model/proc_vgg16.h5", "../model/kvasir.json"),
-    ("VGG-19", "PRE-processed Kvasir (v2)", "../model/proc_vgg19.h5", "../model/kvasir.json"),
-    ("ResNet-50", "PRE-processed Kvasir (v2)", "../model/proc_resnet.h5", "../model/kvasir.json"),
-    ("Xeception", "PRE-processed Kvasir (v2)", "../model/proc_xception.h5", "../model/kvasir.json")
+    
+    ("Inception-V3", "blacked-out-processed Kvasir (v2)", "../model/proc_inceptionv3.h5", "../model/kvasir.json"),
+    ("VGG-16", "blacked-out-processed Kvasir (v2)", "../model/proc_vgg16.h5", "../model/kvasir.json"),
+    ("VGG-19", "blacked-out-processed Kvasir (v2)", "../model/proc_vgg19.h5", "../model/kvasir.json"),
+    ("ResNet-50", "blacked-out-processed Kvasir (v2)", "../model/proc_resnet50.h5", "../model/kvasir.json"),
+    ("Xeception", "blacked-out-processed Kvasir (v2)", "../model/proc_xception.h5", "../model/kvasir.json"),
+    
+    ("Inception-V3", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_inceptionv3.h5", "../model/kvasir.json"),
+    ("VGG-16", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_vgg16.h5", "../model/kvasir.json"),
+    ("VGG-19", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_vgg19.h5", "../model/kvasir.json"),
+    ("ResNet-50", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_resnet50.h5", "../model/kvasir.json"),
+    ("Xeception", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_xception.h5", "../model/kvasir.json")
 ]
 
+def setup_default_data():
+    for model_pair in default_data:
+        model = Architecture()
+        
+        model.model_name = model_pair[0]
+        model.dataset_name = model_pair[1]
+        model.model_file = open(model_pair[2], 'rb').read()
+        model.class_file = open(model_pair[3], 'rb').read()
 
-
+        if model_pair[0] == 'VGG-16':
+            shutil.copy2(model_pair[2], '/tmp/model.h5')
+            shutil.copy2(model_pair[3], '/tmp/class.json')
+            model.active = True
+            
+        db.session.add(model)
+        db.session.commit()
+        
 def setup_app():
+    """ Initialize application
+    """
     app = Flask(__name__)
 
     app.config.from_pyfile('../config/app.conf')
@@ -58,25 +81,12 @@ def setup_app():
     return app
 
 def setup_database(app):
+    """ Initialize database and setup required directories
+    """
     with app.app_context():
         db.create_all()
         initialize_directories()
-
-        for model_pair in default_data:
-            model = Architecture()
-            
-            model.model_name = model_pair[0]
-            model.dataset_name = model_pair[1]
-            model.model_file = open(model_pair[2], 'rb').read()
-            model.class_file = open(model_pair[3], 'rb').read()
-
-            if model_pair[0] == 'VGG-16':
-                shutil.copy2(model_pair[2], '/tmp/model.h5')
-                shutil.copy2(model_pair[3], '/tmp/class.json')
-                model.active = True
-
-            db.session.add(model)
-            db.session.commit()
+        setup_default_data()
 
 if __name__ == '__main__':
 
