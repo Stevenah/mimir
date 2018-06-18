@@ -26,17 +26,17 @@ default_data=[
     ("ResNet-50", "Non-processed Kvasir (v2)", "../model/resnet50.h5", "../model/kvasir.json", "https://www.dropbox.com/s/0vzgs2e341k0j9u/resnet50.h5?dl=1"),
     ("Xeception", "Non-processed Kvasir (v2)", "../model/xception.h5", "../model/kvasir.json", "https://www.dropbox.com/s/h314gq7ly82wgml/xception.h5?dl=1"),
     
-    ("Inception-V3", "blacked-out-processed Kvasir (v2)", "../model/proc_inceptionv3.h5", "../model/kvasir.json"),
-    ("VGG-16", "blacked-out-processed Kvasir (v2)", "../model/proc_vgg16.h5", "../model/kvasir.json"),
-    ("VGG-19", "blacked-out-processed Kvasir (v2)", "../model/proc_vgg19.h5", "../model/kvasir.json"),
-    ("ResNet-50", "blacked-out-processed Kvasir (v2)", "../model/proc_resnet50.h5", "../model/kvasir.json"),
-    ("Xeception", "blacked-out-processed Kvasir (v2)", "../model/proc_xception.h5", "../model/kvasir.json"),
+    ("Inception-V3", "blacked-out-processed Kvasir (v2)", "../model/proc_inceptionv3.h5", "../model/kvasir.json", "https://www.dropbox.com/s/tc48pru25jv68fb/proc_inceptionv3.h5?dl=1"),
+    ("VGG-16", "blacked-out-processed Kvasir (v2)", "../model/proc_vgg16.h5", "../model/kvasir.json", "https://www.dropbox.com/s/7iv38tsi43ryh0h/proc_vgg16.h5?dl=1"),
+    ("VGG-19", "blacked-out-processed Kvasir (v2)", "../model/proc_vgg19.h5", "../model/kvasir.json", "https://www.dropbox.com/s/slcgtyp8l40pz0x/proc_vgg19.h5?dl=1"),
+    ("ResNet-50", "blacked-out-processed Kvasir (v2)", "../model/proc_resnet50.h5", "../model/kvasir.json", "https://www.dropbox.com/s/38i1kvdnee4gnhs/proc_resnet50.h5?dl=1"),
+    ("Xeception", "blacked-out-processed Kvasir (v2)", "../model/proc_xception.h5", "../model/kvasir.json", "https://www.jottacloud.com/s/1377028df809dcc4f9a9b39134bfd8d58e5"),
     
-    ("Inception-V3", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_inceptionv3.h5", "../model/kvasir.json"),
-    ("VGG-16", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_vgg16.h5", "../model/kvasir.json"),
-    ("VGG-19", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_vgg19.h5", "../model/kvasir.json"),
-    ("ResNet-50", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_resnet50.h5", "../model/kvasir.json"),
-    ("Xeception", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_xception.h5", "../model/kvasir.json")
+    ("Inception-V3", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_inceptionv3.h5", "../model/kvasir.json", "https://www.dropbox.com/s/9fpt4ygu3msobtr/proc2_inceptionv3.h5?dl=1"),
+    ("VGG-16", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_vgg16.h5", "../model/kvasir.json", "https://www.dropbox.com/s/9tqd0x1g8pi4x4v/proc2_vgg16.h5?dl=1"),
+    ("VGG-19", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_vgg19.h5", "../model/kvasir.json", "https://www.dropbox.com/s/4t9sl0vjighi2ei/proc2_vgg19.h5?dl=1"),
+    ("ResNet-50", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_resnet50.h5", "../model/kvasir.json", "https://www.dropbox.com/s/zz4l2stk2ci41wf/proc2_resnet50.h5?dl=1"),
+    ("Xeception", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_xception.h5", "../model/kvasir.json", "https://www.dropbox.com/s/r4rub3ob75v7dnz/proc2_xception.h5?dl=1")
 ]
 
 def setup_default_data():
