@@ -10,7 +10,7 @@ from models.Visualization import Visualization
 
 from database import db
 from model import ModelHelper
-from utils.util import server_arg_parser
+from utils.util import server_arg_parser, download_file, init_dir
 from utils.file_utils import initialize_directories
 
 import os
@@ -25,6 +25,17 @@ default_data=[
     ("VGG-19", "Non-processed Kvasir (v2)", "../model/vgg19.h5", "../model/kvasir.json", "https://www.dropbox.com/s/t3v0rktokali77m/vgg19.h5?dl=1"),
     ("ResNet-50", "Non-processed Kvasir (v2)", "../model/resnet50.h5", "../model/kvasir.json", "https://www.dropbox.com/s/0vzgs2e341k0j9u/resnet50.h5?dl=1"),
     ("Xeception", "Non-processed Kvasir (v2)", "../model/xception.h5", "../model/kvasir.json", "https://www.dropbox.com/s/h314gq7ly82wgml/xception.h5?dl=1")
+]
+
+default_dirs = [
+    '../model'
+    'uploads/images'
+    'uploads/thumbnails'
+    'uploads/gradcam'
+    'uploads/guided_gradcam'
+    'uploads/saliency'
+    'uploads/chunks'
+    'uploads/videos'
 ]
 
 def setup_default_data():
@@ -80,11 +91,11 @@ def setup_database(app):
     """
     with app.app_context():
         db.create_all()
-        initialize_directories()
-        setup_default_data()
+        
+        for directory in default_dirs:
+            init_dir(directory)
 
-def download_file(url, dest):
-    urllib.request.urlretrieve(url, dest)
+        setup_default_data()
 
 if __name__ == '__main__':
 

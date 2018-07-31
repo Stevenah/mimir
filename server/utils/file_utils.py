@@ -2,39 +2,13 @@ from flask import current_app as app
 from database import db
 from models.Image import Image
 from models.Visualization import Visualization
+from utils.util import add_file_extension
 
 import os
 import cv2
 import base64
 import shutil
 import numpy as np
-
-
-def initialize_directories():
-    if not os.path.isdir('../model'):
-        os.makedirs('../model')
-
-    if not os.path.isdir('uploads/images'):
-        os.makedirs('uploads/images')
-
-    if not os.path.isdir('uploads/thumbnails'):
-        os.makedirs('uploads/thumbnails')
-
-    if not os.path.isdir('uploads/gradcam'):
-        os.makedirs('uploads/gradcam')
-
-    if not os.path.isdir('uploads/guided_gradcam'):
-        os.makedirs('uploads/guided_gradcam')
-
-    if not os.path.isdir('uploads/saliency'):
-        os.makedirs('uploads/saliency')
-
-    if not os.path.isdir('uploads/chunks'):
-        os.makedirs('uploads/chunks')
-
-    if not os.path.isdir('uploads/videos'):
-        os.makedirs('uploads/videos')
-
 
 def save_standard_file(f, file_id, file_name=None, from_type='string', file_type='image'):
     """ Saves a file to the standard directory.
@@ -96,6 +70,7 @@ def save_image(source, file_name, from_type='string'):
 
     thumbnail = cv2.imread(image.path) 
     thumbnail = cv2.resize(thumbnail, (100, 100))
+    
     cv2.imwrite(image.thumbnail, thumbnail)
 
     db.session.add(image)
@@ -284,7 +259,7 @@ def upload(f, form_attributes):
 
     if chunked and (chunk_size - 1 == chunk_index):
         combine_chunks(file_id, chunk_size)
-        video_to_images(file_id)
+        video_to_frames(file_id)
     
     if not chunked:
         save_standard_file(f, file_id, file_name, file_type=file_type)
@@ -332,18 +307,8 @@ def get_file_type(file_extension):
 
     if file_extension in video_extensions:
         return 'video'
-        
-def add_file_extension(file_name, extension):
-    """ Add file extension to file name.
 
-        # Returns
-            file name with added file extension.
-    """
-    if extension[0] == '.':
-        return f'{file_name}{extension}'
-    return f'{file_name}.{extension}'
-
-def video_to_images(video_id):
+def video_to_frames(video_id):
     """ Converts video to frames and saves to disk.
 
         # Arguments

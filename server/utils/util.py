@@ -25,3 +25,20 @@ def server_arg_parser():
     ap.add_argument('-d', '--debug', help='set the debug option', default=False)
 
     return ap.parse_args()
+
+def download_file(url, dest):
+    urllib.request.urlretrieve(url, dest)
+
+def init_dir(dir_name):
+    if not os.path.isdir(dir_name):
+        os.makedirs(dir_name)
+
+def add_file_extension(file_name, extension):
+    """ Add file extension to file name.
+
+        # Returns
+            file name with added file extension.
+    """
+    if extension[0] == '.':
+        return f'{file_name}{extension}'
+    return f'{file_name}.{extension}'
