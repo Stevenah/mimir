@@ -14,6 +14,10 @@ class ButtonAction extends Component {
         classNames: [],
     }
 
+    static propTypes = {
+
+    }
+
     render() {
         let classNames = classnames(
             defaultClasses,
@@ -25,10 +29,10 @@ class ButtonAction extends Component {
 
         return (
             <span 
-                className={classNames}
-                onClick={this.props.onClick}
+                className={ classNames }
+                onClick={ this.props.onClick }
             >
-                {label}
+                { label }
             </span>
         );
     }

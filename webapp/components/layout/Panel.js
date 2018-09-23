@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import classnames from 'classnames';
 import { compose, withProps, branch, nest, renderComponent, defaultProps } from 'recompose';
 import { Grid, Loader } from 'semantic-ui-react';
@@ -14,12 +16,21 @@ const PanelLoading = props =>
         </div>
     </Grid.Row>
 
-const PanelEmpty = props =>
+const PanelEmpty = props => 
     <Grid.Row className='panel'>
         {props.emptyMessage}
     </Grid.Row>
 
 class Panel extends Component {
+    
+    static defaultProps = {
+        classNames: [],
+    }
+
+    static propTypes = {
+        classNames: PropTypes.array,
+    }
+    
     render() {
         let classNames = classnames([
             'panel'

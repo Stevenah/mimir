@@ -1,8 +1,6 @@
 import * as api from 'api';
 import * as types from 'actionConstants';
 import * as actions from 'actions'; 
-import { ajax } from 'rxjs/observable/dom/ajax';
-import { Observable } from 'rxjs';
 
 import 'rxjs/add/operator/concatMap';
 

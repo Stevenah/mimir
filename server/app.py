@@ -4,13 +4,11 @@ from blueprints.pages import mod as pages_mod
 from blueprints.cnn import mod as cnn_mod
 from blueprints.files import mod as files_mod
 
-from models.Architecture import Architecture
-from models.Image import Image
-from models.Visualization import Visualization
+from argparse import ArgumentParser
 
-from database import db
+from models import Architecture, Image, Visualization, db
+
 from model import ModelHelper
-from utils.util import server_arg_parser
 from utils.file_utils import initialize_directories
 
 import os
@@ -19,27 +17,22 @@ import urllib
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-default_data=[
-    ("Inception-V3", "Non-processed Kvasir (v2)", "../model/inceptionv3.h5", "../model/kvasir.json", "https://www.dropbox.com/s/t0lxg8ei0g3etye/inceptionv3.h5?dl=1"),
-    ("VGG-16", "Non-processed Kvasir (v2)", "../model/vgg16.h5", "../model/kvasir.json", "https://www.dropbox.com/s/vonhjmv4qzorhex/vgg16.h5?dl=1"),
-    ("VGG-19", "Non-processed Kvasir (v2)", "../model/vgg19.h5", "../model/kvasir.json", "https://www.dropbox.com/s/t3v0rktokali77m/vgg19.h5?dl=1"),
-    ("ResNet-50", "Non-processed Kvasir (v2)", "../model/resnet50.h5", "../model/kvasir.json", "https://www.dropbox.com/s/0vzgs2e341k0j9u/resnet50.h5?dl=1"),
-    ("Xeception", "Non-processed Kvasir (v2)", "../model/xception.h5", "../model/kvasir.json", "https://www.dropbox.com/s/h314gq7ly82wgml/xception.h5?dl=1"),
-    
-    ("Inception-V3", "blacked-out-processed Kvasir (v2)", "../model/proc_inceptionv3.h5", "../model/kvasir.json"),
-    ("VGG-16", "blacked-out-processed Kvasir (v2)", "../model/proc_vgg16.h5", "../model/kvasir.json"),
-    ("VGG-19", "blacked-out-processed Kvasir (v2)", "../model/proc_vgg19.h5", "../model/kvasir.json"),
-    ("ResNet-50", "blacked-out-processed Kvasir (v2)", "../model/proc_resnet50.h5", "../model/kvasir.json"),
-    ("Xeception", "blacked-out-processed Kvasir (v2)", "../model/proc_xception.h5", "../model/kvasir.json"),
-    
-    ("Inception-V3", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_inceptionv3.h5", "../model/kvasir.json"),
-    ("VGG-16", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_vgg16.h5", "../model/kvasir.json"),
-    ("VGG-19", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_vgg19.h5", "../model/kvasir.json"),
-    ("ResNet-50", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_resnet50.h5", "../model/kvasir.json"),
-    ("Xeception", "blacked-out-borders-removed-processed Kvasir (v2)", "../model/proc2_xception.h5", "../model/kvasir.json")
-]
+def server_arg_parser():
+    """ Gets argument parser for server.
+        # Returns
+            argument parser.
+    """
+    ap = ArgumentParser()
+
+    ap.add_argument('-p', '--port', help='set the port used by the server', type=int, default=5000)
+    ap.add_argument('--host', help='set the host used by the server', default='0.0.0.0')
+    ap.add_argument('-d', '--debug', help='set the debug option', default=False)
+
+    return ap.parse_args()
+
 
 def setup_default_data():
+
     for model_pair in default_data:
 
         if not os.path.exists(model_pair[2]):
@@ -63,8 +56,7 @@ def setup_default_data():
         db.session.commit()
         
 def setup_app():
-    """ Initialize application
-    """
+
     app = Flask(__name__)
 
     app.config.from_pyfile('../config/app.conf')
@@ -88,8 +80,7 @@ def setup_app():
     return app
 
 def setup_database(app):
-    """ Initialize database and setup required directories
-    """
+
     with app.app_context():
         db.create_all()
         initialize_directories()

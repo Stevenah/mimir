@@ -27,16 +27,33 @@ import cv2
 import json
 import io
 
-class ModelHelper():
-    """ Wrapper class for the keras Model
+class ImagePreprocessor():
 
-        # Returns
-            A ModelHelper instance.
-
-    """
     def __init__(self):
+        pass
 
+class ConvolutionalNeuralNetowrk():
+
+    def __init__(self):
+        pass
+        
+class KerasModelHelper(ConvolutionalNeuralNetowrk):
+
+    def __init__(self):
         K.set_learning_phase(0)
+
+    def predict(self):
+
+class PytorchModelHelper(ConvolutionalNeuralNetowrk):
+
+    def __init__(self):
+        pass
+
+
+
+class ModelHelper():
+
+    def __init__(self):
 
         register_guided_relu()
 
@@ -65,8 +82,6 @@ class ModelHelper():
         return self.model_id
 
     def initialize_model(self):
-        """ Initialize models
-        """
         
         self.model = load_model(self.model_file)
 
