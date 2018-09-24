@@ -4,22 +4,6 @@ from utils.util import temppath
 import tensorflow as tf
 import os
 
-def clone(model):
-    """ Clonse model.
-
-        # Arguments
-            model: model to be cloned.
-        
-        # Returns
-            Cloned model.
-
-    """
-    temp_path = temppath('temp_model')
-    model.save(temp_path)
-    model_clone = load_model(temp_path)
-    os.remove(temp_path)
-    return model_clone
-
 def apply_guided_backprop(model):
     """ Applied guided backprop relu to model.
 

@@ -29,26 +29,69 @@ import io
 
 class ImagePreprocessor():
 
-    def __init__(self):
-        pass
 
-class ConvolutionalNeuralNetowrk():
+class ConvolutionalNeuralNetwork():
 
     def __init__(self):
+
+    def predict():
         pass
+
         
-class KerasModelHelper(ConvolutionalNeuralNetowrk):
+class KerasModelHelper(ConvolutionalNeuralNetwork):
 
     def __init__(self):
+
         K.set_learning_phase(0)
+        
+        self.model_file
+        self.class_file
 
-    def predict(self):
+        self.model = load_model(self.model_file)
 
-class PytorchModelHelper(ConvolutionalNeuralNetowrk):
+        self.image_width = self.model.input_shape[1]
+        self.image_height = self.model.input_shape[2]
+        self.image_channels = self.model.input_shape[3]
+
+        self.labels = {int(k): v for k, v in json.load(open(self.class_file)).items()}
+        self.number_of_classes = len(self.labels)
+        
+        self.graph = tf.get_default_graph()
+    
+    @property
+    def layers(self, instance=object):
+        return [
+            layer for layer in self.model.layers if isinstance(layer, instance)
+        ]
+
+    @property
+    def labels(self):
+        return [
+            
+        ]
+
+    def predict(self, image):
+        if isinstance(image, basestring):
+            image = self.image_processor.load(iamge)
+        with self.graph.as_default():
+            return self.model.predict(image)[0]
+
+    def clone(self):
+        temp_path = temppath('temp_model')
+        self.model.save(temp_path)
+        model_clone = load_model(temp_path)
+        os.remove(temp_path)
+        return model_clone
+
+
+class ModelManager():
 
     def __init__(self):
         pass
 
+    @property
+    def active(self):
+        pass
 
 
 class ModelHelper():
