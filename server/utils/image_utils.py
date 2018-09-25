@@ -8,13 +8,9 @@ import cv2
 import base64
 
 def deprocess_image(image):
-    """ Deprocess image
-
+    """ 
         # Source
             https://github.com/keras-team/keras/blob/master/examples/conv_filter_visualization.py
-
-        # Returns
-            deprocessed image.
     """
     if np.ndim(image) > 3:
         image = np.squeeze(image)
@@ -32,16 +28,6 @@ def deprocess_image(image):
     return image
 
 def deprocess_saliency(saliency, grayscale=False):
-    """ Deprocess saliency map.
-
-        # Arguments
-            saliency: saliency map representation of image
-            greyscale (optional): whether or not to 
-            greyscale imag
-
-        # Returns
-            deprocessed saliency map
-    """
     if np.ndim(saliency) > 3:
         saliency = np.squeeze(saliency)
 
@@ -54,17 +40,6 @@ def deprocess_saliency(saliency, grayscale=False):
     return saliency
 
 def deprocess_gradcam(image, gradcam, greyscale=False):
-    """ Deprocess grad-CAM.
-
-        # Arguments
-            image: original image.
-            gradcam: grad-CAM representation of image
-            greyscale (optional): whether or not to 
-            greyscale image.
-
-        # Returns
-            deprocessed grad-CAM
-    """
     if np.ndim(image) > 3:
         image = np.squeeze(image)
 

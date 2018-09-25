@@ -1,7 +1,8 @@
 from flask import Blueprint, current_app as app
 from flask.json import jsonify
 
-from models import Architecture, db
+from models import Architecture, Image, db
+from manager import model_manager
 
 from utils.file_utils import *
 
@@ -19,13 +20,9 @@ def classify(image_id):
     }
     
     if flask.request.method == 'GET':
-
-        model = app.config['MODEL']
-
-        image = load_image(image_id, as_type='np_array')
-        image = model.prepare_image(image)
-
-        response['classification'] = model.labeled_predictions(image)
+        model = model_manager.get_active()
+        image = Image.get(image_id, as_type='np_array')
+        response['classification'] = model.predict(image, with_labels=True)
         response['status'] = 200
 
     return jsonify(response)
@@ -39,22 +36,13 @@ def reclassify():
     }
     
     if flask.request.method == 'POST':
-
-        model = app.config['MODEL']
-        images = Image.query.all()
-
-        for image in images:
-
-            prediction, label, class_index = model.predict_from_path(image.path)
-
-            image.label = label
-            image.prediction = prediction
-            image.class_index = int(class_index)
-
-            db.session.add(image)
-            db.session.commit()
-
+        model = model_manager.get_active()
+        for image in Image.query.all():
+            prediction, label, class_index = model.predict(image.path, with_labels=True)
+            Image.update(image.id, label=label,
+                prediction=prediction, class_id=int(class_index))
         response['status'] = 200
+        response['success'] = True
 
     return jsonify(response)
 
@@ -69,12 +57,12 @@ def visualize(image_id):
 
     if flask.request.method == 'GET':
 
-        model = app.config['MODEL']
+        model = model_manager.get_active()
 
         layer_id = flask.request.args.get('layerId', '0')
         class_id = flask.request.args.get('classId', '0')
 
-        image = load_image(image_id, as_type='np_array')
+        image = Image.get(image_id, as_type='np_array')
 
         model.visualize_image(image, image_id, layer_id, class_id)
 

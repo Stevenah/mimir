@@ -15,3 +15,14 @@ def register_guided_relu():
             dtype = op.inputs[0].dtype
             return grad * tf.cast(grad > 0., dtype) * \
                 tf.cast(op.inputs[0] > 0., dtype)
+
+def apply_guided_backprop(model):
+    with tf.get_default_graph().gradient_override_map({'Relu': 'GuidedRelu'}):
+
+        modified_model = clone(model)
+
+        for layer in model.layers[1:]:
+            if hasattr(layer, 'activation'):
+                layer.activation = tf.nn.relu
+        
+        return modified_model

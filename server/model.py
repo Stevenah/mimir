@@ -27,57 +27,63 @@ import cv2
 import json
 import io
 
+class ConvVisualizer():
+
+    def __init__(self):
+        pass
+
 class ImagePreprocessor():
 
+    def __init__(self, image_width, image_height, image_channels):
+
+        self.image_width = image_width
+        self.image_height = image_height
+        self.image_channels = image_channels
+
+    def load(self, path):
+        pass
+
+    def process(self, image):
+        pass
 
 class ConvolutionalNeuralNetwork():
 
-    def __init__(self):
+    def __init__(self, model, class_labels, image_processor=None):
 
-    def predict():
-        pass
+        self.number_of_classes = len(class_labels)
 
+        self.model = model
+        self.class_labels = class_labels
+        self.image_processor = image_processor
+
+class KerasModel(ConvolutionalNeuralNetwork):
+
+    def __init__(self, model, class_labels,
+        image_processor=None, **kwargs):
         
-class KerasModelHelper(ConvolutionalNeuralNetwork):
-
-    def __init__(self):
+        super(KerasModel, self).__init__(**kwargs)
 
         K.set_learning_phase(0)
-        
-        self.model_file
-        self.class_file
-
-        self.model = load_model(self.model_file)
-
-        self.image_width = self.model.input_shape[1]
-        self.image_height = self.model.input_shape[2]
-        self.image_channels = self.model.input_shape[3]
-
-        self.labels = {int(k): v for k, v in json.load(open(self.class_file)).items()}
-        self.number_of_classes = len(self.labels)
-        
         self.graph = tf.get_default_graph()
     
-    @property
-    def layers(self, instance=object):
-        return [
-            layer for layer in self.model.layers if isinstance(layer, instance)
-        ]
-
-    @property
-    def labels(self):
-        return [
-            
-        ]
+    def reload(self):
+        K.clear_session()
 
     def predict(self, image):
-        if isinstance(image, basestring):
-            image = self.image_processor.load(iamge)
+        if isinstance(image, str):
+            image = self.image_processor.load(image)
+        image = self.image_processor.process(image)
         with self.graph.as_default():
-            return self.model.predict(image)[0]
+            return self.model.predict(image)[0]         
+
+    def decode_predictions(self, predictions):
+        return {
+            self.class_labels[class_index]: prediction 
+            for class_index, prediction in enumerate(predictions)
+        }
 
     def clone(self):
-        temp_path = temppath('temp_model')
+        temp_path = os.path.join(tempfile.gettempdir(), 'temp_model')
         self.model.save(temp_path)
         model_clone = load_model(temp_path)
         os.remove(temp_path)
@@ -91,6 +97,10 @@ class ModelManager():
 
     @property
     def active(self):
+        pass
+
+    @property.setter
+    def active(self, model_id):
         pass
 
 
@@ -237,23 +247,6 @@ class ModelHelper():
             return self.model.predict(image)[0]
 
     def visualize(self, image, layer_id, class_id):
-        """ Visualizes an image going through the convolutional neural network.
-
-            # Arguments
-                image: Image to be visualized for.
-                layer_id: Id of the layer to be visualized for.
-                class_id: Id of the class to be visualized for.
-
-            # Returns
-                gradcam: The grad-CAM representation of the given image
-                    at the point of the layer_id maximized for the given
-                    class_id.
-                saliency: The saliency map representation of the given image
-                    at the point of the layer_id.
-                guided_gradcam: The guided grad-CAM representation of the given image
-                    at the point of the layer_id maximized for the given
-                    class_id.
-        """
         image = self.prepare_image(image)
         processed = image
 
@@ -274,16 +267,6 @@ class ModelHelper():
         return gradcam, saliency, guided_gradcam
 
     def visualize_image(self, image, image_id, layer_id, class_id):
-        """ Visualizes an image going through the convolutional neural network
-            and saves them to disk.
-
-            # Arguments
-                image: Image to be visualized for.
-                image_id: Id of imag eto be visualized for, used when saving
-                    the various representations.
-                layer_id: Id of the layer to be visualized for.
-                class_id: Id of the class to be visualized for.
-        """
         class_id = int(class_id)
 
         if class_id > self.number_of_classes:
@@ -301,13 +284,6 @@ class ModelHelper():
         save_visualization(guided_gradcam, image_id, layer_id, class_id, 'guided_gradcam', 'np_array')
 
     def create_saliency_map(self, image, layer_id):
-        """ Creates the saliency map representation of the given image
-            at the point of the layer_id.
-
-            # Arguments
-                image: Image to be visualized for.
-                layer_id: Id of the layer to be visualized for.
-        """
         layer_output = self.guided_model.get_layer(layer_id).output
 
         loss = K.sum(K.max(layer_output, axis=3))
@@ -316,15 +292,6 @@ class ModelHelper():
         return K.function([self.guided_model.input], [saliency])([image])
 
     def create_gradcam(self, image, class_id, layer_id):
-        """ Creates the grad-CAM representation of the given image
-            at the point of the layer_id maximized for the given
-            class_id.
-
-            # Arguments
-                image: Image to be visualized for.
-                layer_id: Id of the layer to be visualized for.
-                class_id: Id of the class to be visualized for.
-        """
         input_layer  = self.model.layers[0].input
         output_layer = self.model.layers[-1].output
         target_layer = self.model.get_layer(layer_id).output
@@ -332,7 +299,6 @@ class ModelHelper():
         loss = K.sum(output_layer * K.one_hot([class_id], self.number_of_classes))
 
         gradients = K.gradients(loss, target_layer)[0]
-        # gradients /= (K.sqrt(K.mean(K.square(gradients))) + K.epsilon())
 
         weights = GlobalAveragePooling2D()(gradients)
         
@@ -347,13 +313,6 @@ class ModelHelper():
         return gradcam / np.max(gradcam)
 
     def create_guided_gradcam(self, saliancy_map, grad_cam):
-        """The guided grad-CAM representation of the given image
-            by combining the grad-CAM and the saliency map.
-
-            # Arguments
-                saliency_map: saliency map of image.
-                grad_cam: grad-CAM of image.
-        """
         saliancy_map = np.squeeze(saliancy_map)
         grad_cam = grad_cam[..., np.newaxis]
         return saliancy_map * grad_cam
