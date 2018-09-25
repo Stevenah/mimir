@@ -4,6 +4,8 @@ from blueprints.pages import mod as pages_mod
 from blueprints.cnn import mod as cnn_mod
 from blueprints.files import mod as files_mod
 
+from tf_extensions.activations import register_guided_relu
+
 from argparse import ArgumentParser
 
 from models import Architecture, Image, Visualization, db
@@ -15,10 +17,6 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 def server_arg_parser():
-    """ Gets argument parser for server.
-        # Returns
-            argument parser.
-    """
     ap = ArgumentParser()
 
     ap.add_argument('-p', '--port', help='set the port used by the server', type=int, default=5000)
@@ -42,6 +40,8 @@ def setup_app():
     if not os.path.isfile('/srv/mimir/mimir.db'):
         print("database initialization...")
         setup_database(app)
+
+    register_guided_relu()Q
 
     return app
 

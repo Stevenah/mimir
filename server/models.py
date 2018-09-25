@@ -18,22 +18,7 @@ os.makedirs(MODEL_STORAGE_PATH)
 
 db = SQLAlchemy()
 
-class NeuralNetwork(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-
-    model_name = db.Column(db.String(80), nullable=False)
-    active = db.Column(db.Boolean, default=False, nullable=False)
-
-    trained_on = db.Column(db.String(80))
-    description = db.Column(db.String(255))
-
-    model_file = db.Column(db.LargeBinary)
-    weights_file = db.Column(db.LargeBinary)
-    class_file = db.Column(db.LargeBinary)
-
-    submission_id = db.Column(db.String(80))
-
-class Architecture(db.Model):
+class KerasModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     model_name = db.Column(db.String(80), nullable=False)
     active = db.Column(db.Boolean, default=False, nullable=False)
@@ -121,10 +106,6 @@ class Image(db.Model):
     def all(self, as_thumb=False):
         images = self.query.all()
         return images
-
-
-
-
 
 class Visualization(db.Model):
     id = db.Column(db.Integer, primary_key=True)

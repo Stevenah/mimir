@@ -6,7 +6,6 @@ from scipy.misc import imresize
 
 from flask import current_app as app
 
-from tf_extensions.activations import register_guided_relu
 
 from models.Architecture import Architecture
 
@@ -27,24 +26,39 @@ import cv2
 import json
 import io
 
-class ConvVisualizer():
+class KerasVisualizer():
 
     def __init__(self):
         pass
 
+
 class ImagePreprocessor():
 
-    def __init__(self, image_width, image_height, image_channels):
+    def __init__(self, image_width, image_height, 
+        image_channels, rescale=None, bgr=False):
 
         self.image_width = image_width
         self.image_height = image_height
         self.image_channels = image_channels
 
+        self.rescale = rescale
+        self.bgr = bgr
+
     def load(self, path):
-        pass
+        return imread(path)
 
     def process(self, image):
-        pass
+
+        image = imresize(image, (self.image_width, 
+            self.image_height, self.image_channels))
+
+        if self.rescale is not None:
+            image = np.true_divide(image, 255.)
+
+        if self.bgr:
+            image = image[...,::-1]
+
+        return image
 
 class ConvolutionalNeuralNetwork():
 
@@ -69,7 +83,7 @@ class KerasModel(ConvolutionalNeuralNetwork):
     def reload(self):
         K.clear_session()
 
-    def predict(self, image):
+    def predict(self, image, with_labels=False):
         if isinstance(image, str):
             image = self.image_processor.load(image)
         image = self.image_processor.process(image)
@@ -104,147 +118,28 @@ class ModelManager():
         pass
 
 
+
+
+
+
+def apply_guided_backprop(model):
+    with tf.get_default_graph().gradient_override_map({'Relu': 'GuidedRelu'}):
+
+        modified_model = clone(model)
+
+        for layer in model.layers[1:]:
+            if hasattr(layer, 'activation'):
+                layer.activation = tf.nn.relu
+        
+        return modified_model
+
+
+
 class ModelHelper():
 
-    def __init__(self):
-
-        register_guided_relu()
-
-        self.model_file = '/tmp/model.h5'
-        self.class_file = '/tmp/class.json'
-
-        self.initialize_model()
-
-        self.image_rescale = True
-        self.image_bgr = False
-
-    def swap_model(self, model_id):
-
-        model = Architecture.query.with_entities(Architecture.model_file, Architecture.class_file).filter_by(id = model_id).first()
-
-        with open(f'/tmp/model.h5', 'wb') as f:
-            f.write(model.model_file)
-
-        with open(f'/tmp/class.json', 'wb') as f:
-            f.write(model.class_file)
-
-        self.model_id = model_id
-        self.initialize_model()
-
-    def get_model_id(self):
-        return self.model_id
-
-    def initialize_model(self):
-        
-        self.model = load_model(self.model_file)
-
-        self.model_id = 5
-
-        self.image_width = self.model.input_shape[1]
-        self.image_height = self.model.input_shape[2]
-        self.image_channels = self.model.input_shape[3]
-
-        self.labels = {int(k): v for k, v in json.load(open(self.class_file)).items()}
-        self.number_of_classes = len(self.labels)
-
-        self.layers = self.get_layers()
-        
+    def initialize_model(self):        
         self.guided_model = apply_guided_backprop(self.model)
         self.graph = tf.get_default_graph()
-
-    def reset(self):
-        """ Clears greaph and re-initializes models.
-        """
-        K.clear_session()
-        self.initialize_model()
-
-    def get_layers(self):
-        """ Gets the convolutional layers of the model.
-
-            # Returns
-                A list containing the convolutional layers of the 
-                model.
-        """
-        return [layer.name for layer in self.model.layers if isinstance(layer, _Conv)]
-
-    def get_classes(self):
-        """ Gets the classes of the model.
-
-            # Returns
-                A list containing the classes to be classified into 
-                of the model.
-        """
-        return {class_id: self.labels[class_id] for class_id in self.labels}
-            
-    def labeled_predictions(self, image):
-        """ Gets labeled predictions.
-
-            # Arguments
-                image: Image to be classified
-
-            # Returns
-                A dictionary containing a class-prediction pair.
-        """
-        predictions = self.predict(image)
-        return { label: predictions[i].tolist() 
-            for i, label in self.labels.items()}
-
-    def predict_from_path(self, path):
-
-        image = cv2.imread(path)
-        image = self.prepare_image(image)
-
-        prediction = self.predict(image)
-
-        label = self.labels[np.argmax(prediction)]
-        prob = prediction[np.argmax(prediction)]
-
-        return prob, label, np.argmax(prediction)
-
-    def prepare_image(self, image):
-        """ Prepares an image for classification.
-
-            # Arguments
-                image: Image to be classified
-
-            # Returns
-                A resized image ready to be passed through
-                the convolutional model.
-        """
-        image = imresize(image, (self.image_width, 
-            self.image_height, self.image_channels))
-        
-        image = image.reshape(1, self.image_width, 
-            self.image_height, self.image_channels)
-            
-        
-        return image
-
-    def predict(self, image, max_only=False):
-        """ Classifies an image.
-
-            # Arguments
-                image: Image to be classified
-                max_only (default True): Returns single in corresponding
-                    to highest classification prediction.
-
-            # Returns
-                A dictionary containing class ids and predictions or 
-                a single tuple containing the class id and prediction for the
-                highest predicted class.
-        """
-        with self.graph.as_default():
-
-            if self.image_bgr:
-                image = image[...,::-1]
-
-            if self.image_rescale:
-                image = np.true_divide(image, 255.)
-
-            if max_only:
-                return np.argmax(self.model.predict(image)[0], axis=1)
-
-            return self.model.predict(image)[0]
 
     def visualize(self, image, layer_id, class_id):
         image = self.prepare_image(image)
