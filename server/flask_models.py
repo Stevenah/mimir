@@ -95,7 +95,7 @@ class Image(db.Model):
         raise NotImplementedError(f'Support for {as_type} is currenlty not supported!')
 
     @classmethod
-    def get():
+    def get(image_id):
         pass
 
     @classmethod
@@ -155,7 +155,7 @@ class ClassActivationMap():
     def get(self, image_id, layer_id, class_id):
         pass
     
-    def remove():
+    def remove(self):
         pass
 
 class SaliencyMap():
@@ -165,10 +165,9 @@ class SaliencyMap():
     target_layer = db.Column(db.Integer)
     target_class = db.Column(db.Integer)
 
-    def create(self):
+    def create(self, file_object, image_id, layer_id):
         self.image_id = image_id
         self.target_layer = layer_id
-        self.target_class = class_id
 
         image = Image.get(image_id)
 
