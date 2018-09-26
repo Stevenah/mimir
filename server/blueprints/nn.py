@@ -1,7 +1,7 @@
 from flask import Blueprint, current_app as app
 from flask.json import jsonify
 
-from models import Architecture, KerasModel, db
+from models import NeuralNet, NeuralNet, db
 from models import MODEL_STORAGE_PATH
 
 from managers import model_manager
@@ -11,13 +11,13 @@ import os
 
 mod = Blueprint('nn', __name__, url_prefix='/api/nn')
 
-def upload(form_attributes):
+def model_upload(form_attributes):
 
         submission_id = form_attributes['submission_id']
         button_id = form_attributes['buttonId']
         file_name = form_attributes['qqfilename']
 
-        model = KerasModel.get(submission_id)
+        model = NeuralNet.create(submission_id)
 
         with open(os.path.join(MODEL_STORAGE_PATH, file_name), 'wb+') as f:
             f.write(file.read())
@@ -49,18 +49,18 @@ def model():
     }
 
     if flask.request.method == 'GET':
-        response['models'] = model_manager.active()
+        response['models'] = NeuralNet.get_all()
         response['success'] = True
         response['status'] = 200
 
     if flask.request.method == 'POST':
-        upload(flask.request.form)
+        model_upload(flask.request.form)
         response['success'] = True
         response['status'] = 200
 
     return jsonify(response)
 
-@mod.route('/model/<model_id>', methods=['GET', 'DELETE', 'POST'])
+@mod.route('/model/<model_id>', methods=['DELETE'])
 def specific_model():
 
     response = {
@@ -69,16 +69,28 @@ def specific_model():
     }
 
     if flask.request.method == 'DELETE':
-        KerasModel.remove(model_id)
+        NeuralNet.remove(model_id)
         response['success'] = True
         response['status'] = 200
+
+    return jsonify(response)
+
+@mod.route('/model/<model_id>/activate', methods=['POST'])
+def activate():
+
+    response = {
+        'status': 400,
+        'payload': {}
+    }
 
     if flask.request.method == 'POST':
-        model_manager.activate(model_id)
+        NeuralNet.activate(model_id)
         response['success'] = True
         response['status'] = 200
 
-@mod.route('/models', methods=['POST', 'GET'])
+    return jsonify(response)
+
+@mod.route('/models', methods=['GET'])
 def models():
 
     response = {
@@ -87,7 +99,7 @@ def models():
     }
 
     if flask.request.method == 'GET':
-        response['models'] = model_manager.get_all()
+        response['models'] = NeuralNet.get_all()
         response['success'] = True
         response['status'] = 200
 

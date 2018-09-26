@@ -9,7 +9,7 @@ import shutil
 
 mod = Blueprint('media', __name__, url_prefix='/api/media')
 
-def upload(f, form_attributes):
+def image_upload(f, form_attributes):
     chunked = False
     chunk_dir = None
 
@@ -53,12 +53,12 @@ def route_images():
     }
 
     if request.method == 'GET':
-        response['images'] = Image.all()
+        response['images'] = Image.load_all(as_type='base_64')
         response['success'] = True
         response['status'] = 200
 
     if request.method == 'POST':
-        upload(request.files['qqfile'], request.form)
+        image_upload(request.files['qqfile'], request.form)
         response['success'] = True
         response['status'] = 200
 
@@ -73,12 +73,7 @@ def route_image(image_id):
     }
     
     if request.method == 'GET':
-        response['image'] = Image.get(image_id, as_type='base_64')
-        response['success'] = True
-        response['status'] = 200
-
-    if request.method == 'PUT':
-        Image.update(image_id)
+        response['image'] = Image.load(image_id, as_type='base_64')
         response['success'] = True
         response['status'] = 200
 

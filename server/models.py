@@ -76,7 +76,7 @@ class Image(db.Model):
         db.session.commit()
 
     @classmethod
-    def get(self, image_id, as_type='string', as_thumb=False):
+    def load(self, image_id, as_type='string', as_thumb=False):
 
         image = self.query.get(image_id)
         path = image.thumb if as_thumb else image.path
@@ -95,6 +95,10 @@ class Image(db.Model):
         raise NotImplementedError(f'Support for {as_type} is currenlty not supported!')
 
     @classmethod
+    def get():
+        pass
+
+    @classmethod
     def remove(self):
         pass
 
@@ -107,11 +111,69 @@ class Image(db.Model):
         images = self.query.all()
         return images
 
-class Visualization(db.Model):
+class ClassActivationMap():
     id = db.Column(db.Integer, primary_key=True)
     image_id = db.Column(db.Integer, db.ForeignKey('image.id'), nullable=False)
-    name = db.Column(db.String(255))
-    type=db.Column(db.String(255))
     path = db.Column(db.String(255))
     target_layer = db.Column(db.Integer)
     target_class = db.Column(db.Integer)
+
+    def create(self, file_object, image_id, layer_id, class_id):
+
+        self.image_id = image_id
+        self.target_layer = layer_id
+        self.target_class = class_id
+
+        self.name = f'cam_{ layer_id }_{ class_id }'
+
+        image = Image.get(image_id)
+
+        with open(f'{ image.path }_{ self.name }', 'wb+') as f:
+            f.write(file_object.read())
+
+        db.session.add(self)
+        db.session.commit()
+    
+    def load(self, image_id, layer_id, class_id):
+        
+        image = self.query.get(image_id)
+        path = image.thumb if as_thumb else image.path
+
+        if as_type == 'np_array':
+            return imread(path)
+
+        if as_type == 'base_64':
+            with open(path, 'rb') as f:
+                return base64.b64encode(f.read()).decode('UTF-8')
+
+        if as_type == 'string':
+            with open(path, 'rb') as f:
+                return f.read()
+
+        raise NotImplementedError(f'Support for {as_type} is currenlty not supported!')
+
+    def get(self, image_id, layer_id, class_id):
+        pass
+    
+    def remove():
+        pass
+
+class SaliencyMap():
+    id = db.Column(db.Integer, primary_key=True)
+    image_id = db.Column(db.Integer, db.ForeignKey('image.id'), nullable=False)
+    path = db.Column(db.String(255))
+    target_layer = db.Column(db.Integer)
+    target_class = db.Column(db.Integer)
+
+    def create(self):
+        self.image_id = image_id
+        self.target_layer = layer_id
+        self.target_class = class_id
+
+        image = Image.get(image_id)
+
+        with open(f'{ image.path }_sal', 'wb+') as f:
+            f.write(file_object.read())
+
+        db.session.add(self)
+        db.session.commit()

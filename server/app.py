@@ -8,13 +8,13 @@ from tf_extensions.activations import register_guided_relu
 
 from argparse import ArgumentParser
 
-from models import Architecture, Image, Visualization, db
+from models import db
 
-from model import ModelHelper
-
+import keras.backend as K
 import os
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+K.set_learning_phase(0)
 
 def server_arg_parser():
     ap = ArgumentParser()
@@ -41,7 +41,7 @@ def setup_app():
         print("database initialization...")
         setup_database(app)
 
-    register_guided_relu()Q
+    register_guided_relu()
 
     return app
 
