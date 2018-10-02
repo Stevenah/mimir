@@ -45,6 +45,7 @@ def model():
 
     response = {
         'status': 400,
+        'success': False,
         'payload': {}
     }
 
@@ -65,6 +66,7 @@ def specific_model():
 
     response = {
         'status': 400,
+        'success': False,
         'payload': {}
     }
 
@@ -80,6 +82,7 @@ def activate():
 
     response = {
         'status': 400,
+        'success': False,
         'payload': {}
     }
 
@@ -95,6 +98,7 @@ def models():
 
     response = {
         'status': 400,
+        'success': False,
         'payload': {}
     }
 
@@ -111,6 +115,7 @@ def model_info():
 
     response = {
         'status': 400,
+        'success': False,
         'payload': {}
     }
 

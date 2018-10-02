@@ -4,7 +4,7 @@ from blueprints.pages import mod as pages_mod
 from blueprints.cnn import mod as cnn_mod
 from blueprints.files import mod as files_mod
 
-from tf_extensions.activations import register_guided_relu
+from helper.tensorflow import register_guided_relu
 
 from argparse import ArgumentParser
 
@@ -38,10 +38,8 @@ def setup_app():
     app.register_blueprint(cnn_mod)
 
     if not os.path.isfile('/srv/mimir/mimir.db'):
-        print("database initialization...")
+        print('database initialization...')
         setup_database(app)
-
-    register_guided_relu()
 
     return app
 
@@ -59,6 +57,6 @@ if __name__ == '__main__':
     host  = args.host
     debug = args.debug
 
-    print(f"Starting app on host {host} port {port}...")
+    print(f'Starting app on host {host} port {port}...')
     
     app.run(host=host, debug=debug)

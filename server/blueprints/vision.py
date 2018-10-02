@@ -7,31 +7,34 @@ from manager import model_manager
 import flask
 import os
 
-mod = Blueprint('nn', __name__, url_prefix='/api/vision')
+mod = Blueprint('vision', __name__, url_prefix='/api/vision')
 
-@mod.route('/predict/<image_id>', methods=['GET'])
-def classify(image_id):
+@mod.route('/predict/<image_id>', methods=[ 'GET' ])
+def predict(image_id):
 
     response = {
         'status': 400,
+        'success': False,
         'payload': {}
     }
     
     if flask.request.method == 'GET':
-        model = model_manager.get_active()
-        image = Image.load(image_id, as_type='np_array')
+        model = model_manager.get()
+        image = Image.get(image_id)
         
-        response['classification'] = model.predict(image, with_labels=True)
+        response['classification'] = model.predict(image)
+        response['success'] = True
         response['status'] = 200
 
     return jsonify(response)
 
-@mod.route('/visualize/<image_id>', methods=['GET', 'DELETE'])
+@mod.route('/visualize/<image_id>', methods=[ 'GET' ])
 def visualize(image_id):
 
     response = {
         'status': 400,
-        'success': False
+        'success': False,
+        'payload': {}
     }
 
     if flask.request.method == 'GET':
@@ -41,14 +44,13 @@ def visualize(image_id):
         layer_id = flask.request.args.get('layerId', '0')
         class_id = flask.request.args.get('classId', '0')
 
-        image = Image.load(image_id, as_type='np_array')
+        image = Image.get(image_id)
 
-        cam = model.cam(image, image_id, layer_id, class_id)
-        guided_cam = model.guided_cam(image, image_id, layer_id, class_id)
+        model.cam(image, image_id, layer_id, class_id)
+        model.guided_cam(image, image_id, layer_id, class_id)
 
-        response['gradCam'] = load_visualization(image_id, layer_id, class_id, 'gradcam', as_type='base_64')
-        response['guidedGradCam'] = load_visualization(image_id, layer_id, class_id, 'guided_gradcam', as_type='base_64')
-
+        response['cam'] = image.load_cam(layer_id, class_id, as_type='base64')
+        response['guidedCam'] = image.laod_guided_cam(layer_id, class_id, as_type='base64')
         response['success'] = True
         response['status'] = 200
 
