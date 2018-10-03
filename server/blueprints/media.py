@@ -1,7 +1,10 @@
-from flask import Blueprint, request
+from flask import Blueprint
 from flask.json import jsonify
 
-from models import Image
+from models.flask_models import Image
+from helpers.image import upload_image
+
+import flask
 
 mod = Blueprint('media', __name__, url_prefix='/api/media')
 
@@ -10,17 +13,17 @@ def route_images():
     
     response = {
         'status': 400,
-        'success': False
+        'success': False,
         'payload': { }
     }
 
-    if request.method == 'GET':
-        response['images'] = Image.load_all(as_type='base_64')
+    if flask.request.method == 'GET':
+        response['payload']['images'] = Image.load_all(as_type='base_64')
         response['success'] = True
         response['status'] = 200
 
-    if request.method == 'POST':
-        upload_image(request.files['qqfile'], request.form)
+    if flask.request.method == 'POST':
+        upload_image(flask.request.files['qqfile'], flask.request.form)
         response['success'] = True
         response['status'] = 200
 
@@ -35,12 +38,12 @@ def route_image(image_id):
         'payload': { }
     }
     
-    if request.method == 'GET':
+    if flask.request.method == 'GET':
         response['image'] = Image.load(image_id, as_type='base_64')
         response['success'] = True
         response['status'] = 200
 
-    if request.method == 'DELETE':
+    if flask.request.method == 'DELETE':
         Image.remove(image_id)
         response['success'] = True
         response['status'] = 200

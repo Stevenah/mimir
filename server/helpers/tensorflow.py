@@ -1,5 +1,6 @@
 from tensorflow.python.framework import ops
 from tensorflow.python.ops import gen_nn_ops
+
 import tensorflow as tf
 
 def register_guided_relu():

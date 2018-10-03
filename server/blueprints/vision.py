@@ -1,11 +1,10 @@
-from flask import Blueprint, current_app as app
+from flask import Blueprint
 from flask.json import jsonify
 
-from models import Architecture, Image, db
+from models.flask_models import Image
 from managers.model import model_manager
 
 import flask
-import os
 
 mod = Blueprint('vision', __name__, url_prefix='/api/vision')
 
@@ -15,7 +14,7 @@ def predict(image_id):
     response = {
         'status': 400,
         'success': False,
-        'payload': {}
+        'payload': { }
     }
     
     if flask.request.method == 'GET':
@@ -33,7 +32,7 @@ def visualize(image_id):
     response = {
         'status': 400,
         'success': False,
-        'payload': {}
+        'payload': { }
     }
 
     if flask.request.method == 'GET':
@@ -49,7 +48,7 @@ def visualize(image_id):
         model.guided_cam(image, image_id, layer_id, class_id)
 
         response['cam'] = image.load_cam(layer_id, class_id, as_type='base64')
-        response['guidedCam'] = image.laod_guided_cam(layer_id, class_id, as_type='base64')
+        response['guidedCam'] = image.load_guided_cam(layer_id, class_id, as_type='base64')
         response['success'] = True
         response['status'] = 200
 

@@ -2,18 +2,16 @@ from flask import Flask
 from argparse import ArgumentParser
 
 from blueprints.pages import mod as pages_mod
-from blueprints.cnn import mod as cnn_mod
-from blueprints.files import mod as files_mod
+from blueprints.vision import mod as vision_mod
+from blueprints.media import mod as media_mod
+from blueprints.nn import mod as nn_mod
 
-from helper.tensorflow import register_guided_relu
-from models import db
+from helpers.tensorflow import register_guided_relu
+from models.flask_models import db
 
-import keras.backend as K
 import os
 
-
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-K.set_learning_phase(0)
 
 def server_arg_parser():
     ap = ArgumentParser()
@@ -33,10 +31,13 @@ def setup_app():
     db.init_app(app)
 
     app.register_blueprint(pages_mod)
-    app.register_blueprint(files_mod)
-    app.register_blueprint(cnn_mod)
+    app.register_blueprint(media_mod)
+    app.register_blueprint(vision_mod)
+    app.register_blueprint(nn_mod)
 
-    if not os.path.isfile('/srv/mimir/mimir.db'):
+    mimir_storage = app.config[ 'MIMIR_STORAGE' ]
+
+    if not os.path.isfile(f'{ mimir_storage }/mimir.db'):
         print('database initialization...')
         setup_database(app)
 

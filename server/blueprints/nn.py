@@ -1,13 +1,9 @@
-from flask import Blueprint, current_app as app
+from flask import Blueprint
 from flask.json import jsonify
 
-from models import NeuralNet, NeuralNet, db
-from models import MODEL_STORAGE_PATH
-
-from managers import model_manager
+from managers.model import model_manager
 
 import flask
-import os
 
 mod = Blueprint('nn', __name__, url_prefix='/api/nn')
 
@@ -21,7 +17,7 @@ def model():
     }
 
     if flask.request.method == 'GET':
-        response['models'] = model_manager.get_available()
+        response['models'] = model_manager.get()
         response['success'] = True
         response['status'] = 200
 
@@ -42,7 +38,7 @@ def specific_model():
     }
 
     if flask.request.method == 'DELETE':
-        NeuralNet.remove(model_id)
+        model_manager.delete(model_id)
         response['success'] = True
         response['status'] = 200
 

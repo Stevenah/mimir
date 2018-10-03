@@ -4,31 +4,77 @@ from scipy.misc import imread, imsave, imresize
 import os
 import base64
 
-BASE_PATH = '/srv/mimir'
+mimir_storage = '/srv/mimir'
 
-MEDIA_STORAGE_PATH = f'{ BASE_PATH }/media'
-MODEL_STORAGE_PATH = f'{ BASE_PATH }/models'
+MEDIA_STORAGE_PATH = f'{ mimir_storage }/media'
+MODEL_STORAGE_PATH = f'{ mimir_storage }/models'
 
 IMAGE_STORAGE_PATH = os.path.join(MEDIA_STORAGE_PATH, 'image')
 VIDEO_STORAGE_PATH = os.path.join(MEDIA_STORAGE_PATH, 'video')
 CHUNK_STORAGE_PATH = os.path.join(MEDIA_STORAGE_PATH, 'chunk')
 
-os.makedirs(IMAGE_STORAGE_PATH)
-os.makedirs(VIDEO_STORAGE_PATH)
-os.makedirs(CHUNK_STORAGE_PATH)
-os.makedirs(MODEL_STORAGE_PATH)
+if not os.path.exists(IMAGE_STORAGE_PATH):
+    os.makedirs(IMAGE_STORAGE_PATH)
+    
+if not os.path.exists(VIDEO_STORAGE_PATH):
+    os.makedirs(VIDEO_STORAGE_PATH)
+    
+if not os.path.exists(CHUNK_STORAGE_PATH):
+    os.makedirs(CHUNK_STORAGE_PATH)
+    
+if not os.path.exists(MODEL_STORAGE_PATH):
+    os.makedirs(MODEL_STORAGE_PATH)
 
 db = SQLAlchemy()
 
 class NeuralNet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    model_name = db.Column(db.String(80), nullable=False)
+    name = db.Column(db.String(80), nullable=False)
     active = db.Column(db.Boolean, default=False, nullable=False)
     dataset_name = db.Column(db.String(80))
     description = db.Column(db.String(255))
     model_file = db.Column(db.LargeBinary)
     class_file = db.Column(db.LargeBinary)
     submission_id = db.Column(db.String(80))
+
+    @classmethod
+    def create(cls, model_file):
+        
+        image = cls()
+        
+        db.session.add(image)
+        db.session.flush()
+
+        image.name = file_name
+        image_name = f'{ image.id }_{ image.name }'
+        
+        image_path = os.path.join(IMAGE_STORAGE_PATH, image_name)
+        thumb_path = os.path.join(IMAGE_STORAGE_PATH, 'thumb_' + image_name)
+
+        image.source = image_path
+
+        with open(image.source, 'wb+') as f:
+            f.write(file_object.read())
+
+        imsave(thumb_path, imresize(imread(image.source), (100, 100)))
+
+        db.session.add(image)
+        db.session.commit()
+
+    @classmethod
+    def activate(cls, model_id):
+        active_model = cls.query.filter_by(active=True).first()
+        requested_model = cls.query.get(model_id)
+        
+        active_model.active = False
+        requested_model.active = True
+
+        db.session.commit()
+
+    @classmethod
+    def get_active(cls):
+        active_model = cls.query.filter_by(active=True).first()
+
 
 class Image(db.Model):
 
@@ -38,7 +84,10 @@ class Image(db.Model):
     class_label = db.Column(db.String(80))
     class_index = db.Column(db.Integer)
     prediction = db.Column(db.Float)
-    visualizations = db.relationship('Visualization', backref='image', lazy=True)
+
+    @classmethod
+    def get(cls, image_id):
+        return cls.query.get(image_id)
 
     @classmethod
     def create(cls, file_object, file_name):
@@ -56,17 +105,13 @@ class Image(db.Model):
 
         image.source = image_path
 
-        with open(image.path, 'wb+') as f:
+        with open(image.source, 'wb+') as f:
             f.write(file_object.read())
 
-        imsave(thumb_path, imresize(imread(image.path), (100, 100)))
+        imsave(thumb_path, imresize(imread(image.source), (100, 100)))
 
         db.session.add(image)
         db.session.commit()
-
-    @classmethod
-    def get(cls, image_id):
-        return cls.query.get(image_id)
 
     @classmethod
     def load(cls, image_id, as_type='np_array', as_thumb=False):
@@ -111,7 +156,7 @@ class ClassActivationMap():
 
         image = Image.get(image_id)
 
-        with open(f'{ image.path }_{ self.name }', 'wb+') as f:
+        with open(f'{ image.source }_{ self.name }', 'wb+') as f:
             f.write(file_object.read())
 
         db.session.add(self)
@@ -120,7 +165,7 @@ class ClassActivationMap():
     def load(self, image_id, layer_id, class_id):
         
         image = self.query.get(image_id)
-        path = image.thumb if as_thumb else image.path
+        path = image.thumb if as_thumb else image.source
 
         if as_type == 'np_array':
             return imread(path)
@@ -154,7 +199,7 @@ class SaliencyMap():
 
         image = Image.get(image_id)
 
-        with open(f'{ image.path }_sal', 'wb+') as f:
+        with open(f'{ image.source }_sal', 'wb+') as f:
             f.write(file_object.read())
 
         db.session.add(self)

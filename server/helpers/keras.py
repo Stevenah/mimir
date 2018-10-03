@@ -1,7 +1,8 @@
 from keras.models import load_model
 from keras.layers import GlobalAveragePooling2D, Activation
 
-from scipy.misc import imresize, imread
+from scipy.misc import imresize, imread, imsave
+from helpers.image import *
 
 import keras.backend as K
 import tensorflow as tf

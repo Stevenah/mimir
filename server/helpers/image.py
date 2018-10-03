@@ -1,19 +1,22 @@
-from models import CHUNK_STORAGE_PATH, VIDEO_STORAGE_PATH
+
+from models.flask_models import CHUNK_STORAGE_PATH, VIDEO_STORAGE_PATH, Image
+
+from scipy.misc import imread, imsave, imresize
+
 import os
 import shutil
-
+import cv2
 
 class ImagePreprocessor():
 
     def __init__(self, image_width, image_height, 
-        image_channels, rescale=None, bgr=False):
+        image_channels, rescale=None):
 
         self.image_width = image_width
         self.image_height = image_height
         self.image_channels = image_channels
 
         self.rescale = rescale
-        self.bgr = bgr
 
     def process(self, image):
 
@@ -21,10 +24,7 @@ class ImagePreprocessor():
             self.image_height, self.image_channels))
 
         if self.rescale is not None:
-            image = np.true_divide(image, 255.)
-
-        if self.bgr:
-            image = image[...,::-1]
+            image = np.true_divide(image, rescale)
 
         return image
 
@@ -97,6 +97,7 @@ def upload_image(f, form_attributes):
 
     file_name = form_attributes['qqfilename']
     file_id = form_attributes['qquuid']
+
 
     if 'qqtotalparts' in form_attributes:
         chunked = True
