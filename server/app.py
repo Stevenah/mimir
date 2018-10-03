@@ -7,6 +7,7 @@ from blueprints.media import mod as media_mod
 from blueprints.nn import mod as nn_mod
 
 from helpers.tensorflow import register_guided_relu
+from managers.model import model_manager
 from models.flask_models import db
 
 import os
@@ -40,6 +41,9 @@ def setup_app():
     if not os.path.isfile(f'{ mimir_storage }/mimir.db'):
         print('database initialization...')
         setup_database(app)
+
+    app.app_context().push()
+    model_manager.init()
 
     return app
 

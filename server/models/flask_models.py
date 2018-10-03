@@ -31,34 +31,21 @@ class NeuralNet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     active = db.Column(db.Boolean, default=False, nullable=False)
-    dataset_name = db.Column(db.String(80))
-    description = db.Column(db.String(255))
     model_file = db.Column(db.LargeBinary)
-    class_file = db.Column(db.LargeBinary)
-    submission_id = db.Column(db.String(80))
+    description = db.Column(db.String(255))
+    dataset_id =  db.Column(db.Integer, db.ForeignKey('dataset.id'), nullable=False)
 
     @classmethod
-    def create(cls, model_file):
+    def create(cls, model_file, name, description, dataset_id):
         
-        image = cls()
-        
-        db.session.add(image)
-        db.session.flush()
+        model = cls()
 
-        image.name = file_name
-        image_name = f'{ image.id }_{ image.name }'
-        
-        image_path = os.path.join(IMAGE_STORAGE_PATH, image_name)
-        thumb_path = os.path.join(IMAGE_STORAGE_PATH, 'thumb_' + image_name)
+        model.name = name
+        model.model_file = model_file
+        model.description = description
+        model.dataset_id = dataset_id
 
-        image.source = image_path
-
-        with open(image.source, 'wb+') as f:
-            f.write(file_object.read())
-
-        imsave(thumb_path, imresize(imread(image.source), (100, 100)))
-
-        db.session.add(image)
+        db.session.add(model)
         db.session.commit()
 
     @classmethod
@@ -75,6 +62,27 @@ class NeuralNet(db.Model):
     def get_active(cls):
         active_model = cls.query.filter_by(active=True).first()
 
+class Dataset(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    description = db.Column(db.String(255))
+    class_file = db.Column(db.LargeBinary)
+
+    @classmethod
+    def create(cls, class_file, name, description):
+        
+        dataset = cls()
+
+        dataset.name = name
+        dataset.description = description
+        dataset.class_file = class_file
+
+        db.session.add(dataset)
+        db.session.commit()
+
+    @classmethod
+    def get_classes(cls, as_type):
+        pass
 
 class Image(db.Model):
 
