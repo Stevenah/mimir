@@ -1,17 +1,16 @@
 from flask import Flask
+from argparse import ArgumentParser
 
 from blueprints.pages import mod as pages_mod
 from blueprints.cnn import mod as cnn_mod
 from blueprints.files import mod as files_mod
 
 from helper.tensorflow import register_guided_relu
-
-from argparse import ArgumentParser
-
 from models import db
 
 import keras.backend as K
 import os
+
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 K.set_learning_phase(0)

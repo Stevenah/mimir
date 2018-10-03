@@ -2,7 +2,7 @@ from flask import Blueprint, current_app as app
 from flask.json import jsonify
 
 from models import Architecture, Image, db
-from manager import model_manager
+from managers.model import model_manager
 
 import flask
 import os
@@ -20,9 +20,8 @@ def predict(image_id):
     
     if flask.request.method == 'GET':
         model = model_manager.get()
-        image = Image.get(image_id)
         
-        response['classification'] = model.predict(image)
+        response['classification'] = model.predict(Image.get(image_id))
         response['success'] = True
         response['status'] = 200
 

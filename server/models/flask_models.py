@@ -4,12 +4,14 @@ from scipy.misc import imread, imsave, imresize
 import os
 import base64
 
-MEDIA_STORAGE_PATH = '/srv/mimir/media'
+BASE_PATH = '/srv/mimir'
+
+MEDIA_STORAGE_PATH = f'{ BASE_PATH }/media'
+MODEL_STORAGE_PATH = f'{ BASE_PATH }/models'
+
 IMAGE_STORAGE_PATH = os.path.join(MEDIA_STORAGE_PATH, 'image')
 VIDEO_STORAGE_PATH = os.path.join(MEDIA_STORAGE_PATH, 'video')
 CHUNK_STORAGE_PATH = os.path.join(MEDIA_STORAGE_PATH, 'chunk')
-
-MODEL_STORAGE_PATH = '/srv/mimir/models'
 
 os.makedirs(IMAGE_STORAGE_PATH)
 os.makedirs(VIDEO_STORAGE_PATH)
@@ -18,7 +20,7 @@ os.makedirs(MODEL_STORAGE_PATH)
 
 db = SQLAlchemy()
 
-class KerasModel(db.Model):
+class NeuralNet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     model_name = db.Column(db.String(80), nullable=False)
     active = db.Column(db.Boolean, default=False, nullable=False)
@@ -28,58 +30,49 @@ class KerasModel(db.Model):
     class_file = db.Column(db.LargeBinary)
     submission_id = db.Column(db.String(80))
 
-class Video(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
-    path = db.Column(db.String(80))
-    thumbnail = db.Column(db.String(80))
-
-    def create(self, chunked=False):
-        pass
-
-    def add_chunk(self):
-        pass
-        
 class Image(db.Model):
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    path = db.Column(db.String(80))
-    thumbnail = db.Column(db.String(80))
-    prediction = db.Column(db.Float)
-    label = db.Column(db.String(80))
+    source = db.Column(db.String(80))
+    class_label = db.Column(db.String(80))
     class_index = db.Column(db.Integer)
+    prediction = db.Column(db.Float)
     visualizations = db.relationship('Visualization', backref='image', lazy=True)
 
     @classmethod
-    def create(self, file_object, file_name):
+    def create(cls, file_object, file_name):
+
+        image = cls()
         
-        if getattr(self, 'id', None) is None:
-            db.session.add(self)
-            db.session.flush()
+        db.session.add(image)
+        db.session.flush()
 
-        self.name = file_name
-
-        image_name = f'{self.id}_{self.name}'
+        image.name = file_name
+        image_name = f'{ image.id }_{ image.name }'
         
         image_path = os.path.join(IMAGE_STORAGE_PATH, image_name)
         thumb_path = os.path.join(IMAGE_STORAGE_PATH, 'thumb_' + image_name)
 
-        self.path = image_path
-        self.thumb = thumb_path
+        image.source = image_path
 
-        with open(self.path, 'wb+') as f:
+        with open(image.path, 'wb+') as f:
             f.write(file_object.read())
 
-        imsave(self.thumb, imresize(imread(self.path), (100, 100)))
+        imsave(thumb_path, imresize(imread(image.path), (100, 100)))
 
-        db.session.add(self)
+        db.session.add(image)
         db.session.commit()
 
     @classmethod
-    def load(self, image_id, as_type='string', as_thumb=False):
+    def get(cls, image_id):
+        return cls.query.get(image_id)
 
-        image = self.query.get(image_id)
-        path = image.thumb if as_thumb else image.path
+    @classmethod
+    def load(cls, image_id, as_type='np_array', as_thumb=False):
+
+        image = Image.get(image_id)
+        path = image.thumb if as_thumb else image.source
 
         if as_type == 'np_array':
             return imread(path)
@@ -92,24 +85,14 @@ class Image(db.Model):
             with open(path, 'rb') as f:
                 return f.read()
 
-        raise NotImplementedError(f'Support for {as_type} is currenlty not supported!')
+        raise NotImplementedError(f'Support for { as_type } is currenlty not supported!')
 
     @classmethod
-    def get(image_id):
-        pass
-
-    @classmethod
-    def remove(self):
-        pass
-
-    @classmethod
-    def update(self, image_id):
-        pass
-
-    @classmethod
-    def all(self, as_thumb=False):
-        images = self.query.all()
-        return images
+    def load_all(cls, as_type='np_array', as_thumb=False):
+        return [ 
+            Image.load(image.id, as_type, as_thumb) 
+            for image in Image.query.all()
+        ]
 
 class ClassActivationMap():
     id = db.Column(db.Integer, primary_key=True)
@@ -176,3 +159,16 @@ class SaliencyMap():
 
         db.session.add(self)
         db.session.commit()
+
+class Video(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80))
+    path = db.Column(db.String(80))
+    thumbnail = db.Column(db.String(80))
+
+    def create(self, chunked=False):
+        pass
+
+    def add_chunk(self):
+        pass
+        
