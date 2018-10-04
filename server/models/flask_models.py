@@ -59,7 +59,9 @@ class NeuralNet(db.Model):
         active_model = cls.query.filter_by(active=True).first()
         requested_model = cls.query.get(model_id)
         
-        active_model.active = False
+        if active_model is not None:
+            active_model.active = False
+
         requested_model.active = True
 
         db.session.commit()
@@ -67,6 +69,10 @@ class NeuralNet(db.Model):
     @classmethod
     def get_active(cls):
         active_model = cls.query.filter_by(active=True).first()
+
+    def get_classes(self):
+        
+
 
 class Dataset(db.Model):
     id = db.Column(db.Integer, primary_key=True)

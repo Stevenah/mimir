@@ -18,8 +18,9 @@ class ModelManager():
     def get(self):
         return self.active
     
-    def activate(self, modsel_id):
+    def activate(self, model_id):
         NeuralNet.activate(model_id)
+        active_model = NeuralNet.get_active()
         self.active = ModelHelper(active_model)
         
 model_manager = ModelManager()
