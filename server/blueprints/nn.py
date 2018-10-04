@@ -1,6 +1,8 @@
 from flask import Blueprint
 from flask.json import jsonify
 
+from helpers.model import upload_dataset, upload_model
+
 from managers.model import model_manager
 
 import flask
@@ -8,7 +10,7 @@ import flask
 mod = Blueprint('nn', __name__, url_prefix='/api/nn')
 
 @mod.route('/model', methods=['POST', 'GET'])
-def model():
+def route_model():
 
     response = {
         'status': 400,
@@ -22,14 +24,30 @@ def model():
         response['status'] = 200
 
     if flask.request.method == 'POST':
-        model_upload(flask.request.form)
+        upload_model(flask.request.files['qqfile'], flask.request.form)
+        response['success'] = True
+        response['status'] = 200
+
+    return jsonify(response)
+
+@mod.route('/dataset', methods=['POST', 'GET'])
+def route_dataset():
+
+    response = {
+        'status': 400,
+        'success': False,
+        'payload': { }
+    }
+
+    if flask.request.method == 'POST':
+        upload_dataset(flask.request.files['qqfile'], flask.request.form)
         response['success'] = True
         response['status'] = 200
 
     return jsonify(response)
 
 @mod.route('/model/<model_id>', methods=['DELETE'])
-def specific_model():
+def route_model_id():
 
     response = {
         'status': 400,
@@ -45,7 +63,7 @@ def specific_model():
     return jsonify(response)
 
 @mod.route('/model/activate/<model_id>', methods=['POST'])
-def activate():
+def route_activate():
 
     response = {
         'status': 400,
@@ -61,7 +79,7 @@ def activate():
     return jsonify(response)
 
 @mod.route('/model/<model_id>/meta', methods=['GET'])
-def model_info():
+def route_meta():
 
     response = {
         'status': 400,

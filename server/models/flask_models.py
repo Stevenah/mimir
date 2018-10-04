@@ -41,9 +41,15 @@ class NeuralNet(db.Model):
         model = cls()
 
         model.name = name
-        model.model_file = model_file
         model.description = description
         model.dataset_id = dataset_id
+
+        model_path = '/srv/mimir/tmp/model.h5'
+
+        with open(model_path, 'wb+') as f:
+            f.write(model_file.read())
+
+        model.model_file = open(model_path, 'rb').read()
 
         db.session.add(model)
         db.session.commit()
@@ -70,12 +76,16 @@ class Dataset(db.Model):
 
     @classmethod
     def create(cls, class_file, name, description):
-        
-        dataset = cls()
 
-        dataset.name = name
-        dataset.description = description
-        dataset.class_file = class_file
+        class_file_path = '/srv/mimir/tmp/class_file_path.json'
+
+        print(name, description, class_file)
+
+        dataset = cls(
+            name=name,
+            description=description,
+            class_file=class_file.read()
+        )
 
         db.session.add(dataset)
         db.session.commit()
