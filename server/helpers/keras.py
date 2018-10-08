@@ -4,6 +4,8 @@ from keras.layers import GlobalAveragePooling2D, Activation
 from scipy.misc import imresize, imread, imsave
 from helpers.image import *
 
+from mimir_visualizer.visualize import *
+
 import keras.backend as K
 import tensorflow as tf
 import numpy as np
@@ -27,42 +29,14 @@ class ModelHelper():
             return self.model.predict(
                 self.image_processor.process(image)
             )[0]
+
+    def class_activation_map(self, image, class_index, layer_name);
+        return generate_gradcam(self.model, image,
+            class_index=class_index, layer_name=layer_name)
+
+    def class_saliency_map(self):
+        return generate_saliency(self.model, image, layer_name=layer_name)
     
-    def saliency(self, image, layer_id):
-        with tf.get_default_graph().gradient_override_map({'Relu': 'GuidedRelu'}):
-            
-            layer_output = model.get_layer(layer_id).output
-            model_input = model.input
-
-            loss = K.sum(K.max(layer_output, axis=3))
-            saliency = K.gradients(loss, model_input)[0]
-
-            return K.function([model_input], [saliency])([image])
-
-    def cam(self, image, class_id, layer_id):
-
-        input_layer= model.layers[0].input
-        output_layer = model.layers[-1].output
-        target_layer = model.get_layer(layer_id).output
-
-        loss = K.sum(output_layer * K.one_hot([class_id], int(output_layer.shape[1])))
-
-        gradients = K.gradients(loss, target_layer)[0]
-
-        weights = GlobalAveragePooling2D()(gradients)
-        
-        cam = K.sum(weights * target_layer, axis=-1)
-        cam = Activation('relu')(cam)
-
-        gradcam_fn = K.function([input_layer], [cam])
-
-        cam = gradcam_fn([image])
-        cam = imresize(np.squeeze(cam), tuple(input_layer.shape[1:3]))
-
-        return cam / np.max(cam)
-
-    def guided_cam(self, image, class_id, layer_id):
-        saliency = np.squeeze(self.saliency(model, image, layer_id))
-        cam = self.cam(model, image, class_id, layer_id)
-
-        return np.squeeze(saliency) * cam[..., np.newaxis]
+    def saliency_map(self):
+        return generate_class_saliency(self.model, image,
+            class_index=class_index, layer_name=layer_name)
