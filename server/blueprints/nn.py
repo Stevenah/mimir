@@ -1,8 +1,7 @@
 from flask import Blueprint
 from flask.json import jsonify
 
-from helpers.model import upload_dataset, upload_model
-
+from models import NeuralNet
 from managers.model import model_manager
 
 import flask
@@ -24,7 +23,11 @@ def route_model():
         response['status'] = 200
 
     if flask.request.method == 'POST':
-        upload_model(flask.request.files['qqfile'], flask.request.form)
+        NeuralNet.create(flask.request.files['qqfile'],
+            flask.request.form['model_name'],
+            flask.request.form['dataset_id'],
+            flask.request.form['description'])
+            
         response['success'] = True
         response['status'] = 200
 
@@ -40,7 +43,10 @@ def route_dataset():
     }
 
     if flask.request.method == 'POST':
-        upload_dataset(flask.request.files['qqfile'], flask.request.form)
+        Dataset.create(flask.request.files['qqfile'], 
+            flask.request.form['dataset_name'],
+            flask.request.form['description'])
+            
         response['success'] = True
         response['status'] = 200
 

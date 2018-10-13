@@ -1,12 +1,13 @@
 from flask import Blueprint
 from flask.json import jsonify
 
-from models.flask_models import Image
+from models import Image
 from helpers.image import upload_image
 
 import flask
 
 mod = Blueprint('media', __name__, url_prefix='/api/media')
+
 
 @mod.route('/image', methods=['GET', 'POST'])
 def route_images():

@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask.json import jsonify
 
-from models.flask_models import Image
+from models import Image
 from managers.model import model_manager
 
 import flask
