@@ -167,7 +167,8 @@ typings/
 .env
 *.jpg
 
-uploads/*
-model/
+*.sqlite3
 
-mimir.db
+run/*
+.2
+secrets.*
