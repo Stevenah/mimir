@@ -1,17 +1,25 @@
 from rest_framework.test import APIRequestFactory
-from django.test import TestCase
+from django.test import TestCase, Client
+                                           
+from django.core.files.images import ImageFile
+from .models import Image
 
 import base64
+import json
 
 class ImageTest(TestCase):
 
-    def test_tests(self):
+    def setUp(self):
+        with open('/Users/stevenah/github/mimir/static/16614450.jpeg', 'rb') as image_file:
+            Image.objects.create(image=ImageFile(image_file))
 
-        encoded_string = None
-
+    def test_post_image(self):
+        client = Client()
+        response = None
         with open('/Users/stevenah/Pictures/16614450.jpeg', 'rb') as image_file:
-            encoded_string = base64.b64encode(image_file.read())
+            response = client.post('/media/images/', { 'image': image_file })
 
-        # Using the standard RequestFactory API to create a form POST request
-        factory = APIRequestFactory()
-        request = factory.post('/media/', {'image': encoded_string}, content_type='application/json')
+    def test_get_images(self):
+        client = Client()
+        response = client.get('/media/images/')
+        self.assertEqual(len(response.data), 1)

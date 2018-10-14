@@ -1,11 +1,14 @@
 from django.db import models
 
 class Image(models.Model):
-    source      = models.ImageField(upload_to='images/source')
-    file_name   = models.CharField(max_length=80)
-    class_label = models.CharField(max_length=80)
-    class_index = models.IntegerField()
-    prediction  = models.FloatField()
+    image      = models.ImageField(upload_to='images/source')
+
+
+class ImagePrediction(models.Model):
+    image   = models.ForeignKey(Image, on_delete=models.CASCADE)
+    network = models.ForeignKey(NeuralNet, on_delete=models.CASCADE)
+    index   = models.IntegerField()
+    label   = models.CharField(max_length=80)
 
 class Dataset(models.Model):
     name        = models.CharField(max_length=80)

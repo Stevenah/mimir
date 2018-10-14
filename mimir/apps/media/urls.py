@@ -4,7 +4,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 urlpatterns = [
-    # ex: /media/
+    # ex: /media/images/
     path('images/', views.image_list),
 ]
 
