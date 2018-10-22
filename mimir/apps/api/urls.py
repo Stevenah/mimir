@@ -1,8 +1,18 @@
-from django.urls import path
+from django.urls import path, include
 
-from . import views
+from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.routers import DefaultRouter
+
+from . import viewsets
+
+router = DefaultRouter()
+
+router.register('networks', viewsets.NeuralNetViewSet)
+router.register('images', viewsets.ImageViewSet)
+router.register('datasets', viewsets.DatasetViewSet)
 
 urlpatterns = [
-    # ex: /reporting/
-    path('', views.index, name='index'),
+    path('', include(router.urls)),
 ]
+
+# urlpatterns = format_suffix_patterns(urlpatterns)
