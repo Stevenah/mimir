@@ -10,4 +10,23 @@ class NeuralNetViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=True)
     def activate(self, request, pk=None):
-        print("hello")
+        old = NeuralNet.objects.get(active=True)
+        new = NeuralNet.objects.get(pk=pk)
+
+        old.active = False
+        new.active = True
+
+        old.save()
+        new.save()
+
+    @action(methods=['get'], detail=True)
+    def layers(self, request, pk=None):
+        pass
+    
+    @action(methods=['get'], detail=True)
+    def classes(self, request, pk=None):
+        pass
+
+    @action(methods=['get'], detail=True)
+    def predict(self, request, pk=None):
+        pass

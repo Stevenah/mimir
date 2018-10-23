@@ -7,7 +7,5 @@ class NeuralNetSerializer(serializers.ModelSerializer):
 
     class Meta:
          model=NeuralNet
-         fields=[
-             'name'
-         ]
+         fields=[ 'name' ]
         
