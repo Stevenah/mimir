@@ -2,7 +2,7 @@ from rest_framework.test import APIRequestFactory
 from django.test import TestCase, Client
                                            
 from django.core.files.images import ImageFile
-from .models import Image
+from ..models import Image
 
 import base64
 import json
@@ -19,7 +19,7 @@ class ImageTest(TestCase):
         self.response = None
         
         with open(TEST_IMAGE, 'rb') as image_file:
-            Image.objects.create(image=ImageFile(image_file))
+            Image.objects.create(source=ImageFile(image_file))
 
     def test_post_image(self):
         with open(TEST_IMAGE, 'rb') as image_file:

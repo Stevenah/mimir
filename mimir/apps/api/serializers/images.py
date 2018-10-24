@@ -8,8 +8,8 @@ class ImageSerializer(serializers.ModelSerializer):
     source = serializers.ImageField()
     
     class Meta:
-         model=Image
-         fields= [ 'source' ]
+         model = Image
+         fields = [ 'source' ]
 
     def create(self, validated_data):
         image=validated_data.pop('source')

@@ -1,7 +1,7 @@
 from rest_framework.test import APIRequestFactory
 from django.test import TestCase, Client
                                            
-from .models import Dataset
+from ..models import Dataset
 
 import base64
 import json
