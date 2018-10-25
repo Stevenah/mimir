@@ -172,3 +172,4 @@ typings/
 run/*
 .2
 secrets.*
+*.h5

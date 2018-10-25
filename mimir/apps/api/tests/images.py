@@ -8,7 +8,7 @@ import base64
 import json
 import os
 
-TEST_RESOURCE_PATH = '/Users/stevenah/github/mimir/'
+TEST_RESOURCE_PATH = '/Users/stevenah/github/mimir/run/media'
 TEST_IMAGE = os.path.join(TEST_RESOURCE_PATH, 'hello.png')
 
 class ImageTest(TestCase):

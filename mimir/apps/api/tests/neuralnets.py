@@ -8,7 +8,7 @@ import base64
 import json
 import os
 
-TEST_RESOURCE_PATH = '/Users/stevenah/github/mimir/'
+TEST_RESOURCE_PATH = '/Users/stevenah/github/mimir/run/media'
 TEST_NETWORK_FILE = os.path.join(TEST_RESOURCE_PATH, 'model.h5')
 
 class NeuralTest(TestCase):
@@ -27,6 +27,7 @@ class NeuralTest(TestCase):
 
     def test_activate_neural_net(self):
         self.response = self.client.post('/api/networks/1/activate/')
+        self.assertEqual(NeuralNet.objects.get(pk=1).active, True)
 
     def test_layers_neural_net(self):
         self.response = self.client.get('/api/networks/1/layers/')

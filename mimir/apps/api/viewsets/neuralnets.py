@@ -15,15 +15,17 @@ class NeuralNetViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=True)
     def activate(self, request, pk=None):
-        print("hello")
-        # old = NeuralNet.objects.get(active=True)
-        # new = NeuralNet.objects.get(pk=pk)
 
-        # old.active = False
-        # new.active = True
+        old = NeuralNet.objects.filter(active=True)
 
-        # old.save()
-        # new.save()
+        if len(old) == 1:
+            old[0].active = False
+            old[0].save()
+
+        new = NeuralNet.objects.get(pk=pk)
+        new.active = True
+        new.save()
+
         return Response(status=status.HTTP_200_OK)
 
     @action(methods=['get'], detail=True)
@@ -33,7 +35,8 @@ class NeuralNetViewSet(viewsets.ModelViewSet):
     
     @action(methods=['get'], detail=True)
     def classes(self, request, pk=None):
-        pass
+        classes = NeuralNet.objects.get(pk=pk).dataset.dataset_category_set.all()
+        return Response(classes, status=status.HTTP_200_OK)
 
     @action(methods=['get'], detail=True)
     def predict(self, request, pk=None):
