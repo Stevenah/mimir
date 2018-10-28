@@ -25,6 +25,7 @@ INSTALLED_APPS = [
 
     'mimir.apps.reporting',
     'mimir.apps.api',
+    'mimir.apps.core',
 ]
 
 MIDDLEWARE = [
