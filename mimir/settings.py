@@ -23,9 +23,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'mimir.apps.reporting',
-    'mimir.apps.api',
     'mimir.apps.core',
+    'mimir.apps.api',
+    'mimir.apps.dashboard',
+    'mimir.apps.reporting',
 ]
 
 MIDDLEWARE = [
@@ -99,4 +100,5 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'run/media')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

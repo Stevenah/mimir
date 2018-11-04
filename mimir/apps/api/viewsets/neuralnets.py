@@ -16,15 +16,15 @@ class NeuralNetViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=True)
     def activate(self, request, pk=None):
 
-        old = NeuralNet.objects.filter(active=True)
+        current_active = NeuralNet.objects.filter(active=True)
 
-        if len(old) == 1:
-            old[0].active = False
-            old[0].save()
+        if len(current_active) == 1:
+            current_active[0].active = False
+            current_active[0].save()
 
-        new = NeuralNet.objects.get(pk=pk)
-        new.active = True
-        new.save()
+        new_active = NeuralNet.objects.get(pk=pk)
+        new_active.active = True
+        new_active.save()
 
         return Response(status=status.HTTP_200_OK)
 
