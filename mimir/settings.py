@@ -66,11 +66,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mimir.wsgi.application'
 
+DATABASES_PATH = os.path.join(BASE_DIR, 'run')
+
+if not os.path.exists:
+    os.makedirs(DATABASES_PATH)
+
 # Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'run/db.sqlite3'),
+        'NAME': os.path.join(DATABASES_PATH, 'db.sqlite3'),
     }
 }
 

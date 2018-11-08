@@ -5,6 +5,8 @@ from ..models import Application
 
 class ApplicationSerializer(serializers.ModelSerializer):
     
+    banner = Base64ImageField()
+
     class Meta:
          model = Application
-         fields = [ 'name', 'description' ]
+         fields = [ 'name', 'description', 'banner', 'link' ]

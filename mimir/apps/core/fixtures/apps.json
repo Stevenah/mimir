@@ -5,7 +5,8 @@
         "fields": {
             "name": "Gastroentology Reporting",
             "description": "Application for colonoscopy reportingh and disease diagnosis.",
-            "banner": "/media/apps/banners/reporting_banner.jpeg"
+            "banner": "/apps/banners/reporting_banner.jpeg",
+            "link": "/reporting"
         }
     }
 ]
