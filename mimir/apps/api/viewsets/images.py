@@ -1,21 +1,15 @@
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
+from rest_framework.parsers import FormParser, MultiPartParser
 
 from ..models import Image
 from .. import serializers
 
 class ImageViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.ImageSerializer
     queryset = Image.objects.all()
+    serializer_class = serializers.ImageSerializer
+    parser_classes = (MultiPartParser, FormParser,)
 
-    @action(methods=['get'], detail=True)
-    def gradcam(self, request, pk=None):
-        pass
-    
-    @action(methods=['get'], detail=True)
-    def saliency(self, request, pk=None):
-        pass
-
-    @action(methods=['get'], detail=True)
-    def guided(self, request, pk=None):
-        pass
+    def perform_create(self, serializer):
+        serializer.save(
+            imagefile=self.request.data.get('imagefile'))

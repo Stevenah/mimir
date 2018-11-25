@@ -5,12 +5,12 @@ from ..models import Image
 
 class ImageSerializer(serializers.ModelSerializer):
     
-    source = serializers.ImageField()
+    imagefile = serializers.ImageField()
     
     class Meta:
          model = Image
-         fields = [ 'source' ]
+         fields = [ 'imagefile', 'id' ]
 
     def create(self, validated_data):
-        image=validated_data.pop('source')
-        return Image.objects.create(sourec=image)
+        image=validated_data.pop('imagefile')
+        return Image.objects.create(imagefile=image)

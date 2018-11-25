@@ -16,7 +16,9 @@ class ImageListView(APIView):
 
     def post(self, request):
 
-        serializer = ImageSerializer(data=request.data)
+        images = request.data
+
+        serializer = ImageSerializer(data=images, many=True)
 
         if serializer.is_valid():
             serializer.save()

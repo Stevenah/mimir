@@ -18,7 +18,8 @@ class NeuralNet(models.Model):
     model_file = models.FileField(upload_to='neuralnets/')
 
 class Image(models.Model):
-    source = models.ImageField(upload_to='images/source')
+    created = models.DateTimeField(auto_now_add=True)
+    imagefile = models.ImageField(upload_to='media/')
 
 class ImageCategoryPrediction(models.Model):
     image      = models.ForeignKey(Image, on_delete=models.CASCADE)
