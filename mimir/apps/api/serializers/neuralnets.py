@@ -3,9 +3,29 @@ from drf_extra_fields.fields import Base64ImageField
 
 from keras.models import load_model
 
-from ..models import NeuralNet, Dataset
+from ..models import NeuralNet, Dataset, DatasetCategory, Category
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=Category
+        fields=[ 'name' ]
+
+class DatasetCategoriesSerializer(serializers.ModelSerializer):
+    
+    category = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='name'
+     )
+
+    class Meta:
+        model=DatasetCategory
+        fields=[ 'category' ]
+        depth=1
 
 class DatasetSerializer(serializers.ModelSerializer):
+
+    dataset_categories = DatasetCategoriesSerializer
     
     class Meta:
         model=Dataset
@@ -20,9 +40,6 @@ class NeuralNetSerializer(serializers.ModelSerializer):
         model=NeuralNet
         fields=[ 'name', 'pk', 'dataset' ]
         depth = 1
-        
-
-        
 
 class NeuralNetModelSerializer(serializers.ModelSerializer):
 
