@@ -9,7 +9,7 @@ class Category(models.Model):
 class DatasetCategory(models.Model):
     index    = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    dataset  = models.ForeignKey(Dataset, on_delete=models.CASCADE)
+    dataset  = models.ForeignKey(Dataset, related_name='dataset_categories', on_delete=models.CASCADE)
 
 class NeuralNet(models.Model):
     name       = models.CharField(max_length=80)

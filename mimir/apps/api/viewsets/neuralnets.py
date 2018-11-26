@@ -1,6 +1,7 @@
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 
 from keras.models import load_model
@@ -12,6 +13,7 @@ from .. import serializers
 class NeuralNetViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.NeuralNetSerializer
     queryset = NeuralNet.objects.all()
+    renderer_classes = (JSONRenderer, )
 
     @action(methods=['post'], detail=True)
     def activate(self, request, pk=None):
