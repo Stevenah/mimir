@@ -21,11 +21,21 @@ class Image(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     imagefile = models.ImageField(upload_to='media/')
 
+
+
+
+
+
+
 class ImageCategoryPrediction(models.Model):
     image      = models.ForeignKey(Image, on_delete=models.CASCADE)
     network    = models.ForeignKey(NeuralNet, on_delete=models.CASCADE)
     index      = models.IntegerField()
     confidence = models.DecimalField(max_digits=3, decimal_places=3)
+
+
+
+
 
 class SaliencyMap(models.Model):
     source  = models.ImageField(upload_to='images/source')

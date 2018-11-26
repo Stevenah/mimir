@@ -1,0 +1,52 @@
+[
+    {
+        "model": "api.Dataset",
+        "pk": 1,
+        "fields": {
+            "name": "Medico"
+        }
+    },
+    {
+        "model": "api.NeuralNet",
+        "pk": 1,
+        "fields": {
+            "name": "Medico",
+            "active": true,
+            "dataset": 1,
+            "model_file": null
+        }
+    },
+    { "model": "api.Category", "pk": 1, "fields": { "name": "blurry-nothing" } },
+    { "model": "api.Category", "pk": 2, "fields": { "name": "colon-clear" } },
+    { "model": "api.Category", "pk": 3, "fields": { "name": "dyed-lifted-polyps" } },
+    { "model": "api.Category", "pk": 4, "fields": { "name": "dyed-resection-margins" } },
+    { "model": "api.Category", "pk": 5, "fields": { "name": "esophagitis" } },
+    { "model": "api.Category", "pk": 6, "fields": { "name": "instruments" } },
+    { "model": "api.Category", "pk": 7, "fields": { "name": "normal-cecum" } },
+    { "model": "api.Category", "pk": 8, "fields": { "name": "normal-pylorus" } },
+    { "model": "api.Category", "pk": 9, "fields": { "name": "normal-z-line" } },
+    { "model": "api.Category", "pk": 10, "fields": { "name": "out-of-patient" } },
+    { "model": "api.Category", "pk": 11, "fields": { "name": "polyps" } },
+    { "model": "api.Category", "pk": 12, "fields": { "name": "retroflex-rectum" } },
+    { "model": "api.Category", "pk": 13, "fields": { "name": "retroflex-stomach" } },
+    { "model": "api.Category", "pk": 14, "fields": { "name": "stool-inclusions" } },
+    { "model": "api.Category", "pk": 15, "fields": { "name": "stool-plenty" } },
+    { "model": "api.Category", "pk": 16, "fields": { "name": "ulcerative-colitis" } },
+
+    { "model": "api.DatasetCategory", "pk": 1, "fields": { "index": 0, "category": 1, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 2, "fields": { "index": 1, "category": 2, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 3, "fields": { "index": 2, "category": 3, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 4, "fields": { "index": 3, "category": 4, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 5, "fields": { "index": 4, "category": 5, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 6, "fields": { "index": 5, "category": 6, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 7, "fields": { "index": 6, "category": 7, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 8, "fields": { "index": 7, "category": 8, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 9, "fields": { "index": 8, "category": 9, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 10, "fields": { "index": 9, "category": 10, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 11, "fields": { "index": 10, "category": 11, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 12, "fields": { "index": 11, "category": 12, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 13, "fields": { "index": 12, "category": 13, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 14, "fields": { "index": 13, "category": 14, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 15, "fields": { "index": 14, "category": 15, "dataset": 1 } },
+    { "model": "api.DatasetCategory", "pk": 16, "fields": { "index": 15, "category": 16, "dataset": 1 } }
+]
