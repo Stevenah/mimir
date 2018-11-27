@@ -1,4 +1,4 @@
 from .images import ImageSerializer
-from .neuralnets import NeuralNetSerializer, NeuralNetModelSerializer, DatasetCategoriesSerializer
+from .neuralnets import NeuralNetworkSerializer, NeuralNetworkModelSerializer, DatasetCategoriesSerializer
 from .datasets import DatasetSerializer
         

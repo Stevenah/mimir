@@ -3,7 +3,7 @@ from drf_extra_fields.fields import Base64ImageField
 
 from keras.models import load_model
 
-from ..models import NeuralNet, Dataset, DatasetCategory, Category
+from ..models import NeuralNetwork, Dataset, DatasetCategory, Category
 
 class CategorySerializer(serializers.ModelSerializer):
 
@@ -32,17 +32,17 @@ class DatasetSerializer(serializers.ModelSerializer):
         fields = ('id', 'dataset_categories')
         depth = 2
 
-class NeuralNetSerializer(serializers.ModelSerializer):
+class NeuralNetworkSerializer(serializers.ModelSerializer):
 
     dataset = DatasetSerializer()
 
     class Meta:
-        model=NeuralNet
+        model=NeuralNetwork
         fields=[ 'name', 'pk', 'dataset' ]
         depth = 1
 
-class NeuralNetModelSerializer(serializers.ModelSerializer):
+class NeuralNetworkModelSerializer(serializers.ModelSerializer):
 
     class Meta:
-         model=NeuralNet
+         model=NeuralNetwork
          fields=[ 'model_file' ]

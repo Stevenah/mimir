@@ -1,21 +1,8 @@
 [
-    {
-        "model": "api.Dataset",
-        "pk": 1,
-        "fields": {
-            "name": "Medico"
-        }
-    },
-    {
-        "model": "api.NeuralNet",
-        "pk": 1,
-        "fields": {
-            "name": "Medico",
-            "active": true,
-            "dataset": 1,
-            "model_file": null
-        }
-    },
+    { "model": "api.Dataset", "pk": 1, "fields": { "name": "Medico" } },
+
+    { "model": "api.NeuralNetwork", "pk": 1, "fields": { "name": "Medico", "active": true, "dataset": 1, "model_file": null } },
+
     { "model": "api.Category", "pk": 1, "fields": { "name": "blurry-nothing" } },
     { "model": "api.Category", "pk": 2, "fields": { "name": "colon-clear" } },
     { "model": "api.Category", "pk": 3, "fields": { "name": "dyed-lifted-polyps" } },
@@ -48,5 +35,23 @@
     { "model": "api.DatasetCategory", "pk": 13, "fields": { "index": 12, "category": 13, "dataset": 1 } },
     { "model": "api.DatasetCategory", "pk": 14, "fields": { "index": 13, "category": 14, "dataset": 1 } },
     { "model": "api.DatasetCategory", "pk": 15, "fields": { "index": 14, "category": 15, "dataset": 1 } },
-    { "model": "api.DatasetCategory", "pk": 16, "fields": { "index": 15, "category": 16, "dataset": 1 } }
+    { "model": "api.DatasetCategory", "pk": 16, "fields": { "index": 15, "category": 16, "dataset": 1 } },
+
+    { "model": "api.NeuralNetworkLayer", "pk": 1, "fields":  { "name": "block1_conv2", "network": 1, "index": 0 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 2, "fields":  { "name": "block1_pool",  "network": 1, "index": 1 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 3, "fields":  { "name": "block2_conv1", "network": 1, "index": 2 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 4, "fields":  { "name": "block2_conv2", "network": 1, "index": 3 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 5, "fields":  { "name": "block2_pool",  "network": 1, "index": 4 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 6, "fields":  { "name": "block3_conv1", "network": 1, "index": 5 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 7, "fields":  { "name": "block3_conv2", "network": 1, "index": 6 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 8, "fields":  { "name": "block3_conv3", "network": 1, "index": 7 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 9, "fields":  { "name": "block3_pool",  "network": 1, "index": 8 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 10, "fields": { "name": "block4_conv1", "network": 1, "index": 9 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 11, "fields": { "name": "block4_conv2", "network": 1, "index": 10 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 12, "fields": { "name": "block4_conv3", "network": 1, "index": 11 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 13, "fields": { "name": "block4_pool",  "network": 1, "index": 12 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 14, "fields": { "name": "block5_conv1", "network": 1, "index": 13 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 15, "fields": { "name": "block5_conv2", "network": 1, "index": 14 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 16, "fields": { "name": "block5_conv3", "network": 1, "index": 15 } },
+    { "model": "api.NeuralNetworkLayer", "pk": 17, "fields": { "name": "block5_pool",  "network": 1, "index": 16 } }
 ]
