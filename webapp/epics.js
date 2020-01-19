@@ -1,105 +1,92 @@
-import * as api from 'api';
-import * as types from 'actionConstants';
-import * as actions from 'actions'; 
-import { ajax } from 'rxjs/observable/dom/ajax';
-import { Observable } from 'rxjs';
+import * as types from 'actionTypes';
+import * as actions from 'actions';
 
-import 'rxjs/add/operator/concatMap';
+import { of } from 'rxjs';
+import { concatMap, map, catchError, mergeMap } from 'rxjs/operators';
+import { ofType } from 'redux-observable';
+import { ajax } from 'rxjs/ajax';
 
-export const requestImages = action$ => {
-    return action$.ofType(types.REQUEST_IMAGES)
-        .concatMap(action => api.getImages()
-            .then(response => actions.receiveImages(response))
-            .catch(error => actions.rejectImages(error)));
-};
+const baseApi = 'http://0.0.0.0:5000'
 
-export const requestCnnLayers = action$ => {
-    return action$.ofType(types.REQUEST_CNN_LAYERS)
-        .concatMap(action => api.getCnnLayers()
-            .then(response => actions.receiveCnnLayers(response))
-            .catch(error => actions.rejectCnnLayers(error)));
-};
+export const requestNetworkLayers = action$ => action$.pipe(
+    ofType(types.REQUEST_NETWORK_LAYERS),
+    concatMap(action =>
+        ajax.getJSON(`${ baseApi }/api/networks/${ action.payload }/layers/`).pipe(
+            map(response => actions.receiveNetworkLayers(response)),
+            catchError(error => of(actions.rejectNetworkLayers(error)))
+        )
+    )
+);
 
-export const requestCnnClasses = action$ => {
-    return action$.ofType(types.REQUEST_CNN_CLASSES)
-        .concatMap(action => api.getCnnClasses()
-            .then(response => actions.receiveCnnClasses(response))
-            .catch(error => actions.rejectCnnClasses(error)));
-};
+export const requestNetworkClasses = action$ => action$.pipe(
+    ofType(types.REQUEST_NETWORK_CLASSES),
+    concatMap(action =>
+        ajax.getJSON(`${ baseApi }/api/networks/${ action.payload }/classes/`).pipe(
+            map(response => actions.receiveNetworkClasses(response)),
+            catchError(error => of(actions.rejectNetworkClasses(error)))
+        ),
+    )
+);
 
-export const requestCnnClassification = action$ => {
-    return action$.ofType(types.REQUEST_CNN_CLASSIFICATION)
-        .concatMap(({payload: { imageId }}) => api.getCnnClassification(imageId)
-            .then(response => actions.receiveCnnClassification(response, imageId))
-            .catch(error => actions.rejectCnnClassification(error)));
-};
+export const requestImages = action$ => action$.pipe(
+    ofType(types.REQUEST_IMAGES),
+    concatMap(action =>
+        ajax.getJSON(`${ baseApi }/api/images`).pipe(
+            map(response => actions.receiveImages(response.payload)),
+            catchError(error => of(actions.rejectImages(error)))
+        )
+    )
+);
 
-export const requestCnnClassificationRefresh = action$ => {
-    return action$.ofType(types.REQUEST_MODEL_ACTIVATION)
-        .concatMap(() => 
-            api.getRefreshCnnClassification()
-                .then(response => actions.requestImages())
-                .catch(error => actions.rejectRefreshCnnClassification(error)));
-};
 
-export const requestImageVisualization = (action$, store) => {
-    return action$.ofType(types.REQUEST_IMAGE_VISUALIZATION)
-        .concatMap(({payload: { imageId, layerId, classId }}) =>
-            api.getImageVisualization(imageId, classId, store.getState().cnn.layers[layerId])
-                .then(response => actions.receiveImageVisualization(response, imageId, classId, layerId))
-                .catch(error => actions.rejectImageVisualization(error)));
-};
+export const requestImageUpload = action$ => action$.pipe(
+    ofType(types.REQUEST_IMAGE_UPLOAD),
+    concatMap(action =>
+        ajax.post(`${ baseApi }/api/images/`, action.payload ).pipe(
+            mergeMap(response => of(
+                actions.receiveImageUpload(response),
+                actions.requestImages()
+            )),
+            catchError(error => of(actions.rejectImageUpload(error)))
+        )
+    )
+);
 
-export const requestSelectedImage = action$ => {
-    return action$.ofType(types.REQUEST_SELECTED_IMAGE)
-        .concatMap(({payload: { imageId }}) =>
-            api.getSelectedImage(imageId)
-                .then(response => actions.receiveSelectedImage(response, imageId))
-                .catch(error => actions.rejectSelectedImage(error)));
-};
+export const requestImageClassification = action$ => action$.pipe(
+    ofType(types.REQUEST_IMAGE_CLASSIFICATION),
+    concatMap(action =>
+        ajax.getJSON(`${ baseApi }/api/images/`).pipe(
+            map(response => actions.receiveImageClassification(response)),
+            catchError(error => of(actions.rejectImageClassification(error)))
+        )
+    )
+)
 
-export const requestAvailableModels = action$ => {
-    return action$.ofType(types.REQUEST_AVAILABLE_MODELS)
-        .concatMap(() =>
-            api.getAvailableModels()
-                .then(response => actions.receiveAvailableModels(response))
-                .catch(error => actions.rejectAvailableModels(error)));
-};
-
-export const requestActiveModel = action$ => {
-    return action$.ofType(types.REQUEST_ACTIVE_MODEL)
-        .concatMap(() =>
-            api.getActiveModel()
-                .then(response => actions.receiveActiveModel(response))
-                .catch(error => actions.rejectActiveModel(error)));
-};
-
-export const requestModelActivation = action$ => {
-    return action$.ofType(types.REQUEST_MODEL_ACTIVATION)
-        .concatMap( ( { payload: { modelId } } ) =>
-            api.activateModel(modelId)
-                .then(response => actions.receiveModelActivation(response))
-                .catch(error => actions.rejectModelActivation(error)));
-};
-
-export const requestDeleteModel = action$ => {
-    return action$.ofType(types.REQUEST_DELETE_MODEL)
-        .concatMap( ( { payload: { modelId } } ) =>
-            api.deleteModel(modelId)
-                .then(response => actions.receiveDeleteModel(response))
-                .catch(error => actions.rejectDeleteModel(error)));
-};
+export const requestGradCam = (action$, store) => action$.pipe(
+    ofType(types.REQUEST_GRADCAM),
+    concatMap(action =>
+        ajax.getJSON(`${ baseApi }/api/images/${ store.value.root.imageId }/gradcam?class=${ store.value.root.class }&layer=${ store.value.root.layer }`).pipe(
+            map(response => actions.receiveGradCam(response)),
+            catchError(error => of(actions.rejectGradCam(error)))
+        )
+    )
+)
+export const requestGuidedGradCam = (action$, store) => action$.pipe(
+    ofType(types.REQUEST_GUIDED_GRADCAM),
+    concatMap(action =>
+        ajax.getJSON(`${ baseApi }/api/images/${ store.value.root.imageId }/guidedgradcam?class=${ store.value.root.class }&layer=${ store.value.root.layer }`).pipe(
+            map(response => actions.receiveGuidedGradCam(response)),
+            catchError(error => of(actions.rejectGuidedGradCam(error)))
+        )
+    )
+)
 
 export default [
+    requestImageClassification,
+    requestGradCam,
+    requestGuidedGradCam,
+    requestNetworkLayers,
+    requestNetworkClasses,
     requestImages,
-    requestImageVisualization,
-    requestCnnClasses,
-    requestCnnLayers,
-    requestCnnClassification,
-    requestSelectedImage,
-    requestAvailableModels,
-    requestActiveModel,
-    requestModelActivation,
-    requestDeleteModel,
-    requestCnnClassificationRefresh,
+    requestImageUpload,
 ];
