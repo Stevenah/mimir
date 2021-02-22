@@ -33,7 +33,7 @@ def setup_default_data():
         if not os.path.exists(model_pair[2]):
             print(f"Downloading {model_pair[0]}...")
             download_file(model_pair[4], model_pair[2])
-            download_file('https://www.dropbox.com/s/pki880covt6bki1/kvasir.json?dl=1', model_pair[3])
+            download_file('https://www.dropbox.com/s/7jwtkbqnjlfn7s5/kvasir.json?dl=1', model_pair[3])
 
         model = Architecture()
         
