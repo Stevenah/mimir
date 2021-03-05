@@ -21,10 +21,10 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 default_data=[
     ("Inception-V3", "Non-processed Kvasir (v2)", "../model/inceptionv3.h5", "../model/kvasir.json", "https://www.dropbox.com/s/t0lxg8ei0g3etye/inceptionv3.h5?dl=1"),
-    ("VGG-16", "Non-processed Kvasir (v2)", "../model/vgg16.h5", "../model/kvasir.json", "https://www.dropbox.com/s/vonhjmv4qzorhex/vgg16.h5?dl=1"),
-    ("VGG-19", "Non-processed Kvasir (v2)", "../model/vgg19.h5", "../model/kvasir.json", "https://www.dropbox.com/s/t3v0rktokali77m/vgg19.h5?dl=1"),
+    ("VGG-16", "Non-processed Kvasir (v2)", "../model/vgg16.h5", "../model/kvasir.json", "https://www.dropbox.com/s/stpzw989gvxznhh/vgg16.h5?dl=1"),
+    ("VGG-19", "Non-processed Kvasir (v2)", "../model/vgg19.h5", "../model/kvasir.json", "https://www.dropbox.com/s/xtgem4mzbv7rff8/vgg19.h5?dl=1"),
     ("ResNet-50", "Non-processed Kvasir (v2)", "../model/resnet50.h5", "../model/kvasir.json", "https://www.dropbox.com/s/0vzgs2e341k0j9u/resnet50.h5?dl=1"),
-    ("Xeception", "Non-processed Kvasir (v2)", "../model/xception.h5", "../model/kvasir.json", "https://www.dropbox.com/s/h314gq7ly82wgml/xception.h5?dl=1")
+    ("Xeception", "Non-processed Kvasir (v2)", "../model/xception.h5", "../model/kvasir.json", "https://www.dropbox.com/s/mgqwlaqgx6o3q74/xception.h5?dl=1")
 ]
 
 def setup_default_data():
