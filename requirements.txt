@@ -19,7 +19,7 @@ olefile==0.45.1
 opencv-python==3.4.0.14
 Pillow==4.2.1
 protobuf==3.5.2.post1
-PyYAML==3.12
+PyYAML==5.4
 scipy==1.1.0
 six==1.11.0
 SQLAlchemy==1.2.7
