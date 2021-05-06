@@ -76,7 +76,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jest": "^22.4.2",
     "jsdom": "^11.6.2",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.21",
     "mixin-loader": "^2.0.3",
     "nock": "^9.2.3",
     "node-sass": "^4.5.3",
